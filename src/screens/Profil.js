@@ -23,7 +23,7 @@ export default class Home extends React.Component {
         <View style={styles.body}>
 
           <View style={styles.content}>
-            <Text>HOME</Text>
+            <Text>PROFIL</Text>
           </View>
 
         </View>

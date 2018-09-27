@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, TextInput } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button } from '../components';
 
 export default class Login extends React.Component {
 
   static navigationOptions = {
     header: null
-  };
+  }
 
   constructor(props) {
     super(props);
@@ -27,35 +27,40 @@ export default class Login extends React.Component {
 
     return (
 
-      <ImageBackground source={require('../resources/images/meeting.jpg')} style={styles.container}>
+      <View style={styles.container}>
 
-        <View style={styles.body}>
+        <View style={styles.header}>
 
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Welcome to #Ibusinez</Text>
-          </View>
-
-          <View style={styles.formContent}>
-            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 28 }}>LOGIN</Text>
-            <TextInput
-              style={styles.input}
-              placeholder='Email..'
-            />
-            <TextInput
-              style={styles.input}
-              placeholder='Password..'
-            />
-
-            <View style={styles.buttonContainer}>
-              <Button buttonStyle={styles.button} title='SUBMIT' onPress={() => { }} />
-              <Button buttonStyle={styles.button} title='REGISTER' onPress={() => this.navRegister()} />
-            </View>
-            
+            <Text style={styles.title}>#Ibusinez</Text>
           </View>
 
         </View>
 
-      </ImageBackground>
+        <View style={styles.body}>
+
+          <View style={styles.formContent}>
+            <Button
+              buttonStyle={styles.button}
+              title='Login'
+              color='rgb(45,48,71)'
+              backgroundColor='white'
+            />
+            <Button
+              buttonStyle={styles.button}
+              title='Signup'
+              color='white'
+              backgroundColor='rgb(45,48,71)'
+              fontSize={12}
+            />
+            <Text>Skip</Text>
+          </View>
+
+        </View>
+        <View style={styles.curvedView}></View>
+
+
+      </View>
 
     )
   }
@@ -64,39 +69,50 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center'
+  },
+  header: {
+    height: 400,
+    width: '100%',
+    backgroundColor: 'rgb(45,48,71)',
+    justifyContent: 'center'
+  },
+  curvedView: {
+    width: 105,
+    height: 100,
+    borderRadius: 50,
+    transform: [
+      { scaleX: 4 }
+    ],
+    backgroundColor: 'rgb(45,48,71)',
+    position: 'absolute',
+    top: 350
   },
   body: {
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
+    paddingTop: 100
   },
   titleContainer: {
-    marginTop: 70
-  },
-  title: {
-    color: 'orange',
-    fontSize: 38,
-    fontWeight: 'bold'
-  },
-  formContent: {
-    marginTop: 190,
     alignItems: 'center',
   },
-  input: {
-    padding: 10,
-    fontSize: 18,
-    height: 50,
-    width: 200,
-    backgroundColor: 'white',
-    margin: 10,
-    borderRadius: 10
+  title: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  formContent: {
+    alignItems: 'center',
   },
   buttonContainer: {
     paddingTop: 10,
     flexDirection: 'row'
   },
   button: {
-    borderRadius: 5,
-    backgroundColor: 'orange'
+    width: 200,
+    borderRadius: 15,
+    marginBottom: 10,
+    borderWidth: 2,
   }
 })
