@@ -1,24 +1,35 @@
 import React from 'react';
-import Login from './src/screens/Login';
-import Home from './src/screens/Home';
-import Register from './src/screens/Register';
-import Meetings from './src/screens/Meetings';
-import MeetingPage from './src/screens/MeetingPage';
-import Profil from './src/screens/Profil';
-import Support from './src/screens/Support';
-import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+// import Login from './src/screens/Login';
+// import Home from './src/screens/Home';
+// import Register from './src/screens/Register';
+// import Meetings from './src/screens/Meetings';
+// import MeetingPage from './src/screens/MeetingPage';
+// import Profil from './src/screens/Profil';
+// import Support from './src/screens/Support';
+// import ReviewMeeting from './src/screens/ReviewMeeting';
+import { Login, Home, Register, Meetings, MeetingPage, Profil, Support, ReviewMeeting } from './src/screens';
+import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
 const MainTabs = createBottomTabNavigator({
   Home: Home,
   Meetings: Meetings,
   Profil: Profil,
   Support: Support
-},
-  {
+}, {
     tabBarOptions: {
-      activeTintColor: 'purple',
+      activeTintColor: 'rgb(45,48,71)',
       inactiveTintColor: 'gray',
     },
+  })
+
+const TopTabs = createMaterialTopTabNavigator({
+  Business: MainTabs,
+  Politics: MainTabs,
+  Sports: MainTabs,
+  Tech: MainTabs
+}, {
+    navigationOptions: {
+    }
   })
 
 const AuthStack = createStackNavigator({
@@ -26,14 +37,22 @@ const AuthStack = createStackNavigator({
   register: Register,
 })
 
-const MeetingStack = createStackNavigator({
-  mainTabs: MainTabs,
-  meetingPage: MeetingPage
-})
+const MainApp = createStackNavigator({
+  mainTabs: TopTabs,
+  meetingPage: MeetingPage,
+  reviewMeeting: ReviewMeeting
+},
+  {
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: 'rgb(66, 134, 244)'
+      }
+    }
+  })
 
 const RootNav = createSwitchNavigator({
   // mainTabs: MainTabs,
-  meeting: MeetingStack,
+  mainapp: MainApp,
   auth: AuthStack,
 })
 

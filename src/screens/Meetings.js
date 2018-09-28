@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { Button, Text } from 'react-native-elements';
-import { Screen } from '../components/Screen';
+import { Images } from '../resources/images';
 
-export default class Home extends React.Component {
+
+export default class Meetings extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      messages: [
+      meetings: [
         {
           time: 'Imorgon 11:30, 25e September 2018',
           location: 'Karl Johansgatan 15, Majorna',
@@ -20,7 +21,7 @@ export default class Home extends React.Component {
           id: 1
         },
         {
-          time: 'Imorgon 11:30, 25e September 2018',
+          time: 'Söndag 11:30, 28e September 2018',
           location: 'Karl Johansgatan 15, Majorna',
           title: 'React-native meeting',
           leader: 'Joakim Edwardh',
@@ -60,46 +61,54 @@ export default class Home extends React.Component {
 
   }
 
-  navigateMeeting(message) {
-    this.props.navigation.navigate('meetingPage', { message });
+  navigateMeeting(meeting) {
+    this.props.navigation.navigate('meetingPage', { meeting });
   }
 
   render() {
 
-    const meetings = this.state.messages.map((message, key) => {
+    const meetings = this.state.meetings.map((meeting, key) => {
+
       return (
         <TouchableOpacity
           key={key}
-          style={styles.messageContainer}
+          style={styles.meetingContainer}
           onPress={() => {
-            this.navigateMeeting(message)
+            this.navigateMeeting(meeting)
           }}
         >
-          <View style={styles.userRow}>
-            <Text>{message.title}</Text>
+
+          <Image source={Images.profilPic} style={styles.profilPic} />
+
+
+          <View style={styles.infoContainer}>
+
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>{meeting.title}</Text>
+            </View>
+            <View style={styles.userRow}>
+              <Text style={styles.textStyle}>När: {meeting.time}</Text>
+            </View>
+            <View style={styles.userRow}>
+              <Text style={styles.textStyle}>Vem: {meeting.leader}</Text>
+            </View>
+            <View style={styles.userRow}>
+              <Text style={styles.textStyle}>Rating: {meeting.rating}</Text>
+            </View>
+
           </View>
-          <View style={styles.userRow}>
-            <Text>När: {message.time}</Text>
-          </View>
-          <View style={styles.userRow}>
-            <Text>Vem: {message.leader}</Text>
-          </View>
-          <View style={styles.userRow}>
-            <Text>Rating: {message.rating}</Text>
-          </View>
+
         </TouchableOpacity>
       )
     })
 
     return (
 
+
       <ScrollView style={styles.container}>
 
         <View style={styles.titleContainer}>
-          <Text h4 style={{ color: 'white' }}>Meetings</Text>
-        </View>
-        <View style={{ marginVertical: 20 }}>
-          <Text style={{ fontSize: 14, color: 'white' }}>You have <Text style={{ fontSize: 26, color: 'white' }}>5</Text> meetings today</Text>
+          <Text h4 style={{ color: 'rgb(45,48,71)' }}>Dina möten</Text>
         </View>
 
         <View style={{ paddingBottom: 20 }}>
@@ -108,6 +117,7 @@ export default class Home extends React.Component {
 
 
       </ScrollView>
+
     )
   }
 }
@@ -117,21 +127,44 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     padding: 16,
-    backgroundColor: 'rgb(45,48,71)',
+    backgroundColor: 'white'
   },
   titleContainer: {
-    paddingTop: 50
+    width: '100%',
+    alignItems: 'center'
   },
-  messageContainer: {
-    borderColor: 'rgb(225,225,225)',
-    backgroundColor: 'white',
+  meetingContainer: {
     borderWidth: 1,
     borderRadius: 10,
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-    marginVertical: 10
+    borderColor: 'grey',
+    marginTop: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 5,
+    elevation: 1
   },
   userRow: {
-    paddingVertical: 5,
+    paddingLeft: 10,
+    alignItems: 'center'
+  },
+  textStyle: {
+    color: 'rgb(45,48,71)'
+  },
+  profilPic: {
+    height: 75,
+    width: 75,
+    borderRadius: 20
+  },
+  infoContainer: {
+
+  },
+  titleContainer: {
+    width: '100%',
+    alignItems: 'center'
+  },
+  titleText: {
+    fontSize: 16,
+    color: 'green',
+    fontWeight: 'bold',
   }
 })

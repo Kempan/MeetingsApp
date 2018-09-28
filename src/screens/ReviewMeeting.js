@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Button, Text, Icon, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
+import { Button, Text, Icon, FormInput, FormLabel } from 'react-native-elements';
 import { Images } from '../resources/images';
 
-export default class MeetingPage extends React.Component {
+export default class ReviewMeeting extends React.Component {
 
   constructor(props) {
     super(props);
@@ -22,7 +22,7 @@ export default class MeetingPage extends React.Component {
   }
 
   componentDidMount() {
-    const meetingInfo = this.props.navigation.state.params.meeting;
+    const meetingInfo = this.props.navigation.state.params.meetingInformation;
     this.setState({
       meetingInformation: {
         time: meetingInfo.time,
@@ -36,19 +36,11 @@ export default class MeetingPage extends React.Component {
     })
   }
 
-  navigateReviewMeeting(meetingInformation) {
-    this.props.navigation.navigate('reviewMeeting', { meetingInformation });
-  }
-
   render() {
 
     return (
 
       <View style={styles.container}>
-
-        <View style={styles.mapContainer}>
-          <Image source={require('../resources/images/map.png')} style={{ height: '100%', width: '100%' }} />
-        </View>
 
         <View style={styles.content}>
 
@@ -56,7 +48,7 @@ export default class MeetingPage extends React.Component {
             <Text style={styles.meetingTitleText}>{this.state.meetingInformation.title}</Text>
           </View>
 
-          <View style={styles.leaderContainer}>
+          <View style={styles.leaderInfoContainer}>
 
             <Image
               source={Images.profilPic}
@@ -66,37 +58,34 @@ export default class MeetingPage extends React.Component {
             <View style={styles.leaderInfo}>
               <Text style={styles.careerInfoText1}>{this.state.meetingInformation.leader}</Text>
               <Text style={styles.careerInfoText2}>{this.state.meetingInformation.leaderDesc}</Text>
-              <Text style={styles.careerInfoText2}>BRT: {this.state.meetingInformation.rating}  <Image style={styles.rating} source={Images.rating} /></Text>
             </View>
 
           </View>
 
-          <View style={styles.meetingDescContainer}>
-            <Text style={styles.careerInfoText1}>Mötesbeskrivning</Text>
-            <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text>
+          <View style={styles.formContainer}>
+
+            <Image source={Images.rating} style={{ height: 40, width: 250, marginBottom: 20 }} />
+
+            {/* <FormLabel>Vad var bra med mötet?</FormLabel>
+            <FormInput
+
+            />
+            <FormLabel>Vad var mindre bra med mötet?</FormLabel>
+            <FormInput
+
+            /> */}
+            <FormLabel>Övriga kommentarer</FormLabel>
+            <FormInput
+
+            />
           </View>
 
-          <View style={styles.timeAndLocationContainer}>
-            <Icon
-              name='clock'
-              type='material-community'
-            />
-            <Text style={styles.timeAndLocationText}>{this.state.meetingInformation.time}</Text>
-          </View>
-
-          <View style={styles.timeAndLocationContainer}>
-            <Icon
-              name='map-marker'
-              type='material-community'
-            />
-            <Text style={styles.timeAndLocationText}>{this.state.meetingInformation.location}</Text>
-          </View>
 
           <View style={styles.buttonContainer}>
             <Button
-              title='Boka möte'
+              title='Skicka recension'
               buttonStyle={styles.button}
-              onPress={() => { this.navigateReviewMeeting(this.state.meetingInformation) }}
+              onPress={() => { }}
             />
           </View>
 
@@ -115,25 +104,22 @@ const imagePosition = mapHeight - (imageSize / 2);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
-  },
-  mapContainer: {
-    height: mapHeight,
-    width: '100%'
   },
   content: {
     flex: 1,
     padding: 15,
+    backgroundColor: 'rgb(45,48,71)',
+    justifyContent: 'center'
   },
   meetingTitleContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 15
+    marginBottom: 20
   },
   meetingTitleText: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: 'green'
+    color: 'white'
   },
   profilPic: {
     height: imageSize,
@@ -141,31 +127,23 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 10
   },
-  leaderContainer: {
+  leaderInfoContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   leaderInfo: {
     flexDirection: 'column',
   },
-  meetingDescContainer: {
-    flexDirection: 'column',
-    paddingTop: 10,
-    marginBottom: 5
-  },
   careerInfoText1: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'rgb(45,48,71)',
-    marginBottom: 3
+    color: 'white',
+    marginBottom: 5
   },
   careerInfoText2: {
     fontSize: 16,
-    color: 'rgb(45,48,71)'
-  },
-  rating: {
-    height: 40,
-    width: 250
+    color: 'white'
   },
   buttonContainer: {
     width: '100%',
@@ -177,12 +155,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'green'
   },
-  timeAndLocationContainer: {
-    flexDirection: 'row',
-    padding: 8,
-  },
-  timeAndLocationText: {
-    color: 'green',
-    marginLeft: 10
+  formContainer: {
+    paddingTop: 20,
+    marginBottom: 20,
+    alignItems: 'center'
   }
 })
