@@ -1,7 +1,7 @@
 import Login from './Login';
 import Home from './Home';
 import Register from './Register';
-import Meetings from './Meetings';
+import UserMeetings from './UserMeetings';
 import MeetingPage from './MeetingPage';
 import Profil from './Profil';
 import Support from './Support';
@@ -11,7 +11,7 @@ export {
   Login,
   Home,
   Register,
-  Meetings,
+  UserMeetings,
   MeetingPage,
   Profil,
   Support,

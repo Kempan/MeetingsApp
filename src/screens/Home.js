@@ -18,7 +18,7 @@ export default class Home extends React.Component {
       <View style={styles.container}>
 
         <View style={styles.categoriesContainer}>
-          <Text style={styles.categoriesText}>Top rated</Text>
+          <Text style={styles.categoriesText}>Topp-betyg</Text>
         </View>
 
         <View>
@@ -48,7 +48,7 @@ export default class Home extends React.Component {
         </View>
 
         <View style={styles.categoriesContainer}>
-          <Text style={styles.categoriesText}>Top categories</Text>
+          <Text style={styles.categoriesText}>Populära kategorier</Text>
         </View>
 
         <View>
@@ -78,7 +78,7 @@ export default class Home extends React.Component {
         </View>
 
         <View style={styles.categoriesContainer}>
-          <Text style={styles.categoriesText}>Suggestions</Text>
+          <Text style={styles.categoriesText}>Förslag</Text>
         </View>
 
         <View>

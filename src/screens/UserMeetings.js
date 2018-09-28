@@ -4,7 +4,7 @@ import { Button, Text } from 'react-native-elements';
 import { Images } from '../resources/images';
 
 
-export default class Meetings extends React.Component {
+export default class UserMeetings extends React.Component {
 
   constructor(props) {
     super(props);

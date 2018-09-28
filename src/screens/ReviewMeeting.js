@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Button, Text, Icon, FormInput, FormLabel } from 'react-native-elements';
+import { Button, Text, FormInput, FormLabel } from 'react-native-elements';
 import { Images } from '../resources/images';
 
 export default class ReviewMeeting extends React.Component {
@@ -17,6 +17,10 @@ export default class ReviewMeeting extends React.Component {
         leaderDesc: '',
         rating: '',
         id: null
+      },
+      review: {
+        rating: '',
+        comment: ''
       }
     }
   }
@@ -97,9 +101,7 @@ export default class ReviewMeeting extends React.Component {
   }
 }
 
-const mapHeight = 150;
 const imageSize = 80;
-const imagePosition = mapHeight - (imageSize / 2);
 
 const styles = StyleSheet.create({
   container: {
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 15,
-    backgroundColor: 'rgb(45,48,71)',
+    backgroundColor: 'white',
     justifyContent: 'center'
   },
   meetingTitleContainer: {
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
   meetingTitleText: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: 'white'
+    color: 'black'
   },
   profilPic: {
     height: imageSize,
@@ -138,12 +140,12 @@ const styles = StyleSheet.create({
   careerInfoText1: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
     marginBottom: 5
   },
   careerInfoText2: {
     fontSize: 16,
-    color: 'white'
+    color: 'black'
   },
   buttonContainer: {
     width: '100%',

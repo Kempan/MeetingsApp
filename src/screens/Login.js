@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from '../components';
 
 export default class Login extends React.Component {
@@ -23,6 +23,10 @@ export default class Login extends React.Component {
     this.props.navigation.navigate('register')
   }
 
+  skip() {
+    this.props.navigation.navigate('Home')
+  }
+
   render() {
 
     return (
@@ -32,7 +36,7 @@ export default class Login extends React.Component {
         <View style={styles.header}>
 
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>#Ibusinez</Text>
+            <Text style={styles.title}>#iBusinez</Text>
           </View>
 
         </View>
@@ -43,17 +47,19 @@ export default class Login extends React.Component {
             <Button
               buttonStyle={styles.button}
               title='Login'
-              color='rgb(45,48,71)'
+              color='rgb(66, 134, 244)'
               backgroundColor='white'
             />
             <Button
               buttonStyle={styles.button}
               title='Signup'
               color='white'
-              backgroundColor='rgb(45,48,71)'
+              backgroundColor='rgb(66, 134, 244)'
               fontSize={12}
             />
-            <Text>Skip</Text>
+            <TouchableOpacity onPress={() => { this.skip() }}>
+              <Text>Skip</Text>
+            </TouchableOpacity>
           </View>
 
         </View>
@@ -74,7 +80,7 @@ const styles = StyleSheet.create({
   header: {
     height: 400,
     width: '100%',
-    backgroundColor: 'rgb(45,48,71)',
+    backgroundColor: 'rgb(66, 134, 244)',
     justifyContent: 'center'
   },
   curvedView: {
@@ -84,7 +90,7 @@ const styles = StyleSheet.create({
     transform: [
       { scaleX: 4 }
     ],
-    backgroundColor: 'rgb(45,48,71)',
+    backgroundColor: 'rgb(66, 134, 244)',
     position: 'absolute',
     top: 350
   },
@@ -92,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
-    paddingTop: 100
+    paddingTop: 90
   },
   titleContainer: {
     alignItems: 'center',
