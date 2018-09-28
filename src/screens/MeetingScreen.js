@@ -3,7 +3,7 @@ import { View, StyleSheet, Image } from 'react-native';
 import { Button, Text, Icon, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import { Images } from '../resources/images';
 
-export default class MeetingPage extends React.Component {
+export default class MeetingPageScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -37,7 +37,7 @@ export default class MeetingPage extends React.Component {
   }
 
   navigateReviewMeeting(meetingInformation) {
-    this.props.navigation.navigate('reviewMeeting', { meetingInformation });
+    this.props.navigation.navigate('ReviewMeetingScreen', { meetingInformation });
   }
 
   render() {

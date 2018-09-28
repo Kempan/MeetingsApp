@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 
-export default class Register extends React.Component {
+export default class RegisterScreen extends React.Component {
 
   constructor(props) {
     super(props);

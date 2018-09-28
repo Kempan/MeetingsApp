@@ -1,12 +1,21 @@
 import React from 'react';
-import { Login, Home, Register, UserMeetings, MeetingPage, Profil, Support, ReviewMeeting } from './src/screens';
+import {
+  AuthScreen,
+  HomeScreen,
+  RegisterScreen,
+  UserMeetingScreen,
+  MeetingScreen,
+  ProfilScreen,
+  SupportScreen,
+  ReviewMeetingScreen
+} from './src/screens';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
 const TopTabs = createMaterialTopTabNavigator({
-  Business: Home,
-  Politics: Home,
-  Sports: Home,
-  Tech: Home
+  Business: HomeScreen,
+  Politics: HomeScreen,
+  Sports: HomeScreen,
+  Tech: HomeScreen
 }, {
     navigationOptions: {
     }
@@ -14,9 +23,9 @@ const TopTabs = createMaterialTopTabNavigator({
 
 const MainTabs = createBottomTabNavigator({
   Home: TopTabs,
-  Meetings: UserMeetings,
-  Profil: Profil,
-  Support: Support
+  Meetings: UserMeetingScreen,
+  Profil: ProfilScreen,
+  Support: SupportScreen
 }, {
     tabBarOptions: {
       activeTintColor: 'rgb(45,48,71)',
@@ -25,14 +34,14 @@ const MainTabs = createBottomTabNavigator({
   })
 
 const AuthStack = createStackNavigator({
-  login: Login,
-  register: Register,
+  Login: AuthScreen,
+  Register: RegisterScreen,
 })
 
 const MainApp = createStackNavigator({
-  mainTabs: MainTabs,
-  meetingPage: MeetingPage,
-  reviewMeeting: ReviewMeeting
+  MainTabs: MainTabs,
+  MeetingScreen: MeetingScreen,
+  ReviewMeetingScreen: ReviewMeetingScreen
 },
   {
     navigationOptions: {
@@ -43,8 +52,8 @@ const MainApp = createStackNavigator({
   })
 
 const RootNav = createSwitchNavigator({
-  auth: AuthStack,
-  mainapp: MainApp,
+  MainApp: MainApp,
+  Auth: AuthStack,
 })
 
 export default class App extends React.Component {

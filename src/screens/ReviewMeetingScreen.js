@@ -3,7 +3,7 @@ import { View, StyleSheet, Image } from 'react-native';
 import { Button, Text, FormInput, FormLabel } from 'react-native-elements';
 import { Images } from '../resources/images';
 
-export default class ReviewMeeting extends React.Component {
+export default class ReviewMeetingScreen extends React.Component {
 
   constructor(props) {
     super(props);

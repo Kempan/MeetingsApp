@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from '../components';
+import Turbo from 'turbo360';
 
-export default class Login extends React.Component {
+export default class AuthScreen extends React.Component {
 
   static navigationOptions = {
     header: null
@@ -17,14 +18,22 @@ export default class Login extends React.Component {
         password: ''
       }
     }
+
+    this.turbo = Turbo({ site_id: '5bae1cf2816748001356ffa9' });
   }
 
-  navRegister() {
-    this.props.navigation.navigate('register')
+  register() {
+    this.turbo.createUser(this.state.credentials)
+      .then(data => {
+        console.log(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   skip() {
-    this.props.navigation.navigate('Home')
+    this.props.navigation.navigate('HomeScreen')
   }
 
   render() {

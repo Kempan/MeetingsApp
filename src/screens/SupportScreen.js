@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 
-export default class Home extends React.Component {
+export default class SupportScreen extends React.Component {
 
   constructor(props) {
     super(props);

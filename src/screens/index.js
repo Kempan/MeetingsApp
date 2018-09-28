@@ -1,19 +1,19 @@
-import Login from './Login';
-import Home from './Home';
-import Register from './Register';
-import UserMeetings from './UserMeetings';
-import MeetingPage from './MeetingPage';
-import Profil from './Profil';
-import Support from './Support';
-import ReviewMeeting from './ReviewMeeting';
+import AuthScreen from './AuthScreen';
+import HomeScreen from './HomeScreen';
+import RegisterScreen from './RegisterScreen';
+import UserMeetingScreen from './UserMeetingScreen';
+import MeetingScreen from './MeetingScreen';
+import ProfilScreen from './ProfilScreen';
+import SupportScreen from './SupportScreen';
+import ReviewMeetingScreen from './ReviewMeetingScreen';
 
 export {
-  Login,
-  Home,
-  Register,
-  UserMeetings,
-  MeetingPage,
-  Profil,
-  Support,
-  ReviewMeeting
+  AuthScreen,
+  HomeScreen,
+  RegisterScreen,
+  UserMeetingScreen,
+  MeetingScreen,
+  ProfilScreen,
+  SupportScreen,
+  ReviewMeetingScreen
 }

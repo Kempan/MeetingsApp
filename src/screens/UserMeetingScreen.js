@@ -4,7 +4,7 @@ import { Button, Text } from 'react-native-elements';
 import { Images } from '../resources/images';
 
 
-export default class UserMeetings extends React.Component {
+export default class UserMeetingScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -62,7 +62,7 @@ export default class UserMeetings extends React.Component {
   }
 
   navigateMeeting(meeting) {
-    this.props.navigation.navigate('meetingPage', { meeting });
+    this.props.navigation.navigate('MeetingScreen', { meeting });
   }
 
   render() {
