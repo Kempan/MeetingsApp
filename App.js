@@ -52,9 +52,11 @@ const MainApp = createStackNavigator({
   })
 
 const RootNav = createSwitchNavigator({
-  MainApp: MainApp,
   Auth: AuthStack,
+  MainApp: MainApp,
 })
+
+
 
 export default class App extends React.Component {
   render() {

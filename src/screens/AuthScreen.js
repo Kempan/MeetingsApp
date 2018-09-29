@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { FormInput, Icon } from 'react-native-elements';
 import { Button } from '../components';
 import Turbo from 'turbo360';
 
@@ -22,6 +23,26 @@ export default class AuthScreen extends React.Component {
     this.turbo = Turbo({ site_id: '5bae1cf2816748001356ffa9' });
   }
 
+
+  textUpdate(text, field) {
+    const newCredentials = Object.assign(this.state.credentials);
+    newCredentials[field] = text;
+    this.setState({
+      credentials: newCredentials
+    });
+    console.log(this.state.credentials)
+  }
+
+  login() {
+    this.turbo.login(this.state.credentials)
+      .then(resp => {
+        console.log(resp)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
   register() {
     this.turbo.createUser(this.state.credentials)
       .then(data => {
@@ -40,7 +61,7 @@ export default class AuthScreen extends React.Component {
 
     return (
 
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
 
         <View style={styles.header}>
 
@@ -52,19 +73,53 @@ export default class AuthScreen extends React.Component {
 
         <View style={styles.body}>
 
+          <View style={styles.formContainer}>
+
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='email'
+                containerStyle={styles.icon}
+              />
+              <FormInput
+                placeholder='Email'
+                placeholderTextColor='black'
+                containerStyle={styles.textInput}
+                onChangeText={(text) => { this.textUpdate(text, 'email') }}
+                keyboardType='email-address'
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='key'
+                containerStyle={styles.icon}
+              />
+              <FormInput
+                placeholder='Password'
+                placeholderTextColor='black'
+                containerStyle={styles.textInput}
+                onChangeText={(text) => { this.textUpdate(text, 'password') }}
+                secureTextEntry
+              />
+            </View>
+
+          </View>
+
           <View style={styles.formContent}>
             <Button
               buttonStyle={styles.button}
               title='Login'
               color='rgb(66, 134, 244)'
               backgroundColor='white'
+              onPress={() => { this.login() }}
             />
             <Button
               buttonStyle={styles.button}
               title='Signup'
               color='white'
               backgroundColor='rgb(66, 134, 244)'
-              fontSize={12}
             />
             <TouchableOpacity onPress={() => { this.skip() }}>
               <Text>Skip</Text>
@@ -75,7 +130,7 @@ export default class AuthScreen extends React.Component {
         <View style={styles.curvedView}></View>
 
 
-      </View>
+      </KeyboardAvoidingView>
 
     )
   }
@@ -87,7 +142,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   header: {
-    height: 400,
+    height: 250,
     width: '100%',
     backgroundColor: 'rgb(66, 134, 244)',
     justifyContent: 'center'
@@ -101,7 +156,7 @@ const styles = StyleSheet.create({
     ],
     backgroundColor: 'rgb(66, 134, 244)',
     position: 'absolute',
-    top: 350
+    top: 200
   },
   body: {
     flex: 1,
@@ -120,14 +175,34 @@ const styles = StyleSheet.create({
   formContent: {
     alignItems: 'center',
   },
-  buttonContainer: {
-    paddingTop: 10,
-    flexDirection: 'row'
-  },
   button: {
     width: 200,
     borderRadius: 15,
     marginBottom: 10,
     borderWidth: 2,
+  },
+  formContainer: {
+    marginBottom: 15
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderRadius: 15,
+    borderWidth: 2,
+    marginBottom: 10,
+    width: 280,
+    height: 60,
+    alignItems: 'center'
+  },
+  icon: {
+    marginLeft: 25
+  },
+  textInput: {
+    width: 200,
+    borderRadius: 15,
+    marginBottom: 10,
+    backgroundColor: 'white',
+    alignSelf: 'center',
+    marginTop: 10
   }
 })
