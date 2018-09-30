@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 import { FormInput, Icon } from 'react-native-elements';
 import { Button } from '../components';
+import config from '../config';
 import Turbo from 'turbo360';
 
 export default class AuthScreen extends React.Component {
@@ -15,12 +16,12 @@ export default class AuthScreen extends React.Component {
 
     this.state = {
       credentials: {
-        email: '',
-        password: ''
+        email: 'hejsan',
+        password: 'passwo'
       }
     }
 
-    this.turbo = Turbo({ site_id: '5bae1cf2816748001356ffa9' });
+    this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
 
@@ -36,7 +37,8 @@ export default class AuthScreen extends React.Component {
   login() {
     this.turbo.login(this.state.credentials)
       .then(resp => {
-        console.log(resp)
+        console.log(config.userIdKey)
+        return AsyncStorage.setItem(config.userIdKey, resp.id)
       })
       .catch(err => {
         console.log(err);
@@ -87,6 +89,7 @@ export default class AuthScreen extends React.Component {
                 containerStyle={styles.textInput}
                 onChangeText={(text) => { this.textUpdate(text, 'email') }}
                 keyboardType='email-address'
+                underlineColorAndroid="transparent"
               />
             </View>
 
@@ -102,6 +105,7 @@ export default class AuthScreen extends React.Component {
                 containerStyle={styles.textInput}
                 onChangeText={(text) => { this.textUpdate(text, 'password') }}
                 secureTextEntry
+                underlineColorAndroid="transparent"
               />
             </View>
 

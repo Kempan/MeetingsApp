@@ -1,4 +1,6 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
+import config from './src/config';
 import {
   AuthScreen,
   HomeScreen,
@@ -59,7 +61,39 @@ const RootNav = createSwitchNavigator({
 
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      authCheck: false,
+      authed: false
+    }
+  }
+
+  componentDidMount() {
+    console.log(config.userIdKey);
+    return AsyncStorage.getItem(config.userIdKey)
+      .then(key => {
+        if (key) {
+          this.setState({
+            authCheck: true,
+            authed: true
+          });
+        } else {
+          this.setState({
+            authCheck: true
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+  }
+
   render() {
+
     return (
       <RootNav />
     );
