@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
 import { Button, Text } from 'react-native-elements';
+import config from '../config';
 import Colors from '../styles/Colors';
 import { Images } from '../resources/images';
 
@@ -8,6 +9,13 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      loading: true
+    }
+  }
+
+  componentDidMount() {
 
   }
 

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, TextInput } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, Text, StyleSheet, ImageBackground, AsyncStorage } from 'react-native';
+import { Button } from '../components';
+import config from '../config';
 
 export default class SupportScreen extends React.Component {
 
@@ -14,6 +15,11 @@ export default class SupportScreen extends React.Component {
   //   this.props.navigation.navigate('register')
   // }
 
+  signout() {
+    AsyncStorage.removeItem(config.userIdKey);
+    this.props.navigation.navigate('Auth');
+  }
+
   render() {
 
     return (
@@ -23,7 +29,11 @@ export default class SupportScreen extends React.Component {
         <View style={styles.body}>
 
           <View style={styles.content}>
-            <Text>SUPPORT</Text>
+            <Button
+              title='Sign out'
+              onPress={() => { this.signout() }}
+              buttonStyle={styles.button}
+            />
           </View>
 
         </View>
@@ -40,8 +50,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  content: {
-
+  button: {
+    backgroundColor: 'rgb(66, 134, 244)',
+    width: 150,
+    borderRadius: 15,
+    marginBottom: 10,
+    borderWidth: 2,
   }
-
 })

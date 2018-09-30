@@ -16,14 +16,13 @@ export default class AuthScreen extends React.Component {
 
     this.state = {
       credentials: {
-        email: 'hejsan',
-        password: 'passwo'
+        email: '',
+        password: ''
       }
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
-
 
   textUpdate(text, field) {
     const newCredentials = Object.assign(this.state.credentials);
@@ -31,32 +30,33 @@ export default class AuthScreen extends React.Component {
     this.setState({
       credentials: newCredentials
     });
-    console.log(this.state.credentials)
   }
 
   login() {
     this.turbo.login(this.state.credentials)
       .then(resp => {
-        console.log(config.userIdKey)
-        return AsyncStorage.setItem(config.userIdKey, resp.id)
+        return AsyncStorage.setItem(config.userIdKey, resp.id);
+      })
+      .then(key => {
+        this.navigate('MainApp');
       })
       .catch(err => {
-        console.log(err);
+        alert(err.message);
       })
   }
 
   register() {
     this.turbo.createUser(this.state.credentials)
       .then(data => {
-        console.log(data)
+        console.log(data);
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
       })
   }
 
-  skip() {
-    this.props.navigation.navigate('HomeScreen')
+  navigate(screen) {
+    this.props.navigation.navigate(screen);
   }
 
   render() {
@@ -87,6 +87,7 @@ export default class AuthScreen extends React.Component {
                 placeholder='Email'
                 placeholderTextColor='black'
                 containerStyle={styles.textInput}
+                inputStyle={{ color: 'black' }}
                 onChangeText={(text) => { this.textUpdate(text, 'email') }}
                 keyboardType='email-address'
                 underlineColorAndroid="transparent"
@@ -103,6 +104,7 @@ export default class AuthScreen extends React.Component {
                 placeholder='Password'
                 placeholderTextColor='black'
                 containerStyle={styles.textInput}
+                inputStyle={{ color: 'black' }}
                 onChangeText={(text) => { this.textUpdate(text, 'password') }}
                 secureTextEntry
                 underlineColorAndroid="transparent"
@@ -124,8 +126,9 @@ export default class AuthScreen extends React.Component {
               title='Signup'
               color='white'
               backgroundColor='rgb(66, 134, 244)'
+              onPress={() => { this.navigate('RegisterScreen') }}
             />
-            <TouchableOpacity onPress={() => { this.skip() }}>
+            <TouchableOpacity onPress={() => { this.navigate('MainApp') }}>
               <Text>Skip</Text>
             </TouchableOpacity>
           </View>

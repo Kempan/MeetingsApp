@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, ActivityIndicator } from 'react-native';
 import config from './src/config';
 import {
   AuthScreen,
@@ -36,8 +36,8 @@ const MainTabs = createBottomTabNavigator({
   })
 
 const AuthStack = createStackNavigator({
-  Login: AuthScreen,
-  Register: RegisterScreen,
+  AuthScreen: AuthScreen,
+  RegisterScreen: RegisterScreen,
 })
 
 const MainApp = createStackNavigator({
@@ -53,10 +53,14 @@ const MainApp = createStackNavigator({
     }
   })
 
-const RootNav = createSwitchNavigator({
-  Auth: AuthStack,
-  MainApp: MainApp,
-})
+const RootNav = (authBool) => {
+  return createSwitchNavigator({
+    Auth: AuthStack,
+    MainApp: MainApp,
+  }, {
+      initialRouteName: (authBool) ? 'MainApp' : 'Auth'
+    })
+}
 
 
 
@@ -72,30 +76,32 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log(config.userIdKey);
+    //AUTO INLOGG
     return AsyncStorage.getItem(config.userIdKey)
       .then(key => {
         if (key) {
+          console.log(key)
           this.setState({
             authCheck: true,
             authed: true
           });
-        } else {
+        }
+        else {
           this.setState({
-            authCheck: true
+            authCheck: true,
           });
         }
       })
       .catch(err => {
         console.log(err);
+        this.setState({
+          authCheck: true,
+        });
       })
-
   }
 
   render() {
-
-    return (
-      <RootNav />
-    );
+    const Switch = RootNav(this.state.authed);
+    return this.state.authCheck ? <Switch /> : <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }} size='large' />;
   }
 }
