@@ -20,6 +20,7 @@ const TopTabs = createMaterialTopTabNavigator({
   Tech: HomeScreen
 }, {
     navigationOptions: {
+
     }
   })
 
@@ -47,8 +48,14 @@ const MainApp = createStackNavigator({
 },
   {
     navigationOptions: {
+      title: 'iBusinez',
+      headerTitleStyle: {
+        flex: 1,
+        color: 'white',
+        textAlign: 'center'
+      },
       headerStyle: {
-        backgroundColor: 'rgb(66, 134, 244)'
+        backgroundColor: 'rgb(66, 134, 244)',
       }
     }
   })

@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { Images } from '../resources/images';
+import { Meeting } from '../components';
+import config from '../config';
+import Turbo from 'turbo360';
 
 
 export default class UserMeetingScreen extends React.Component {
@@ -12,53 +15,56 @@ export default class UserMeetingScreen extends React.Component {
     this.state = {
       meetings: [
         {
-          time: 'Imorgon 11:30, 25e September 2018',
+          time: '11:30, 25 Sep 2018',
           location: 'Karl Johansgatan 15, Majorna',
-          title: 'React-native meeting',
+          title: 'React-native',
           leader: 'Joakim Edwardh',
           leaderDesc: 'Junior Developer, React Native',
           rating: '96% +',
           id: 1
         },
         {
-          time: 'Söndag 11:30, 28e September 2018',
-          location: 'Karl Johansgatan 15, Majorna',
-          title: 'React-native meeting',
+          time: '09:30, 28 Sep 2018',
+          location: 'Bokvägen 11, Mölnlycke',
+          title: 'React-native',
           leader: 'Joakim Edwardh',
           leaderDesc: 'Junior Developer, React Native',
           rating: '96% +',
           id: 2
         },
         {
-          time: 'Imorgon 11:30, 25e September 2018',
-          location: 'Karl Johansgatan 15, Majorna',
-          title: 'React-native meeting',
+          time: '17:30, 2 Okt 2018',
+          location: 'Magasinsgatan 7, Göteborg',
+          title: 'React-native',
           leader: 'Joakim Edwardh',
           leaderDesc: 'Junior Developer, React Native',
           rating: '96% +',
           id: 3
-        },
-        {
-          time: 'Imorgon 11:30, 25e September 2018',
-          location: 'Karl Johansgatan 15, Majorna',
-          title: 'React-native meeting',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 4
-        },
-        {
-          time: 'Imorgon 11:30, 25e September 2018',
-          location: 'Karl Johansgatan 15, Majorna',
-          title: 'React-native meeting',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 5
-        },
+        }
       ]
     }
 
+    this.turbo = Turbo({ site_id: config.turboAppId });
+
+  }
+
+  componentDidMount() {
+    // const { meetings } = this.state;
+    // this.turbo.create('Meeting', { meetings })
+    //   .then(resp => {
+    //     console.log(resp)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+
+    // this.turbo.fetchOne('Meeting', '5bb209effc93910014b0ea96')
+    //   .then(resp => {
+    //     console.log(resp)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
   }
 
   navigateMeeting(meeting) {
@@ -67,54 +73,51 @@ export default class UserMeetingScreen extends React.Component {
 
   render() {
 
-    const meetings = this.state.meetings.map((meeting, key) => {
+    // const meetings = this.state.meetings.map((meeting, key) => {
 
-      return (
-        <TouchableOpacity
-          key={key}
-          style={styles.meetingContainer}
-          onPress={() => {
-            this.navigateMeeting(meeting)
-          }}
-        >
+    //   return (
+    //     <TouchableOpacity
+    //       key={key}
+    //       style={styles.meetingContainer}
+    //       onPress={() => {
+    //         this.navigateMeeting(meeting)
+    //       }}
+    //     >
 
-          <Image source={Images.profilPic} style={styles.profilPic} />
+    //       <Image source={Images.profilPic} style={styles.profilPic} />
 
 
-          <View style={styles.infoContainer}>
 
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{meeting.title}</Text>
-            </View>
-            <View style={styles.userRow}>
-              <Text style={styles.textStyle}>När: {meeting.time}</Text>
-            </View>
-            <View style={styles.userRow}>
-              <Text style={styles.textStyle}>Vem: {meeting.leader}</Text>
-            </View>
-            <View style={styles.userRow}>
-              <Text style={styles.textStyle}>Rating: {meeting.rating}</Text>
-            </View>
+    //       <View style={styles.infoContainer}>
+    //         <View style={styles.infoRow1}>
+    //           <View>
+    //             <Text style={styles.titleText}>{meeting.title}</Text>
+    //           </View>
+    //           <View>
+    //             <Text style={styles.textStyle}>{meeting.time}</Text>
+    //           </View>
+    //         </View>
+    //         <View style={styles.infoRow1}>
+    //           <Text style={styles.textStyle}>Vem: {meeting.leader}</Text>
 
-          </View>
+    //           <Text style={styles.textStyle}>Rating: {meeting.rating}</Text>
+    //         </View>
+    //       </View>
 
-        </TouchableOpacity>
-      )
-    })
+
+
+    //     </TouchableOpacity>
+    //   )
+    // })
 
     return (
 
 
       <ScrollView style={styles.container}>
 
-        <View style={styles.titleContainer}>
-          <Text h4 style={{ color: 'rgb(45,48,71)' }}>Dina möten</Text>
-        </View>
-
         <View style={{ paddingBottom: 20 }}>
-          {meetings}
+          <Meeting content={this.state.meetings} nav={() => { this.navigateMeeting(this.state.meetings) }} />
         </View>
-
 
       </ScrollView>
 
@@ -125,46 +128,47 @@ export default class UserMeetingScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
     padding: 16,
     backgroundColor: 'white'
   },
-  titleContainer: {
-    width: '100%',
-    alignItems: 'center'
-  },
   meetingContainer: {
-    borderWidth: 1,
+    borderWidth: 0.3,
+    backgroundColor: '#F8F8F8',
     borderRadius: 10,
     borderColor: 'grey',
     marginTop: 20,
     alignItems: 'center',
     flexDirection: 'row',
     padding: 5,
-    elevation: 1
+    elevation: 5,
+    position: 'relative',
+    flexWrap: 'wrap'
   },
-  userRow: {
-    paddingLeft: 10,
-    alignItems: 'center'
+  infoContainer: {
+    flex: 1
+  },
+  infoRow1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginBottom: 5
   },
   textStyle: {
-    color: 'rgb(45,48,71)'
+    color: 'rgb(45,48,71)',
+    fontSize: 15
   },
   profilPic: {
     height: 75,
     width: 75,
     borderRadius: 20
   },
-  infoContainer: {
-
-  },
   titleContainer: {
     width: '100%',
     alignItems: 'center'
   },
   titleText: {
-    fontSize: 16,
-    color: 'green',
+    fontSize: 18,
+    color: 'rgb(66, 134, 244)',
     fontWeight: 'bold',
   }
 })

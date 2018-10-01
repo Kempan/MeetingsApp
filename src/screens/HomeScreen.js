@@ -1,29 +1,59 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { Button, Text } from 'react-native-elements';
-import config from '../config';
 import Colors from '../styles/Colors';
 import { Images } from '../resources/images';
+import { Meeting } from '../components';
 
 export default class HomeScreen extends React.Component {
+
+
 
   constructor(props) {
     super(props);
 
     this.state = {
-      loading: true
+      meetings: [
+        {
+          time: '11:30, 25 Sep 2018',
+          location: 'Karl Johansgatan 15, Majorna',
+          title: 'React-native',
+          leader: 'Joakim Edwardh',
+          leaderDesc: 'Junior Developer, React Native',
+          rating: '96% +',
+          id: 1
+        },
+        {
+          time: '09:30, 28 Sep 2018',
+          location: 'Bokvägen 11, Mölnlycke',
+          title: 'React-native',
+          leader: 'Joakim Edwardh',
+          leaderDesc: 'Junior Developer, React Native',
+          rating: '96% +',
+          id: 2
+        },
+        {
+          time: '17:30, 2 Okt 2018',
+          location: 'Magasinsgatan 7, Göteborg',
+          title: 'React-native',
+          leader: 'Joakim Edwardh',
+          leaderDesc: 'Junior Developer, React Native',
+          rating: '96% +',
+          id: 3
+        }
+      ]
     }
   }
 
-  componentDidMount() {
-
+  navigateMeeting(meeting) {
+    this.props.navigation.navigate('MeetingScreen', { meeting });
   }
 
   render() {
 
     return (
 
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
 
         <View style={styles.categoriesContainer}>
           <Text style={styles.categoriesText}>Topp-betyg</Text>
@@ -91,31 +121,13 @@ export default class HomeScreen extends React.Component {
 
         <View>
 
-          <ScrollView style={styles.genreContainer} horizontal={true}>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.business} style={styles.image} resizeMode='stretch'>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.politics} style={styles.image}>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.programming} style={styles.image}>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-          </ScrollView>
+          <View style={styles.categoriesContainer}>
+            <Meeting content={this.state.meetings} nav={() => { this.navigateMeeting(this.state.meetings) }} />
+          </View>
 
         </View>
 
-      </View >
+      </ScrollView>
     )
   }
 }
