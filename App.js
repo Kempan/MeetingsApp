@@ -9,42 +9,43 @@ import {
   MeetingScreen,
   ProfilScreen,
   SupportScreen,
-  ReviewMeetingScreen
+  ReviewMeetingScreen,
+  Home
 } from './src/screens';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
 const TopTabs = createMaterialTopTabNavigator({
-  Business: HomeScreen,
-  Politics: HomeScreen,
-  Sports: HomeScreen,
-  Tech: HomeScreen
-}, {
+  Business: Home,
+  Politics: UserMeetingScreen,
+},
+  {
     navigationOptions: {
 
     }
-  })
+  });
 
 const MainTabs = createBottomTabNavigator({
-  Home: TopTabs,
-  Meetings: UserMeetingScreen,
+  Home: HomeScreen,
+  Meetings: TopTabs,
   Profil: ProfilScreen,
   Support: SupportScreen
-}, {
+},
+  {
     tabBarOptions: {
       activeTintColor: 'rgb(45,48,71)',
       inactiveTintColor: 'gray',
     },
-  })
+  });
 
 const AuthStack = createStackNavigator({
   AuthScreen: AuthScreen,
   RegisterScreen: RegisterScreen,
-})
+});
 
 const MainApp = createStackNavigator({
   MainTabs: MainTabs,
   MeetingScreen: MeetingScreen,
-  ReviewMeetingScreen: ReviewMeetingScreen
+  ReviewMeetingScreen: ReviewMeetingScreen,
 },
   {
     navigationOptions: {
@@ -58,13 +59,14 @@ const MainApp = createStackNavigator({
         backgroundColor: 'rgb(66, 134, 244)',
       }
     }
-  })
+  });
 
 const RootNav = (authBool) => {
   return createSwitchNavigator({
     Auth: AuthStack,
     MainApp: MainApp,
-  }, {
+  },
+    {
       initialRouteName: (authBool) ? 'MainApp' : 'Auth'
     })
 }

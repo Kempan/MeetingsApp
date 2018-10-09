@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
-import { Button, Text, Icon, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
+import { View, StyleSheet, Image, ActivityIndicator, AsyncStorage } from 'react-native';
+import { Button, Text, Icon } from 'react-native-elements';
 import { Images } from '../resources/images';
+import Turbo from 'turbo360';
+import config from '../config';
 
 export default class MeetingPageScreen extends React.Component {
 
@@ -9,100 +11,177 @@ export default class MeetingPageScreen extends React.Component {
     super(props);
 
     this.state = {
-      meetingInformation: {
-        time: '',
-        location: '',
-        title: '',
-        leader: '',
-        leaderDesc: '',
-        rating: '',
-        id: null
-      }
+      meeting: null,
+      loading: true,
+      attendants: [],
+      bookedMeeting: false
     }
+    this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
-    const meetingInfo = this.props.navigation.state.params.meeting;
-    this.setState({
-      meetingInformation: {
-        time: meetingInfo.time,
-        location: meetingInfo.location,
-        title: meetingInfo.title,
-        leader: meetingInfo.leader,
-        leaderDesc: meetingInfo.leaderDesc,
-        rating: meetingInfo.rating,
-        id: meetingInfo.id
-      }
-    })
+    this.fetchMeeting();
   }
 
-  navigateReviewMeeting(meetingInformation) {
-    this.props.navigation.navigate('ReviewMeetingScreen', { meetingInformation });
+  fetchMeeting = () => {
+    const meetingId = this.props.navigation.state.params.id;
+    this.turbo.fetchOne('meeting', meetingId)
+      .then(data => {
+        this.setState({
+          meeting: data,
+          loading: false,
+          attendants: data.attendants
+        })
+      })
+      .then(() => {
+        AsyncStorage.getItem(config.userIdKey)
+          .then(key => {
+            this.state.attendants.forEach(item => {
+              if (item === key) {
+                this.setState({
+                  bookedMeeting: true
+                })
+              } else {
+                this.setState({
+                  bookedMeeting: false
+                })
+              }
+            })
+          })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  bookMeeting() {
+    AsyncStorage.getItem(config.userIdKey)
+      .then(key => {
+        const newAttendants = [...this.state.attendants];
+        newAttendants.push(key);
+        this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: newAttendants })
+          .then(data => {
+            this.setState({
+              bookedMeeting: true
+            })
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      });
+    alert('Du har bokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.');
+
+  }
+
+  //FUNKAR
+  cancelMeeting() {
+    AsyncStorage.getItem(config.userIdKey)
+      .then(key => {
+        const newAttendants = [...this.state.attendants];
+        const filterAttendants = newAttendants.filter(item => {
+          return item !== key;
+        });
+        this.setState({
+          attendants: filterAttendants
+        });
+      })
+      .then(() => {
+        this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: this.state.attendants })
+          .then(data => {
+            console.log(data);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    alert('Du har avbokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.')
+    this.navigateMeetings();
+  }
+
+  navigateMeetings = () => {
+    const { params } = this.props.navigation.state;
+    this.props.navigation.navigate('Meetings');
+    params.updateScreen();
   }
 
   render() {
 
+    const { meeting } = this.state;
+
+    const bookedButtonTitle = this.state.bookedMeeting ? 'Avboka möte' : 'Boka möte';
+    const buttonOnpress = this.state.bookedMeeting ? () => { this.cancelMeeting() } : () => { this.bookMeeting() };
+
+    const bookedButtonStyle = [styles.button];
+    const bookedButton = this.state.bookedMeeting ? { backgroundColor: 'red' } : { backgroundColor: 'green' };
+    bookedButtonStyle.push(bookedButton);
+
     return (
 
       <View style={styles.container}>
-
-        <View style={styles.mapContainer}>
-          <Image source={require('../resources/images/map.png')} style={{ height: '100%', width: '100%' }} />
-        </View>
-
-        <View style={styles.content}>
-
-          <View style={styles.meetingTitleContainer}>
-            <Text style={styles.meetingTitleText}>{this.state.meetingInformation.title}</Text>
-          </View>
-
-          <View style={styles.leaderContainer}>
-
-            <Image
-              source={Images.profilPic}
-              style={styles.profilPic}
-            />
-
-            <View style={styles.leaderInfo}>
-              <Text style={styles.careerInfoText1}>{this.state.meetingInformation.leader}</Text>
-              <Text style={styles.careerInfoText2}>{this.state.meetingInformation.leaderDesc}</Text>
-              <Text style={styles.careerInfoText2}>BRT: {this.state.meetingInformation.rating}  <Image style={styles.rating} source={Images.rating} /></Text>
+        {this.state.loading ? <ActivityIndicator size='large' /> : (
+          <View style={styles.container}>
+            <View style={styles.mapContainer}>
+              <Image source={require('../resources/images/map.png')} style={{ height: '100%', width: '100%' }} />
             </View>
 
+            <View style={styles.content}>
+
+              <View style={styles.meetingTitleContainer}>
+                <Text style={styles.meetingTitleText}>{meeting.title}</Text>
+              </View>
+
+              <View style={styles.leaderContainer}>
+
+                <Image
+                  source={Images.profilPic}
+                  style={styles.profilPic}
+                />
+
+                <View style={styles.leaderInfo}>
+                  <Text style={styles.careerInfoText1}>{meeting.leader}</Text>
+                  <Text style={styles.careerInfoText2}>{meeting.leaderDesc}</Text>
+                  <Text style={styles.careerInfoText2}>BRT: {meeting.rating}  <Image style={styles.rating} source={Images.rating} /></Text>
+                </View>
+
+              </View>
+
+              <View style={styles.meetingDescContainer}>
+                <Text style={styles.careerInfoText1}>Mötesbeskrivning</Text>
+                <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text>
+              </View>
+
+              <View style={styles.timeAndLocationContainer}>
+                <Icon
+                  name='clock'
+                  type='material-community'
+                />
+                <Text style={styles.timeAndLocationText}>{meeting.time}</Text>
+              </View>
+
+              <View style={styles.timeAndLocationContainer}>
+                <Icon
+                  name='map-marker'
+                  type='material-community'
+                />
+                <Text style={styles.timeAndLocationText}>{meeting.location}</Text>
+              </View>
+
+              <View style={styles.buttonContainer}>
+                <Button
+                  title={bookedButtonTitle}
+                  buttonStyle={bookedButtonStyle}
+                  onPress={buttonOnpress}
+                />
+              </View>
+
+            </View>
           </View>
-
-          <View style={styles.meetingDescContainer}>
-            <Text style={styles.careerInfoText1}>Mötesbeskrivning</Text>
-            <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text>
-          </View>
-
-          <View style={styles.timeAndLocationContainer}>
-            <Icon
-              name='clock'
-              type='material-community'
-            />
-            <Text style={styles.timeAndLocationText}>{this.state.meetingInformation.time}</Text>
-          </View>
-
-          <View style={styles.timeAndLocationContainer}>
-            <Icon
-              name='map-marker'
-              type='material-community'
-            />
-            <Text style={styles.timeAndLocationText}>{this.state.meetingInformation.location}</Text>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <Button
-              title='Boka möte'
-              buttonStyle={styles.button}
-              onPress={() => { this.navigateReviewMeeting(this.state.meetingInformation) }}
-            />
-          </View>
-
-        </View>
-
+        )}
       </View >
+
 
     )
   }
@@ -175,7 +254,6 @@ const styles = StyleSheet.create({
   button: {
     width: 200,
     borderRadius: 5,
-    backgroundColor: 'green'
   },
   timeAndLocationContainer: {
     flexDirection: 'row',

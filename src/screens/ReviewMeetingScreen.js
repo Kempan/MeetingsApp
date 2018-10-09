@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { Button, Text, FormInput, FormLabel } from 'react-native-elements';
 import { Images } from '../resources/images';
+import config from '../config';
+import Turbo from 'turbo360';
 
 export default class ReviewMeetingScreen extends React.Component {
 
@@ -9,94 +11,73 @@ export default class ReviewMeetingScreen extends React.Component {
     super(props);
 
     this.state = {
-      meetingInformation: {
-        time: '',
-        location: '',
-        title: '',
-        leader: '',
-        leaderDesc: '',
-        rating: '',
-        id: null
-      },
-      review: {
-        rating: '',
-        comment: ''
-      }
+      meeting: null,
+      loading: true,
+      comment: ''
     }
+    this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
-    const meetingInfo = this.props.navigation.state.params.meetingInformation;
-    this.setState({
-      meetingInformation: {
-        time: meetingInfo.time,
-        location: meetingInfo.location,
-        title: meetingInfo.title,
-        leader: meetingInfo.leader,
-        leaderDesc: meetingInfo.leaderDesc,
-        rating: meetingInfo.rating,
-        id: meetingInfo.id
-      }
-    })
+    const meetingId = this.props.navigation.state.params;
+    this.turbo.fetchOne('meeting', meetingId)
+      .then(resp => {
+        this.setState({
+          meeting: resp,
+          loading: false
+        })
+      })
+      .catch(err => {
+        console.log(err.message)
+      })
   }
 
   render() {
 
+    const { meeting } = this.state;
+
     return (
 
       <View style={styles.container}>
+        {this.state.loading ? <ActivityIndicator size='large' /> : (
+          <View style={styles.content}>
 
-        <View style={styles.content}>
+            <View style={styles.meetingTitleContainer}>
+              <Text style={styles.meetingTitleText}>{meeting.title}</Text>
+            </View>
 
-          <View style={styles.meetingTitleContainer}>
-            <Text style={styles.meetingTitleText}>{this.state.meetingInformation.title}</Text>
-          </View>
+            <View style={styles.leaderInfoContainer}>
 
-          <View style={styles.leaderInfoContainer}>
+              <Image
+                source={Images.profilPic}
+                style={styles.profilPic}
+              />
 
-            <Image
-              source={Images.profilPic}
-              style={styles.profilPic}
-            />
+              <View style={styles.leaderInfo}>
+                <Text style={styles.careerInfoText1}>{meeting.leader}</Text>
+                <Text style={styles.careerInfoText2}>{meeting.leaderDesc}</Text>
+              </View>
 
-            <View style={styles.leaderInfo}>
-              <Text style={styles.careerInfoText1}>{this.state.meetingInformation.leader}</Text>
-              <Text style={styles.careerInfoText2}>{this.state.meetingInformation.leaderDesc}</Text>
+            </View>
+
+            <View style={styles.formContainer}>
+              <Image source={Images.rating} style={{ height: 40, width: 250, marginBottom: 20 }} />
+              <FormLabel>Övriga kommentarer</FormLabel>
+              <FormInput />
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <Button
+                title='Skicka recension'
+                buttonStyle={styles.button}
+                onPress={() => { }}
+              />
             </View>
 
           </View>
-
-          <View style={styles.formContainer}>
-
-            <Image source={Images.rating} style={{ height: 40, width: 250, marginBottom: 20 }} />
-
-            {/* <FormLabel>Vad var bra med mötet?</FormLabel>
-            <FormInput
-
-            />
-            <FormLabel>Vad var mindre bra med mötet?</FormLabel>
-            <FormInput
-
-            /> */}
-            <FormLabel>Övriga kommentarer</FormLabel>
-            <FormInput
-
-            />
-          </View>
-
-
-          <View style={styles.buttonContainer}>
-            <Button
-              title='Skicka recension'
-              buttonStyle={styles.button}
-              onPress={() => { }}
-            />
-          </View>
-
-        </View>
+        )}
 
       </View >
-
     )
   }
 }
@@ -121,7 +102,7 @@ const styles = StyleSheet.create({
   meetingTitleText: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: 'black'
+    color: 'rgb(66, 134, 244)'
   },
   profilPic: {
     height: imageSize,

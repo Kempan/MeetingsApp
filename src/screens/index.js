@@ -6,6 +6,8 @@ import MeetingScreen from './MeetingScreen';
 import ProfilScreen from './ProfilScreen';
 import SupportScreen from './SupportScreen';
 import ReviewMeetingScreen from './ReviewMeetingScreen';
+import Home from './Home';
+
 
 export {
   AuthScreen,
@@ -15,5 +17,6 @@ export {
   MeetingScreen,
   ProfilScreen,
   SupportScreen,
-  ReviewMeetingScreen
+  ReviewMeetingScreen,
+  Home
 }

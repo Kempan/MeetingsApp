@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { Button, Text } from 'react-native-elements';
-import { Images } from '../resources/images';
+import { View, StyleSheet, ScrollView, FlatList, AsyncStorage, Text } from 'react-native';
 import { Meeting } from '../components';
 import config from '../config';
 import Turbo from 'turbo360';
+import functions from '../functions';
 
 
 export default class UserMeetingScreen extends React.Component {
@@ -13,114 +12,69 @@ export default class UserMeetingScreen extends React.Component {
     super(props);
 
     this.state = {
-      meetings: [
-        {
-          time: '11:30, 25 Sep 2018',
-          location: 'Karl Johansgatan 15, Majorna',
-          title: 'React-native',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 1
-        },
-        {
-          time: '09:30, 28 Sep 2018',
-          location: 'Bokvägen 11, Mölnlycke',
-          title: 'React-native',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 2
-        },
-        {
-          time: '17:30, 2 Okt 2018',
-          location: 'Magasinsgatan 7, Göteborg',
-          title: 'React-native',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 3
-        }
-      ]
+      meetings: [],
+      loading: true
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
-
   }
 
   componentDidMount() {
-    // const { meetings } = this.state;
-    // this.turbo.create('Meeting', { meetings })
-    //   .then(resp => {
-    //     console.log(resp)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
-
-    // this.turbo.fetchOne('Meeting', '5bb209effc93910014b0ea96')
-    //   .then(resp => {
-    //     console.log(resp)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    this.fetchMeetings();
   }
 
-  navigateMeeting(meeting) {
-    this.props.navigation.navigate('MeetingScreen', { meeting });
+  fetchMeetings = () => {
+    AsyncStorage.getItem(config.userIdKey)
+      .then(key => {
+        this.turbo.fetch('Meeting', { attendants: key })
+          .then(data => {
+            this.setState({
+              meetings: data,
+              loading: false,
+            })
+          })
+          .catch(err => {
+            console.log(err);
+            this.setState({
+              loading: false
+            })
+          })
+      })
+      .catch(err => {
+        this.setState({
+          loading: false
+        })
+        console.log(err.message);
+      })
+  }
+
+  navigateMeeting(item) {
+    this.props.navigation.navigate('MeetingScreen', { id: item.id, updateScreen: this.fetchMeetings.bind(this) });
   }
 
   render() {
 
-    // const meetings = this.state.meetings.map((meeting, key) => {
-
-    //   return (
-    //     <TouchableOpacity
-    //       key={key}
-    //       style={styles.meetingContainer}
-    //       onPress={() => {
-    //         this.navigateMeeting(meeting)
-    //       }}
-    //     >
-
-    //       <Image source={Images.profilPic} style={styles.profilPic} />
-
-
-
-    //       <View style={styles.infoContainer}>
-    //         <View style={styles.infoRow1}>
-    //           <View>
-    //             <Text style={styles.titleText}>{meeting.title}</Text>
-    //           </View>
-    //           <View>
-    //             <Text style={styles.textStyle}>{meeting.time}</Text>
-    //           </View>
-    //         </View>
-    //         <View style={styles.infoRow1}>
-    //           <Text style={styles.textStyle}>Vem: {meeting.leader}</Text>
-
-    //           <Text style={styles.textStyle}>Rating: {meeting.rating}</Text>
-    //         </View>
-    //       </View>
-
-
-
-    //     </TouchableOpacity>
-    //   )
-    // })
-
     return (
 
-
       <ScrollView style={styles.container}>
-
-        <View style={{ paddingBottom: 20 }}>
-          <Meeting content={this.state.meetings} nav={() => { this.navigateMeeting(this.state.meetings) }} />
-        </View>
+        {this.state.meetings.length <= 0 && !this.state.loading ?
+          <View style={{ alignItems: 'center' }}><Text style={{ fontWeight: 'bold' }}>Du har inga möten bokade</Text></View>
+          :
+          <View style={{ paddingBottom: 20 }}>
+            <FlatList
+              data={this.state.meetings}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) =>
+                <Meeting
+                  {...item}
+                  nav={this.navigateMeeting.bind(this, { ...item })}
+                />
+              }
+            />
+          </View>
+        }
 
       </ScrollView>
-
     )
   }
 }

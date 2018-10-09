@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Images } from '../resources/images';
 
@@ -11,54 +11,34 @@ export class Meeting extends React.Component {
 
   render() {
 
-    const meetings = this.props.content.map((meeting, key) => {
-
-      return (
-        <TouchableOpacity
-          key={key}
-          style={styles.meetingContainer}
-          onPress={() => {
-            this.props.nav()
-          }}
-        >
-
-          <Image source={Images.profilPic} style={styles.profilPic} />
-
-
-
-          <View style={styles.infoContainer}>
-            <View style={styles.infoRow1}>
-              <View>
-                <Text style={styles.titleText}>{meeting.title}</Text>
-              </View>
-              <View>
-                <Text style={styles.textStyle}>{meeting.time}</Text>
-              </View>
-            </View>
-            <View style={styles.infoRow1}>
-              <Text style={styles.textStyle}>Vem: {meeting.leader}</Text>
-
-              <Text style={styles.textStyle}>Rating: {meeting.rating}</Text>
-            </View>
-          </View>
-
-
-
-        </TouchableOpacity>
-      )
-    })
-
     return (
 
+      <TouchableOpacity
+        style={styles.meetingContainer}
+        onPress={() => {
+          this.props.nav()
+        }}
+      >
 
-      <ScrollView style={styles.container}>
+        <Image source={Images.profilPic} style={styles.profilPic} />
 
-        <View style={{ paddingBottom: 20 }}>
-          {meetings}
+        <View style={styles.infoContainer}>
+          <View style={styles.infoRow1}>
+            <View>
+              <Text style={styles.titleText}>{this.props.title}</Text>
+            </View>
+            <View>
+              <Text style={styles.textStyle}>{this.props.time}</Text>
+            </View>
+          </View>
+          <View style={styles.infoRow1}>
+            <Text style={styles.textStyle}>Vem: {this.props.leader}</Text>
+
+            <Text style={styles.textStyle}>Rating: {this.props.rating}</Text>
+          </View>
         </View>
 
-      </ScrollView>
-
+      </TouchableOpacity>
     )
   }
 }
@@ -77,8 +57,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     padding: 5,
-    elevation: 5,
-    position: 'relative',
+    elevation: 2,
     flexWrap: 'wrap'
   },
   infoContainer: {

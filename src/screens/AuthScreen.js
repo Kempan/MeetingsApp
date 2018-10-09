@@ -35,10 +35,10 @@ export default class AuthScreen extends React.Component {
   login() {
     this.turbo.login(this.state.credentials)
       .then(resp => {
-        return AsyncStorage.setItem(config.userIdKey, resp.id);
-      })
-      .then(key => {
-        this.navigate('MainApp');
+        AsyncStorage.setItem(config.userIdKey, resp.id)
+          .then(() => {
+            this.navigate('MainApp');
+          })
       })
       .catch(err => {
         alert(err.message);

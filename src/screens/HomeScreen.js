@@ -1,60 +1,57 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, FlatList, ActivityIndicator, AsyncStorage } from 'react-native';
+import { Text } from 'react-native-elements';
 import Colors from '../styles/Colors';
 import { Images } from '../resources/images';
 import { Meeting } from '../components';
+import Turbo from 'turbo360';
+import config from '../config';
+import utils from '../utils';
 
 export default class HomeScreen extends React.Component {
-
 
 
   constructor(props) {
     super(props);
 
     this.state = {
-      meetings: [
-        {
-          time: '11:30, 25 Sep 2018',
-          location: 'Karl Johansgatan 15, Majorna',
-          title: 'React-native',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 1
-        },
-        {
-          time: '09:30, 28 Sep 2018',
-          location: 'Bokvägen 11, Mölnlycke',
-          title: 'React-native',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 2
-        },
-        {
-          time: '17:30, 2 Okt 2018',
-          location: 'Magasinsgatan 7, Göteborg',
-          title: 'React-native',
-          leader: 'Joakim Edwardh',
-          leaderDesc: 'Junior Developer, React Native',
-          rating: '96% +',
-          id: 3
-        }
-      ]
+      meetings: [],
+      loading: true
     }
+
+    this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
-  navigateMeeting(meeting) {
-    this.props.navigation.navigate('MeetingScreen', { meeting });
+  componentDidMount() {
+    this.fetchMeetings();
   }
+
+  fetchMeetings = () => {
+    utils.fetchMeetings('meeting')
+      .then(responseJson => {
+        this.setState({
+          meetings: responseJson.data,
+          loading: false
+        })
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          loading: false
+        })
+      })
+  }
+
+  navigateMeeting(item) {
+    this.props.navigation.navigate('MeetingScreen', { id: item.id, updateScreen: this.fetchMeetings.bind(this) });
+  }
+
 
   render() {
 
     return (
 
       <ScrollView style={styles.container}>
-
         <View style={styles.categoriesContainer}>
           <Text style={styles.categoriesText}>Topp-betyg</Text>
         </View>
@@ -119,13 +116,21 @@ export default class HomeScreen extends React.Component {
           <Text style={styles.categoriesText}>Förslag</Text>
         </View>
 
-        <View>
-
-          <View style={styles.categoriesContainer}>
-            <Meeting content={this.state.meetings} nav={() => { this.navigateMeeting(this.state.meetings) }} />
+        {this.state.loading ? <ActivityIndicator size='large' /> : (
+          <View style={{ marginBottom: 20, paddingBottom: 5 }}>
+            <FlatList
+              style={{ width: '100%' }}
+              data={this.state.meetings}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) =>
+                <Meeting
+                  {...item}
+                  nav={this.navigateMeeting.bind(this, { ...item })}
+                />
+              }
+            />
           </View>
-
-        </View>
+        )}
 
       </ScrollView>
     )
@@ -135,7 +140,6 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
     padding: 16,
     backgroundColor: 'white',
   },
