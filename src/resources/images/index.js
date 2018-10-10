@@ -14,4 +14,5 @@ export const Images = {
   meetingsBlack: require(`${path}meetings_black.png`),
   home: require(`${path}home.png`),
   homeBlack: require(`${path}home_black.png`),
+  linesTitle: require(`${path}lines_title.png`),
 }
