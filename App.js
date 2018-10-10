@@ -1,6 +1,7 @@
 import React from 'react';
-import { AsyncStorage, ActivityIndicator } from 'react-native';
+import { AsyncStorage, ActivityIndicator, Image } from 'react-native';
 import config from './src/config';
+import { Images } from './src/resources/images';
 import {
   AuthScreen,
   HomeScreen,
@@ -10,13 +11,13 @@ import {
   ProfilScreen,
   SupportScreen,
   ReviewMeetingScreen,
-  Home
+  CreateMeeting
 } from './src/screens';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
 const TopTabs = createMaterialTopTabNavigator({
-  Business: Home,
-  Politics: UserMeetingScreen,
+  Meetings: UserMeetingScreen,
+  Create: CreateMeeting,
 },
   {
     navigationOptions: {
@@ -28,11 +29,28 @@ const MainTabs = createBottomTabNavigator({
   Home: HomeScreen,
   Meetings: TopTabs,
   Profil: ProfilScreen,
-  Support: SupportScreen
+  Settings: SupportScreen
 },
   {
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = focused ? Images.homeBlack : Images.home
+        } else if (routeName === 'Meetings') {
+          iconName = focused ? Images.meetingsBlack : Images.meetings;
+        } else if (routeName === 'Profil') {
+          iconName = focused ? Images.profilBlack : Images.profil;
+        } else if (routeName === 'Settings') {
+          iconName = focused ? Images.settingsBlack : Images.settings;
+        }
+
+        return <Image source={iconName} style={{ height: 25, width: 25 }} />;
+      },
+    }),
     tabBarOptions: {
-      activeTintColor: 'rgb(45,48,71)',
+      activeTintColor: 'black',
       inactiveTintColor: 'gray',
     },
   });

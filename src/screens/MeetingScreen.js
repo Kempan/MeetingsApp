@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, ActivityIndicator, AsyncStorage } from 'react-native';
-import { Button, Text, Icon } from 'react-native-elements';
+import { Text, Icon } from 'react-native-elements';
+import { Button } from '../components';
 import { Images } from '../resources/images';
 import Turbo from 'turbo360';
 import config from '../config';
@@ -54,6 +55,7 @@ export default class MeetingPageScreen extends React.Component {
       })
   }
 
+  //UPPDATERAR EJ USER MEETING SCREEN, FIX
   bookMeeting() {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
@@ -70,28 +72,21 @@ export default class MeetingPageScreen extends React.Component {
           })
       });
     alert('Du har bokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.');
-
+    this.props.navigation.navigate('Meetings');
   }
 
-  //FUNKAR
+  //FUNKAR KASST
   cancelMeeting() {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
-        const newAttendants = [...this.state.attendants];
-        const filterAttendants = newAttendants.filter(item => {
+        const filterAttendants = this.state.attendants.filter(item => {
+          console.log('items:', item);
           return item !== key;
         });
-        this.setState({
-          attendants: filterAttendants
-        });
-      })
-      .then(() => {
-        this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: this.state.attendants })
+        console.log('filter:', filterAttendants);
+        return this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: filterAttendants })
           .then(data => {
-            console.log(data);
-          })
-          .catch(err => {
-            console.log(err);
+            console.log('data:', data);
           })
       })
       .catch(err => {
@@ -181,8 +176,6 @@ export default class MeetingPageScreen extends React.Component {
           </View>
         )}
       </View >
-
-
     )
   }
 }
@@ -203,6 +196,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 15,
+    width: '100%',
   },
   meetingTitleContainer: {
     width: '100%',
@@ -248,11 +242,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    alignItems: 'center',
-    bottom: 0
+    marginTop: 15
   },
   button: {
-    width: 200,
+    width: '100%',
     borderRadius: 5,
   },
   timeAndLocationContainer: {

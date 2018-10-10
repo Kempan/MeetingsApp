@@ -16,13 +16,26 @@ export default class HomeScreen extends React.Component {
 
     this.state = {
       meetings: [],
-      loading: true
+      loading: true,
+      meeting: {
+        attendants: [],
+        leader: "Joakim Edwardh",
+        leaderDesc: "Junior Developer, Inserve Technology",
+        location: "Bräckegatan 9, Göteborg",
+        time: "07:30, 11 Dec 2018",
+        title: "Node JS",
+      }
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
+    // this.turbo.create('meeting', this.state.meeting)
+    //   .then(resp => {
+    //     console.log(resp);
+    //   })
+
     this.fetchMeetings();
   }
 
@@ -116,21 +129,20 @@ export default class HomeScreen extends React.Component {
           <Text style={styles.categoriesText}>Förslag</Text>
         </View>
 
-        {this.state.loading ? <ActivityIndicator size='large' /> : (
-          <View style={{ marginBottom: 20, paddingBottom: 5 }}>
-            <FlatList
-              style={{ width: '100%' }}
-              data={this.state.meetings}
-              keyExtractor={item => item.id}
-              renderItem={({ item }) =>
-                <Meeting
-                  {...item}
-                  nav={this.navigateMeeting.bind(this, { ...item })}
-                />
-              }
-            />
-          </View>
-        )}
+        <View style={{ marginBottom: 20, paddingBottom: 5 }}>
+          {this.state.loading ? <ActivityIndicator size='large' /> : null}
+          <FlatList
+            style={{ width: '100%' }}
+            data={this.state.meetings}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) =>
+              <Meeting
+                {...item}
+                nav={this.navigateMeeting.bind(this, { ...item })}
+              />
+            }
+          />
+        </View>
 
       </ScrollView>
     )

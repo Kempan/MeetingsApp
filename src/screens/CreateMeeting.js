@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { Images } from '../resources/images';
 
-export default class Home extends React.Component {
+export default class CreateMeeting extends React.Component {
 
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ export default class Home extends React.Component {
 
       <View style={styles.container}>
 
-        <Text>HEJ</Text>
+        <Text>CREATE MEETING</Text>
 
 
       </View>

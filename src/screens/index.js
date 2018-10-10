@@ -6,7 +6,7 @@ import MeetingScreen from './MeetingScreen';
 import ProfilScreen from './ProfilScreen';
 import SupportScreen from './SupportScreen';
 import ReviewMeetingScreen from './ReviewMeetingScreen';
-import Home from './Home';
+import CreateMeeting from './CreateMeeting';
 
 
 export {
@@ -18,5 +18,5 @@ export {
   ProfilScreen,
   SupportScreen,
   ReviewMeetingScreen,
-  Home
+  CreateMeeting
 }

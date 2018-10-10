@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, FlatList, AsyncStorage, Text } from 'react-native';
-import { Meeting } from '../components';
+import { View, StyleSheet, ScrollView, FlatList, AsyncStorage, ActivityIndicator } from 'react-native';
+import { Meeting, Button } from '../components';
+import { Text } from 'react-native-elements';
 import config from '../config';
 import Turbo from 'turbo360';
 import functions from '../functions';
@@ -26,7 +27,7 @@ export default class UserMeetingScreen extends React.Component {
   fetchMeetings = () => {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
-        this.turbo.fetch('Meeting', { attendants: key })
+        return this.turbo.fetch('Meeting', { attendants: key })
           .then(data => {
             this.setState({
               meetings: data,
@@ -57,10 +58,27 @@ export default class UserMeetingScreen extends React.Component {
     return (
 
       <ScrollView style={styles.container}>
+
+        {this.state.loading ? <ActivityIndicator size='large' /> : null}
         {this.state.meetings.length <= 0 && !this.state.loading ?
-          <View style={{ alignItems: 'center' }}><Text style={{ fontWeight: 'bold' }}>Du har inga möten bokade</Text></View>
+
+          <View style={{ alignItems: 'center', width: '100%' }}>
+            <View style={{ width: '100%' }}>
+              <View style={styles.listTitleContainer}>
+                <Text style={styles.listTitleText}>Du har inga möten bokade</Text>
+              </View>
+              <Button
+                buttonStyle={styles.buttons}
+                title='refresh'
+                onPress={() => { this.fetchMeetings() }}
+              />
+            </View>
+          </View>
           :
-          <View style={{ paddingBottom: 20 }}>
+          <View style={{ paddingBottom: 15 }}>
+            <View style={styles.listTitleContainer}>
+              <Text style={styles.listTitleText}>Idag, 12e Okt</Text>
+            </View>
             <FlatList
               data={this.state.meetings}
               keyExtractor={item => item.id}
@@ -70,6 +88,11 @@ export default class UserMeetingScreen extends React.Component {
                   nav={this.navigateMeeting.bind(this, { ...item })}
                 />
               }
+            />
+            <Button
+              buttonStyle={styles.buttons}
+              title='refresh'
+              onPress={() => { this.fetchMeetings() }}
             />
           </View>
         }
@@ -83,7 +106,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    width: '100%',
+  },
+  listTitleContainer: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    width: '80%',
+    alignSelf: 'center'
+  },
+  listTitleText: {
+    fontFamily: 'notoserif',
+    fontSize: 20,
+    margin: 5,
+    letterSpacing: 1,
+    alignSelf: 'center'
   },
   meetingContainer: {
     borderWidth: 0.3,
@@ -124,5 +160,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'rgb(66, 134, 244)',
     fontWeight: 'bold',
+  },
+  buttons: {
+    width: '100%',
+    marginTop: 15,
   }
 })
