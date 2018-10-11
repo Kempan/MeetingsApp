@@ -80,14 +80,9 @@ export default class MeetingPageScreen extends React.Component {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
         const filterAttendants = this.state.attendants.filter(item => {
-          console.log('items:', item);
           return item !== key;
         });
-        console.log('filter:', filterAttendants);
-        return this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: filterAttendants })
-          .then(data => {
-            console.log('data:', data);
-          })
+        this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: filterAttendants })
       })
       .catch(err => {
         console.log(err);
@@ -145,7 +140,8 @@ export default class MeetingPageScreen extends React.Component {
 
               <View style={styles.meetingDescContainer}>
                 <Text style={styles.careerInfoText1}>Mötesbeskrivning</Text>
-                <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text>
+                {/* <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text> */}
+                <Text style={styles.careerInfoText2}>{meeting.meetingDesc}</Text>
               </View>
 
               <View style={styles.timeAndLocationContainer}>
@@ -153,7 +149,7 @@ export default class MeetingPageScreen extends React.Component {
                   name='clock'
                   type='material-community'
                 />
-                <Text style={styles.timeAndLocationText}>{meeting.time}</Text>
+                <Text style={styles.timeAndLocationText}>{meeting.dateTime}</Text>
               </View>
 
               <View style={styles.timeAndLocationContainer}>

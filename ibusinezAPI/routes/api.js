@@ -16,10 +16,26 @@ router.get('/meeting', (req, res) => {
 		.catch(err => {
 			res.json({
 				confirmation: 'fail',
-				message: 'Something went wrong'
+				message: err.message
 			})
 		})
+})
 
+router.post('/create/meeting', (req, res) => {
+
+	turbo.create('meeting', req.body)
+		.then(data => {
+			res.json({
+				confirmation: 'success',
+				data: data
+			})
+		})
+		.catch(err => {
+			res.json({
+				confirmation: 'fail',
+				message: err.message
+			})
+		})
 })
 
 router.get('/:resource/:id', (req, res) => {

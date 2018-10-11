@@ -4,7 +4,6 @@ import { Meeting, Button } from '../components';
 import { Text } from 'react-native-elements';
 import config from '../config';
 import Turbo from 'turbo360';
-import functions from '../functions';
 
 
 export default class UserMeetingScreen extends React.Component {

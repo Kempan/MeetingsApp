@@ -15,4 +15,7 @@ export const Images = {
   home: require(`${path}home.png`),
   homeBlack: require(`${path}home_black.png`),
   linesTitle: require(`${path}lines_title.png`),
+  date: require(`${path}date.png`),
+  address: require(`${path}address.png`),
+  time: require(`${path}time.png`),
 }

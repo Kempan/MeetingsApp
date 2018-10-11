@@ -28,7 +28,7 @@ export class Meeting extends React.Component {
               <Text style={styles.titleText}>{this.props.title}</Text>
             </View>
             <View>
-              <Text style={styles.textStyle}>{this.props.time}</Text>
+              <Text style={styles.textStyle}>{this.props.dateTime}</Text>
             </View>
           </View>
           <View style={styles.infoRow1}>
