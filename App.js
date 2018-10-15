@@ -11,7 +11,8 @@ import {
   ProfilScreen,
   SupportScreen,
   ReviewMeetingScreen,
-  CreateMeeting
+  CreateMeeting,
+  EntrantScreen
 } from './src/screens';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
@@ -64,6 +65,7 @@ const MainApp = createStackNavigator({
   MainTabs: MainTabs,
   MeetingScreen: MeetingScreen,
   ReviewMeetingScreen: ReviewMeetingScreen,
+  EntrantScreen: EntrantScreen,
 },
   {
     navigationOptions: {

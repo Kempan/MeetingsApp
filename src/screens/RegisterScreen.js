@@ -16,13 +16,12 @@ export default class AuthScreen extends React.Component {
 
     this.state = {
       credentials: {
-        email: 'hejsanasfasfasd',
-        password: 'hejasdasfasfasd',
-        firstName: 'hejasdasfasfasd',
-        lastName: 'hejasdasfasfasd',
-        userName: 'hejasdasfasfasd'
-      },
-      showActivityIndicator: false
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        userName: ''
+      }
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
@@ -39,20 +38,14 @@ export default class AuthScreen extends React.Component {
 
   register(cred) {
 
-    this.setState({
-      showActivityIndicator: true
-    });
-
     this.turbo.createUser(cred)
       .then(resp => {
         return AsyncStorage.setItem(config.userIdKey, resp.id)
       })
-      .then(key => {
-        this.navigate('MainApp');
-      })
       .catch(err => {
         console.log(err)
       })
+    this.navigate('MainApp');
   }
 
   navigate(screen) {
@@ -62,111 +55,109 @@ export default class AuthScreen extends React.Component {
   render() {
 
     return (
-      !this.state.showActivityIndicator ?
-        <KeyboardAvoidingView behavior='padding' style={styles.container}>
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
 
-          <View style={styles.header}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>#iBusinez</Text>
-            </View>
-
+        <View style={styles.header}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>#iBusinez</Text>
           </View>
 
-          <View style={styles.body}>
+        </View>
 
-            <View style={styles.formContainer}>
+        <View style={styles.body}>
 
-              <View style={styles.inputContainer}>
-                <Icon
-                  type='material-community'
-                  name='account'
-                  containerStyle={styles.icon}
-                />
-                <FormInput
-                  placeholder='First Name'
-                  placeholderTextColor='black'
-                  inputStyle={{ color: 'black' }}
-                  containerStyle={styles.textInput}
-                  onChangeText={(text) => { this.textUpdate(text, 'firstName') }}
-                  underlineColorAndroid="transparent"
-                />
-              </View>
+          <View style={styles.formContainer}>
 
-              <View style={styles.inputContainer}>
-                <Icon
-                  type='material-community'
-                  name='account'
-                  containerStyle={styles.icon}
-                />
-                <FormInput
-                  placeholder='Last Name'
-                  placeholderTextColor='black'
-                  inputStyle={{ color: 'black' }}
-                  containerStyle={styles.textInput}
-                  onChangeText={(text) => { this.textUpdate(text, 'lastNmae') }}
-                  underlineColorAndroid="transparent"
-                />
-              </View>
-
-              <View style={styles.inputContainer}>
-                <Icon
-                  type='material-community'
-                  name='email'
-                  containerStyle={styles.icon}
-                />
-                <FormInput
-                  placeholder='Email'
-                  placeholderTextColor='black'
-                  inputStyle={{ color: 'black' }}
-                  containerStyle={styles.textInput}
-                  keyboardType='email-address'
-                  onChangeText={(text) => { this.textUpdate(text, 'email') }}
-                  underlineColorAndroid="transparent"
-                />
-              </View>
-
-              <View style={styles.inputContainer}>
-                <Icon
-                  type='material-community'
-                  name='key'
-                  containerStyle={styles.icon}
-                />
-                <FormInput
-                  placeholder='Password'
-                  placeholderTextColor='black'
-                  inputStyle={{ color: 'black' }}
-                  containerStyle={styles.textInput}
-                  onChangeText={(text) => { this.textUpdate(text, 'password') }}
-                  underlineColorAndroid="transparent"
-                  secureTextEntry
-                />
-              </View>
-
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='account'
+                containerStyle={styles.icon}
+              />
+              <FormInput
+                placeholder='First Name'
+                placeholderTextColor='black'
+                inputStyle={{ color: 'black' }}
+                containerStyle={styles.textInput}
+                onChangeText={(text) => { this.textUpdate(text, 'firstName') }}
+                underlineColorAndroid="transparent"
+              />
             </View>
 
-            <View style={styles.formContent}>
-              <Button
-                buttonStyle={styles.button}
-                title='Submit'
-                color='white'
-                backgroundColor='rgb(66, 134, 244)'
-                onPress={() => { this.register(this.state.credentials) }}
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='account'
+                containerStyle={styles.icon}
               />
-              <Button
-                buttonStyle={styles.button}
-                title='Return'
-                color='rgb(66, 134, 244)'
-                backgroundColor='white'
-                onPress={() => { this.navigate('AuthScreen') }}
+              <FormInput
+                placeholder='Last Name'
+                placeholderTextColor='black'
+                inputStyle={{ color: 'black' }}
+                containerStyle={styles.textInput}
+                onChangeText={(text) => { this.textUpdate(text, 'lastName') }}
+                underlineColorAndroid="transparent"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='email'
+                containerStyle={styles.icon}
+              />
+              <FormInput
+                placeholder='Email'
+                placeholderTextColor='black'
+                inputStyle={{ color: 'black' }}
+                containerStyle={styles.textInput}
+                keyboardType='email-address'
+                onChangeText={(text) => { this.textUpdate(text, 'email') }}
+                underlineColorAndroid="transparent"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='key'
+                containerStyle={styles.icon}
+              />
+              <FormInput
+                placeholder='Password'
+                placeholderTextColor='black'
+                inputStyle={{ color: 'black' }}
+                containerStyle={styles.textInput}
+                onChangeText={(text) => { this.textUpdate(text, 'password') }}
+                underlineColorAndroid="transparent"
+                secureTextEntry
               />
             </View>
 
           </View>
-          <View style={styles.curvedView}></View>
 
+          <View style={styles.formContent}>
+            <Button
+              buttonStyle={styles.button}
+              title='Submit'
+              color='white'
+              backgroundColor='rgb(66, 134, 244)'
+              onPress={() => { this.register(this.state.credentials) }}
+            />
+            <Button
+              buttonStyle={styles.button}
+              title='Return'
+              color='rgb(66, 134, 244)'
+              backgroundColor='white'
+              onPress={() => { this.navigate('AuthScreen') }}
+            />
+          </View>
 
-        </KeyboardAvoidingView> : <ActivityIndicator size='large' style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }} />
+        </View>
 
+        <View style={styles.curvedView}></View>
+
+      </KeyboardAvoidingView>
     )
   }
 }

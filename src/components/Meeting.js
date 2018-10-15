@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, Divider } from 'react-native-elements';
 import { Images } from '../resources/images';
+import Colors from '../styles/Colors';
 
 export class Meeting extends React.Component {
 
@@ -9,33 +10,52 @@ export class Meeting extends React.Component {
     super(props);
   }
 
-  render() {
 
+  render() {
     return (
 
       <TouchableOpacity
         style={styles.meetingContainer}
         onPress={() => {
-          this.props.nav()
+          this.props.navigateMeeting()
         }}
       >
 
         <Image source={Images.profilPic} style={styles.profilPic} />
 
-        <View style={styles.infoContainer}>
-          <View style={styles.infoRow1}>
-            <View>
-              <Text style={styles.titleText}>{this.props.title}</Text>
-            </View>
-            <View>
-              <Text style={styles.textStyle}>{this.props.dateTime}</Text>
-            </View>
-          </View>
-          <View style={styles.infoRow1}>
-            <Text style={styles.textStyle}>Vem: {this.props.leader}</Text>
+        <View style={styles.content}>
 
-            <Text style={styles.textStyle}>Rating: {this.props.rating}</Text>
+          <View style={styles.infoRow1}>
+            <Text style={styles.titleText}>{this.props.title}</Text>
+            <Text style={styles.textStyle}>{this.props.dateTime}</Text>
           </View>
+
+          <View style={styles.infoRow1}>
+            <Text style={styles.textStyle}>{this.props.leader}</Text>
+
+            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+              <Text style={styles.textStyle}>Rating: {this.props.rating}</Text>
+              <Image source={Images.rating} style={{ height: 10, width: 50 }} />
+            </View>
+
+          </View>
+
+          <Divider style={styles.divider} />
+
+          <View style={styles.infoRowBot}>
+
+            <TouchableOpacity style={styles.chatContainer} onPress={() => { this.props.navigateEntrants() }}>
+              <Image source={Images.users} style={styles.usersImage} />
+              <Text style={styles.textStyle}>{this.props.attendants.length}</Text>
+            </TouchableOpacity>
+
+            <View style={styles.chatContainer}>
+              <Image source={Images.chat} style={styles.chatImage} />
+              <Text>2</Text>
+            </View>
+
+          </View>
+
         </View>
 
       </TouchableOpacity>
@@ -44,47 +64,60 @@ export class Meeting extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white'
-  },
   meetingContainer: {
-    borderWidth: 0.3,
-    backgroundColor: '#F8F8F8',
-    borderRadius: 10,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    backgroundColor: Colors.white,
     borderColor: 'grey',
     marginTop: 20,
-    alignItems: 'center',
     flexDirection: 'row',
     padding: 5,
-    elevation: 2,
-    flexWrap: 'wrap'
+    elevation: 1,
+    flexWrap: 'wrap',
+    padding: 16
   },
-  infoContainer: {
-    flex: 1
+  content: {
+    flex: 1,
+    paddingLeft: 16
   },
   infoRow1: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    marginBottom: 5
+    justifyContent: 'space-between'
+  },
+  divider: {
+    marginVertical: 10
   },
   textStyle: {
     color: 'rgb(45,48,71)',
-    fontSize: 15
+    fontSize: 12
   },
   profilPic: {
-    height: 75,
-    width: 75,
+    height: 40,
+    width: 40,
     borderRadius: 20
-  },
-  titleContainer: {
-    width: '100%',
-    alignItems: 'center'
   },
   titleText: {
     fontSize: 18,
     color: 'rgb(66, 134, 244)',
     fontWeight: 'bold',
+  },
+  usersImage: {
+    height: 25,
+    width: 25,
+    marginRight: 5
+  },
+  chatImage: {
+    height: 35,
+    width: 35,
+    marginRight: 5
+  },
+  infoRowBot: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  chatContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 })

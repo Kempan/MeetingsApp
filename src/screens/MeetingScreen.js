@@ -6,7 +6,7 @@ import { Images } from '../resources/images';
 import Turbo from 'turbo360';
 import config from '../config';
 
-export default class MeetingPageScreen extends React.Component {
+export default class MeetingScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -15,7 +15,7 @@ export default class MeetingPageScreen extends React.Component {
       meeting: null,
       loading: true,
       attendants: [],
-      bookedMeeting: false
+      meetingIsBooked: false
     }
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
@@ -40,11 +40,11 @@ export default class MeetingPageScreen extends React.Component {
             this.state.attendants.forEach(item => {
               if (item === key) {
                 this.setState({
-                  bookedMeeting: true
+                  meetingIsBooked: true
                 })
               } else {
                 this.setState({
-                  bookedMeeting: false
+                  meetingIsBooked: false
                 })
               }
             })
@@ -64,7 +64,7 @@ export default class MeetingPageScreen extends React.Component {
         this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: newAttendants })
           .then(data => {
             this.setState({
-              bookedMeeting: true
+              meetingIsBooked: true
             })
           })
           .catch(err => {
@@ -101,11 +101,11 @@ export default class MeetingPageScreen extends React.Component {
 
     const { meeting } = this.state;
 
-    const bookedButtonTitle = this.state.bookedMeeting ? 'Avboka möte' : 'Boka möte';
-    const buttonOnpress = this.state.bookedMeeting ? () => { this.cancelMeeting() } : () => { this.bookMeeting() };
+    const bookedButtonTitle = this.state.meetingIsBooked ? 'Avboka möte' : 'Boka möte';
+    const buttonOnpress = this.state.meetingIsBooked ? () => { this.cancelMeeting() } : () => { this.bookMeeting() };
 
     const bookedButtonStyle = [styles.button];
-    const bookedButton = this.state.bookedMeeting ? { backgroundColor: 'red' } : { backgroundColor: 'green' };
+    const bookedButton = this.state.meetingIsBooked ? { backgroundColor: 'red' } : { backgroundColor: 'green' };
     bookedButtonStyle.push(bookedButton);
 
     return (

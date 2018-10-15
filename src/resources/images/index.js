@@ -18,4 +18,6 @@ export const Images = {
   date: require(`${path}date.png`),
   address: require(`${path}address.png`),
   time: require(`${path}time.png`),
+  users: require(`${path}users.png`),
+  chat: require(`${path}chat.png`),
 }

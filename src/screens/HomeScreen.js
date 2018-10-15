@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, FlatList, ActivityIndicator, AsyncStorage } from 'react-native';
-import { Text } from 'react-native-elements';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, FlatList, ActivityIndicator, Image } from 'react-native';
+import { Text, Divider } from 'react-native-elements';
 import Colors from '../styles/Colors';
 import { Images } from '../resources/images';
 import { Meeting } from '../components';
@@ -17,6 +17,11 @@ export default class HomeScreen extends React.Component {
     this.state = {
       meetings: [],
       loading: true,
+      listCategories: [
+        { image: Images.business },
+        { image: Images.politics },
+        { image: Images.programming }
+      ]
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
@@ -46,6 +51,10 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.navigate('MeetingScreen', { id: item.id, updateScreen: this.fetchMeetings.bind(this) });
   }
 
+  navigateEntrants(item) {
+    this.props.navigation.navigate('EntrantScreen', { meeting: item });
+  }
+
 
   render() {
 
@@ -58,29 +67,20 @@ export default class HomeScreen extends React.Component {
 
         <View>
 
-          <ScrollView style={styles.genreContainer} horizontal={true}>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.business} style={styles.image} resizeMode='stretch'>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.politics} style={styles.image}>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.programming} style={styles.image}>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-          </ScrollView>
+          <FlatList
+            data={this.state.listCategories}
+            keyExtractor={item => item.id}
+            horizontal={true}
+            renderItem={({ item }) =>
+              <TouchableOpacity key={item.id} style={styles.cardContainer}>
+                <Image source={item.image} style={styles.image} resizeMode='stretch' />
+              </TouchableOpacity>
+            }
+          />
 
         </View>
+
+        <Divider style={{ marginVertical: 10 }} />
 
         <View style={styles.categoriesContainer}>
           <Text style={styles.categoriesText}>Populära kategorier</Text>
@@ -88,32 +88,23 @@ export default class HomeScreen extends React.Component {
 
         <View>
 
-          <ScrollView style={styles.genreContainer} horizontal={true}>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.business} style={styles.image} resizeMode='stretch'>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.politics} style={styles.image}>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.cardContainer}>
-              <ImageBackground source={Images.programming} style={styles.image}>
-
-              </ImageBackground>
-            </TouchableOpacity>
-
-          </ScrollView>
+          <FlatList
+            data={this.state.listCategories}
+            keyExtractor={item => item.id}
+            horizontal={true}
+            renderItem={({ item }) =>
+              <TouchableOpacity key={item.id} style={styles.cardContainer}>
+                <Image source={item.image} style={styles.image} resizeMode='stretch' />
+              </TouchableOpacity>
+            }
+          />
 
         </View>
 
+        <Divider style={{ marginVertical: 10 }} />
+
         <View style={styles.categoriesContainer}>
-          <Text style={styles.categoriesText}>Förslag</Text>
+          <Text style={styles.categoriesText}>Förslag i Göteborg</Text>
         </View>
 
         <View style={{ marginBottom: 20, paddingBottom: 5 }}>
@@ -125,7 +116,8 @@ export default class HomeScreen extends React.Component {
             renderItem={({ item }) =>
               <Meeting
                 {...item}
-                nav={this.navigateMeeting.bind(this, { ...item })}
+                navigateMeeting={this.navigateMeeting.bind(this, { ...item })}
+                navigateEntrants={() => { this.navigateEntrants({ ...item }) }}
               />
             }
           />
@@ -140,7 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
   },
   categoriesText: {
     fontSize: 20,
@@ -155,10 +147,11 @@ const styles = StyleSheet.create({
     height: 100,
     width: 200,
     borderRadius: 10,
-    marginRight: 10
+    marginRight: 10,
   },
   image: {
     height: '100%',
     width: '100%',
+    borderRadius: 10
   }
 })

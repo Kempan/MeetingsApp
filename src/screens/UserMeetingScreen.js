@@ -52,6 +52,10 @@ export default class UserMeetingScreen extends React.Component {
     this.props.navigation.navigate('MeetingScreen', { id: item.id, updateScreen: this.fetchMeetings.bind(this) });
   }
 
+  navigateEntrants(item) {
+    this.props.navigation.navigate('EntrantScreen', { meeting: item });
+  }
+
   render() {
 
     return (
@@ -73,7 +77,9 @@ export default class UserMeetingScreen extends React.Component {
               />
             </View>
           </View>
+
           :
+
           <View style={{ paddingBottom: 15 }}>
             <View style={styles.listTitleContainer}>
               <Text style={styles.listTitleText}>Idag, 12e Okt</Text>
@@ -84,7 +90,8 @@ export default class UserMeetingScreen extends React.Component {
               renderItem={({ item }) =>
                 <Meeting
                   {...item}
-                  nav={this.navigateMeeting.bind(this, { ...item })}
+                  navigateMeeting={this.navigateMeeting.bind(this, { ...item })}
+                  navigateEntrants={() => { this.navigateEntrants({ ...item }) }}
                 />
               }
             />
@@ -105,7 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: '#F8F8F8',
     width: '100%',
   },
   listTitleContainer: {
@@ -163,5 +170,6 @@ const styles = StyleSheet.create({
   buttons: {
     width: '100%',
     marginTop: 15,
+    backgroundColor: 'rgb(66, 134, 244)'
   }
 })
