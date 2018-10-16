@@ -15,6 +15,7 @@ export class Meeting extends React.Component {
     return (
 
       <TouchableOpacity
+        key={this.props.attendants.length}
         style={styles.meetingContainer}
         onPress={() => {
           this.props.navigateMeeting()

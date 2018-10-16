@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, FlatList, ActivityIndicator, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, FlatList, ActivityIndicator, Image } from 'react-native';
 import { Text, Divider } from 'react-native-elements';
 import Colors from '../styles/Colors';
 import { Images } from '../resources/images';
@@ -7,15 +7,15 @@ import { Meeting } from '../components';
 import Turbo from 'turbo360';
 import config from '../config';
 import utils from '../utils';
+import { connect } from 'react-redux';
+import { MeetingActions, MeetingTypes } from '../redux/MeetingsRedux';
 
-export default class HomeScreen extends React.Component {
-
+class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      meetings: [],
       loading: true,
       listCategories: [
         { image: Images.business },
@@ -34,8 +34,8 @@ export default class HomeScreen extends React.Component {
   fetchMeetings = () => {
     utils.fetchMeetings('meeting')
       .then(responseJson => {
+        this.props.setMeetings(responseJson.data)
         this.setState({
-          meetings: responseJson.data,
           loading: false
         })
       })
@@ -73,7 +73,7 @@ export default class HomeScreen extends React.Component {
             horizontal={true}
             renderItem={({ item }) =>
               <TouchableOpacity key={item.id} style={styles.cardContainer}>
-                <Image source={item.image} style={styles.image} resizeMode='stretch' />
+                <Image key={item.id} source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }
           />
@@ -94,7 +94,7 @@ export default class HomeScreen extends React.Component {
             horizontal={true}
             renderItem={({ item }) =>
               <TouchableOpacity key={item.id} style={styles.cardContainer}>
-                <Image source={item.image} style={styles.image} resizeMode='stretch' />
+                <Image key={item.id} source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }
           />
@@ -111,10 +111,11 @@ export default class HomeScreen extends React.Component {
           {this.state.loading ? <ActivityIndicator size='large' /> : null}
           <FlatList
             style={{ width: '100%' }}
-            data={this.state.meetings}
+            data={this.props.meetings}
             keyExtractor={item => item.id}
             renderItem={({ item }) =>
               <Meeting
+                key={item.id}
                 {...item}
                 navigateMeeting={this.navigateMeeting.bind(this, { ...item })}
                 navigateEntrants={() => { this.navigateEntrants({ ...item }) }}
@@ -127,6 +128,20 @@ export default class HomeScreen extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    meetings: state.meetings.data
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setMeetings: (data) => dispatch((MeetingActions.setMeetings(data)))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {

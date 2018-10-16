@@ -20,12 +20,11 @@ export class EntrantCard extends React.Component {
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
-  componentWillMount() {
-    const entrantId = this.props.entrantId.item;
-    this.fetchUser(entrantId);
-  }
-
   componentDidMount() {
+
+    const entrantId = this.props.entrantId.item;
+    console.log(entrantId, 'hej')
+    this.fetchUser(entrantId);
   }
 
   fetchUser(entrantId) {
@@ -35,6 +34,7 @@ export class EntrantCard extends React.Component {
           entrant: entrant,
           loading: false
         })
+        console.log(this.state.entrant);
       })
       .catch(err => {
         console.log(err);
@@ -42,7 +42,7 @@ export class EntrantCard extends React.Component {
   }
 
   render() {
-    console.log(this.state.entrant)
+    console.log(this.state.entrant, 'bajs')
     const { entrant } = this.state;
     return (
       <View>

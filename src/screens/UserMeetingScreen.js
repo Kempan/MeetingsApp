@@ -89,6 +89,7 @@ export default class UserMeetingScreen extends React.Component {
               keyExtractor={item => item.id}
               renderItem={({ item }) =>
                 <Meeting
+                  key={item.id}
                   {...item}
                   navigateMeeting={this.navigateMeeting.bind(this, { ...item })}
                   navigateEntrants={() => { this.navigateEntrants({ ...item }) }}

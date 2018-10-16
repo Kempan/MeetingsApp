@@ -8,6 +8,7 @@ import config from '../config';
 
 export default class MeetingScreen extends React.Component {
 
+
   constructor(props) {
     super(props);
 

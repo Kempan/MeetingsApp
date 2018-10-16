@@ -15,6 +15,9 @@ import {
   EntrantScreen
 } from './src/screens';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
+import { store } from './src/redux/Store';
+import { Provider } from 'react-redux';
+
 
 const TopTabs = createMaterialTopTabNavigator({
   Meetings: UserMeetingScreen,
@@ -131,6 +134,11 @@ export default class App extends React.Component {
 
   render() {
     const Switch = RootNav(this.state.authed);
-    return this.state.authCheck ? <Switch /> : <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }} size='large' />;
+    const appContent = this.state.authCheck ? <Switch /> : <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }} size='large' />;
+    return (
+      <Provider store={store}>
+        {appContent}
+      </Provider>
+    )
   }
 }

@@ -10,13 +10,14 @@ export default class EntrantScreen extends React.Component {
     super(props);
 
     this.state = {
-      entrants: null,
+      entrants: [],
       loading: true
     }
   }
 
   componentWillMount() {
     const entrants = this.props.navigation.state.params.meeting.attendants;
+    console.log(entrants)
     this.setState({
       entrants: entrants,
       loading: false
@@ -24,7 +25,9 @@ export default class EntrantScreen extends React.Component {
   }
 
   render() {
+
     return (
+
       <View style={styles.container}>
         {this.state.loading ? <ActivityIndicator size='large' /> : null}
         {!this.state.loading && this.state.entrants.length > 0 ?
@@ -38,7 +41,7 @@ export default class EntrantScreen extends React.Component {
 
           :
 
-          <View><Text>Inga deltagare</Text></View>
+          <View style={styles.container2}><Text style={styles.text}>Inga deltagare</Text></View>
 
         }
 
@@ -53,6 +56,17 @@ export default class EntrantScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+  },
+  container2: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  text: {
+    fontFamily: 'notoserif',
+    fontSize: 20,
+    marginTop: 15,
+    letterSpacing: 1,
+    alignSelf: 'center'
   }
 })
