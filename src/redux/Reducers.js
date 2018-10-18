@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { setMeetings } from './MeetingsRedux';
+import { meetingsReducer } from './MeetingsRedux';
 
 export const rootReducer = combineReducers({
-  meetings: setMeetings
+  meetings: meetingsReducer
 })

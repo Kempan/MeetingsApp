@@ -26,5 +26,6 @@ export default {
       .then(response => {
         return response.json();
       })
-  }
+  },
+
 }

@@ -5,7 +5,6 @@ import { Images } from '../resources/images';
 import Colors from '../styles/Colors';
 import Turbo from 'turbo360';
 import config from '../config';
-import utils from '../utils';
 
 export class EntrantCard extends React.Component {
 
@@ -21,9 +20,7 @@ export class EntrantCard extends React.Component {
   }
 
   componentDidMount() {
-
     const entrantId = this.props.entrantId.item;
-    console.log(entrantId, 'hej')
     this.fetchUser(entrantId);
   }
 
@@ -34,7 +31,6 @@ export class EntrantCard extends React.Component {
           entrant: entrant,
           loading: false
         })
-        console.log(this.state.entrant);
       })
       .catch(err => {
         console.log(err);
@@ -42,14 +38,13 @@ export class EntrantCard extends React.Component {
   }
 
   render() {
-    console.log(this.state.entrant, 'bajs')
     const { entrant } = this.state;
     return (
       <View>
         {this.state.loading ? <ActivityIndicator /> : (
           <TouchableOpacity
             style={styles.meetingContainer}
-            onPress={() => { }}
+            onPress={() => { this.props.nav(this.state.entrant) }}
           >
             <Image source={Images.profilPic} style={styles.profilPic} />
 

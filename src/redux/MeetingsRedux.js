@@ -1,10 +1,14 @@
 const initialState = {
-  data: []
+  homePageMeetings: [],
+  bookedMeetings: []
 };
 
-export const setMeetings = (state = initialState, action) => {
+export const meetingsReducer = (state = initialState, action) => {
   if (action.type == MeetingTypes.SET_MEETINGS) {
-    return { data: action.data }
+    return { ...state, homePageMeetings: action.data }
+  }
+  else if (action.type == MeetingTypes.SET_BOOKED_MEETINGS) {
+    return { ...state, bookedMeetings: action.data }
   }
   else {
     return state;
@@ -12,12 +16,17 @@ export const setMeetings = (state = initialState, action) => {
 }
 
 export const MeetingActions = {
-  setMeetings: (meetings) => ({
+  setMeetings: (data) => ({
     type: MeetingTypes.SET_MEETINGS,
-    data: meetings
+    data: data
+  }),
+  setBookedMeetings: (data) => ({
+    type: MeetingTypes.SET_BOOKED_MEETINGS,
+    data: data
   })
 }
 
 export const MeetingTypes = {
-  SET_MEETINGS: 'SET_MEETINGS'
+  SET_MEETINGS: 'SET_MEETINGS',
+  SET_BOOKED_MEETINGS: 'SET_BOOKED_MEETINGS'
 };

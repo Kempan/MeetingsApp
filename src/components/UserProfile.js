@@ -6,48 +6,48 @@ import config from '../config';
 import Turbo from 'turbo360';
 
 
-export default class ProfilScreen extends React.Component {
+export class UserProfile extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      user: {}
-    }
+    // this.state = {
+    //   user: {}
+    // }
 
-    this.turbo = Turbo({ site_id: config.turboAppId });
+    // this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
-    AsyncStorage.getItem(config.userIdKey)
-      .then(key => {
-        console.log(key)
-        this.turbo.fetchOne('user', key)
-          .then(resp => {
-            let newUser = Object.assign(this.state.user);
-            newUser = resp;
-            this.setState({
-              user: newUser
-            })
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    // AsyncStorage.getItem(config.userIdKey)
+    //   .then(key => {
+    //     console.log(key)
+    //     this.turbo.fetchOne('user', key)
+    //       .then(resp => {
+    //         let newUser = Object.assign(this.state.user);
+    //         newUser = resp;
+    //         this.setState({
+    //           user: newUser
+    //         })
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //       })
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   })
   }
 
   render() {
 
-    const { user } = this.state;
+    // const { user } = this.state;
 
     return (
 
       <View style={styles.container}>
-
-        <View style={styles.curvedView}></View>
+        <Text>HEJ</Text>
+        {/* <View style={styles.curvedView}></View>
 
         <View style={styles.header}>
 
@@ -89,7 +89,7 @@ export default class ProfilScreen extends React.Component {
             <Text style={styles.infoText}>Add to group</Text>
           </View>
 
-        </View>
+        </View> */}
 
       </View>
     )

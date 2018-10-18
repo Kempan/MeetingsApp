@@ -12,7 +12,8 @@ import {
   SupportScreen,
   ReviewMeetingScreen,
   CreateMeeting,
-  EntrantScreen
+  EntrantScreen,
+  UserProfileScreen
 } from './src/screens';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 import { store } from './src/redux/Store';
@@ -69,6 +70,7 @@ const MainApp = createStackNavigator({
   MeetingScreen: MeetingScreen,
   ReviewMeetingScreen: ReviewMeetingScreen,
   EntrantScreen: EntrantScreen,
+  UserProfileScreen: UserProfileScreen
 },
   {
     navigationOptions: {

@@ -4,15 +4,17 @@ import { Meeting, Button } from '../components';
 import { Text } from 'react-native-elements';
 import config from '../config';
 import Turbo from 'turbo360';
+import { connect } from 'react-redux';
+import { MeetingActions } from '../redux/MeetingsRedux';
 
 
-export default class UserMeetingScreen extends React.Component {
+export class UserMeetingScreen extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      meetings: [],
+      // meetings: [],
       loading: true
     }
 
@@ -28,8 +30,9 @@ export default class UserMeetingScreen extends React.Component {
       .then(key => {
         return this.turbo.fetch('Meeting', { attendants: key })
           .then(data => {
+            this.props.setBookedMeetings(data)
             this.setState({
-              meetings: data,
+              // meetings: data,
               loading: false,
             })
           })
@@ -63,7 +66,7 @@ export default class UserMeetingScreen extends React.Component {
       <ScrollView style={styles.container}>
 
         {this.state.loading ? <ActivityIndicator size='large' /> : null}
-        {this.state.meetings.length <= 0 && !this.state.loading ?
+        {this.props.bookedMeetings.length <= 0 && !this.state.loading ?
 
           <View style={{ alignItems: 'center', width: '100%' }}>
             <View style={{ width: '100%' }}>
@@ -85,7 +88,7 @@ export default class UserMeetingScreen extends React.Component {
               <Text style={styles.listTitleText}>Idag, 12e Okt</Text>
             </View>
             <FlatList
-              data={this.state.meetings}
+              data={this.props.bookedMeetings}
               keyExtractor={item => item.id}
               renderItem={({ item }) =>
                 <Meeting
@@ -108,6 +111,20 @@ export default class UserMeetingScreen extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    bookedMeetings: state.meetings.bookedMeetings
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setBookedMeetings: (data) => dispatch((MeetingActions.setBookedMeetings(data)))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserMeetingScreen);
 
 const styles = StyleSheet.create({
   container: {

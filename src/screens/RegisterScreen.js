@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, AsyncStorage, ActivityIndicator, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 import { FormInput, Icon } from 'react-native-elements';
 import { Button } from '../components';
 import config from '../config';
@@ -20,13 +20,13 @@ export default class AuthScreen extends React.Component {
         password: '',
         firstName: '',
         lastName: '',
-        userName: ''
+        address: '',
+        phoneNumber: ''
       }
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
-
 
   textUpdate(text, field) {
     const newCredentials = Object.assign(this.state.credentials);
@@ -37,15 +37,15 @@ export default class AuthScreen extends React.Component {
   }
 
   register(cred) {
-
     this.turbo.createUser(cred)
       .then(resp => {
-        return AsyncStorage.setItem(config.userIdKey, resp.id)
+        AsyncStorage.setItem(config.userIdKey, resp.id)
       })
       .catch(err => {
         console.log(err)
       })
     this.navigate('MainApp');
+    console.log(config.userIdKey);
   }
 
   navigate(screen) {
@@ -113,6 +113,38 @@ export default class AuthScreen extends React.Component {
                 containerStyle={styles.textInput}
                 keyboardType='email-address'
                 onChangeText={(text) => { this.textUpdate(text, 'email') }}
+                underlineColorAndroid="transparent"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='map-marker'
+                containerStyle={styles.icon}
+              />
+              <FormInput
+                placeholder='Address'
+                placeholderTextColor='black'
+                inputStyle={{ color: 'black' }}
+                containerStyle={styles.textInput}
+                onChangeText={(text) => { this.textUpdate(text, 'address') }}
+                underlineColorAndroid="transparent"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Icon
+                type='material-community'
+                name='cellphone-android'
+                containerStyle={styles.icon}
+              />
+              <FormInput
+                placeholder='Phone-number'
+                placeholderTextColor='black'
+                inputStyle={{ color: 'black' }}
+                containerStyle={styles.textInput}
+                onChangeText={(text) => { this.textUpdate(text, 'phoneNumber') }}
                 underlineColorAndroid="transparent"
               />
             </View>
@@ -193,7 +225,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
-    paddingTop: 90
+    paddingTop: 70
   },
   titleContainer: {
     alignItems: 'center',
@@ -213,7 +245,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   formContainer: {
-    marginBottom: 15
+    marginBottom: 15,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -222,7 +254,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     marginBottom: 10,
     width: 280,
-    height: 60,
     alignItems: 'center'
   },
   icon: {
@@ -231,9 +262,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: 200,
     borderRadius: 15,
-    marginBottom: 10,
     backgroundColor: 'white',
-    alignSelf: 'center',
-    marginTop: 10
+    alignSelf: 'center'
   }
 })

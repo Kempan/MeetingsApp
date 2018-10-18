@@ -73,7 +73,7 @@ export default class MeetingScreen extends React.Component {
           })
       });
     alert('Du har bokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.');
-    this.props.navigation.navigate('Meetings');
+    this.navigateMeetings('Meetings');
   }
 
   //FUNKAR KASST
@@ -89,12 +89,12 @@ export default class MeetingScreen extends React.Component {
         console.log(err);
       })
     alert('Du har avbokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.')
-    this.navigateMeetings();
+    this.navigateMeetings('Meetings');
   }
 
-  navigateMeetings = () => {
+  navigateMeetings = (screen) => {
     const { params } = this.props.navigation.state;
-    this.props.navigation.navigate('Meetings');
+    this.props.navigation.navigate(screen);
     params.updateScreen();
   }
 

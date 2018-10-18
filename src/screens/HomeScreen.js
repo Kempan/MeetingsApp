@@ -8,7 +8,7 @@ import Turbo from 'turbo360';
 import config from '../config';
 import utils from '../utils';
 import { connect } from 'react-redux';
-import { MeetingActions, MeetingTypes } from '../redux/MeetingsRedux';
+import { MeetingActions } from '../redux/MeetingsRedux';
 
 class HomeScreen extends React.Component {
 
@@ -18,9 +18,9 @@ class HomeScreen extends React.Component {
     this.state = {
       loading: true,
       listCategories: [
-        { image: Images.business },
-        { image: Images.politics },
-        { image: Images.programming }
+        { image: Images.business, id: 1 },
+        { image: Images.politics, id: 2 },
+        { image: Images.programming, id: 3 }
       ]
     }
 
@@ -69,11 +69,11 @@ class HomeScreen extends React.Component {
 
           <FlatList
             data={this.state.listCategories}
-            keyExtractor={item => item.id}
+            keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item }) =>
-              <TouchableOpacity key={item.id} style={styles.cardContainer}>
-                <Image key={item.id} source={item.image} style={styles.image} resizeMode='stretch' />
+              <TouchableOpacity style={styles.cardContainer}>
+                <Image source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }
           />
@@ -90,11 +90,11 @@ class HomeScreen extends React.Component {
 
           <FlatList
             data={this.state.listCategories}
-            keyExtractor={item => item.id}
+            keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item }) =>
-              <TouchableOpacity key={item.id} style={styles.cardContainer}>
-                <Image key={item.id} source={item.image} style={styles.image} resizeMode='stretch' />
+              <TouchableOpacity style={styles.cardContainer}>
+                <Image source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }
           />
@@ -111,7 +111,7 @@ class HomeScreen extends React.Component {
           {this.state.loading ? <ActivityIndicator size='large' /> : null}
           <FlatList
             style={{ width: '100%' }}
-            data={this.props.meetings}
+            data={this.props.homePageMeetings}
             keyExtractor={item => item.id}
             renderItem={({ item }) =>
               <Meeting
@@ -131,7 +131,7 @@ class HomeScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    meetings: state.meetings.data
+    homePageMeetings: state.meetings.homePageMeetings
   }
 }
 

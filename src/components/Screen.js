@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {

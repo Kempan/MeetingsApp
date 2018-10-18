@@ -1,38 +1,31 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, AsyncStorage } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { Button, Icon, Divider } from 'react-native-elements';
 import { Images } from '../resources/images';
 import config from '../config';
 import Turbo from 'turbo360';
 
-
-export default class ProfilScreen extends React.Component {
+export default class UserProfileScreen extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      user: {}
+      user: null,
+      loading: true
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
-    AsyncStorage.getItem(config.userIdKey)
-      .then(key => {
-        console.log(key)
-        this.turbo.fetchOne('user', key)
-          .then(resp => {
-            let newUser = Object.assign(this.state.user);
-            newUser = resp;
-            this.setState({
-              user: newUser
-            })
-          })
-          .catch(err => {
-            console.log(err);
-          })
+    const { userId } = this.props.navigation.state.params;
+    this.turbo.fetchOne('user', userId)
+      .then(resp => {
+        this.setState({
+          user: resp,
+          loading: false
+        })
       })
       .catch(err => {
         console.log(err);
@@ -42,6 +35,14 @@ export default class ProfilScreen extends React.Component {
   render() {
 
     const { user } = this.state;
+
+    if (this.state.loading == true) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size='large' />
+        </View>
+      )
+    }
 
     return (
 
@@ -59,7 +60,7 @@ export default class ProfilScreen extends React.Component {
           </View>
 
           <View style={styles.iconsContainer}>
-            <Icon onPress={() => { console.log(this.state.user) }} iconStyle={styles.bigIcons} size={60} name='linkedin-box' type='material-community' />
+            <Icon iconStyle={styles.bigIcons} size={60} name='linkedin-box' type='material-community' />
             <Icon iconStyle={[styles.bigIcons, { marginHorizontal: 20 }]} size={60} name='facebook-box' type='material-community' />
             <Icon iconStyle={styles.bigIcons} size={60} name='twitter-box' type='material-community' />
           </View>
@@ -72,18 +73,22 @@ export default class ProfilScreen extends React.Component {
             <Image source={Images.mail} style={styles.smallIcons} />
             <Text style={styles.infoText}>{user.email}</Text>
           </View>
+          <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.phone} style={styles.smallIcons} />
             <Text style={styles.infoText}>{user.phoneNumber}</Text>
           </View>
+          <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.address} style={styles.smallIcons} />
             <Text style={styles.infoText}>{user.address}</Text>
           </View>
+          <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.chatBlue} style={styles.smallIcons} />
             <Text style={styles.infoText}>Create message</Text>
           </View>
+          <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.addToGroup} style={styles.smallIcons} />
             <Text style={styles.infoText}>Add to group</Text>
@@ -118,7 +123,7 @@ const styles = StyleSheet.create({
     ],
     backgroundColor: 'rgb(66, 134, 244)',
     justifyContent: 'center',
-    bottom: 250,
+    bottom: 300,
     position: 'absolute'
   },
   userContainer: {
@@ -154,11 +159,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 10
   },
   smallIcons: {
     height: 30,
     width: 30,
     marginRight: 10
+  },
+  divider: {
+    marginVertical: 8,
+    backgroundColor: 'grey'
   }
 })

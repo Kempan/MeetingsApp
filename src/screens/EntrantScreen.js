@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator, FlatList, Text } from 'react-native';
 import { EntrantCard } from '../components';
-import Turbo from 'turbo360';
-import config from '../config';
+
 
 export default class EntrantScreen extends React.Component {
 
@@ -24,6 +23,10 @@ export default class EntrantScreen extends React.Component {
     })
   }
 
+  navigateToProfileScreen(userId) {
+    this.props.navigation.navigate('UserProfileScreen', { userId: userId })
+  }
+
   render() {
 
     return (
@@ -33,9 +36,12 @@ export default class EntrantScreen extends React.Component {
         {!this.state.loading && this.state.entrants.length > 0 ?
           <FlatList
             data={this.state.entrants}
-            keyExtractor={item => item.id}
+            keyExtractor={(index) => index.toString()}
             renderItem={(entrantId) =>
-              <EntrantCard entrantId={entrantId} />
+              <EntrantCard
+                entrantId={entrantId}
+                nav={() => this.navigateToProfileScreen(entrantId.item)}
+              />
             }
           />
 
@@ -44,10 +50,6 @@ export default class EntrantScreen extends React.Component {
           <View style={styles.container2}><Text style={styles.text}>Inga deltagare</Text></View>
 
         }
-
-
-
-
       </View>
     )
 

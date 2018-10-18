@@ -12,7 +12,7 @@ export default class ReviewMeetingScreen extends React.Component {
 
     this.state = {
       meeting: null,
-      loading: false,
+      loading: true,
       comment: ''
     }
     this.turbo = Turbo({ site_id: config.turboAppId });
@@ -20,16 +20,16 @@ export default class ReviewMeetingScreen extends React.Component {
 
   componentDidMount() {
     // const meetingId = this.props.navigation.state.params;
-    // this.turbo.fetchOne('meeting', meetingId)
-    //   .then(resp => {
-    //     this.setState({
-    //       meeting: resp,
-    //       loading: false
-    //     })
-    //   })
-    //   .catch(err => {
-    //     console.log(err.message)
-    //   })
+    this.turbo.fetchOne('meeting', '5bc6e00236d9ec001468d4f7')
+      .then(resp => {
+        this.setState({
+          meeting: resp,
+          loading: false
+        })
+      })
+      .catch(err => {
+        console.log(err.message)
+      })
   }
 
   render() {
