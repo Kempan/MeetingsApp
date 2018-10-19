@@ -48,7 +48,7 @@ class HomeScreen extends React.Component {
   }
 
   navigateMeeting(item) {
-    this.props.navigation.navigate('MeetingScreen', { id: item.id, updateScreen: this.fetchMeetings.bind(this) });
+    this.props.navigation.navigate('MeetingScreen', { id: item.id });
   }
 
   navigateEntrants(item) {

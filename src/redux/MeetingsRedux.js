@@ -1,6 +1,7 @@
 const initialState = {
   homePageMeetings: [],
-  bookedMeetings: []
+  bookedMeetings: [],
+  isLoading: true
 };
 
 export const meetingsReducer = (state = initialState, action) => {
@@ -23,10 +24,15 @@ export const MeetingActions = {
   setBookedMeetings: (data) => ({
     type: MeetingTypes.SET_BOOKED_MEETINGS,
     data: data
+  }),
+  getMeetings: () => ({
+    type: MeetingTypes.GET_MEETINGS,
+    data: {}
   })
 }
 
 export const MeetingTypes = {
   SET_MEETINGS: 'SET_MEETINGS',
-  SET_BOOKED_MEETINGS: 'SET_BOOKED_MEETINGS'
+  SET_BOOKED_MEETINGS: 'SET_BOOKED_MEETINGS',
+  GET_MEETINGS: 'GET_MEETINGS'
 };

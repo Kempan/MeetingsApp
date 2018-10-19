@@ -1,4 +1,5 @@
 import config from '../config';
+import Turbo from 'turbo360';
 
 export default {
   fetchMeetings: (endpoint) => {
@@ -11,6 +12,18 @@ export default {
     })
       .then(response => {
         return response.json();
+      })
+  },
+
+  fetchBookedMeetings: (userId) => {
+    console.log(userId);
+    return Turbo({ site_id: config.turboAppId }).fetch('meeting', { attendants: userId })
+      .then(resp => {
+        console.log(resp);
+        return resp;
+      })
+      .catch(err => {
+        console.log(err.message);
       })
   },
 
@@ -27,5 +40,4 @@ export default {
         return response.json();
       })
   },
-
 }

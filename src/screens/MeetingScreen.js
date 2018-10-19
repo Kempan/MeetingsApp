@@ -5,8 +5,10 @@ import { Button } from '../components';
 import { Images } from '../resources/images';
 import Turbo from 'turbo360';
 import config from '../config';
+import { connect } from 'react-redux';
+import { MeetingActions } from '../redux/MeetingsRedux';
 
-export default class MeetingScreen extends React.Component {
+export class MeetingScreen extends React.Component {
 
 
   constructor(props) {
@@ -73,29 +75,43 @@ export default class MeetingScreen extends React.Component {
           })
       });
     alert('Du har bokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.');
-    this.navigateMeetings('Meetings');
+    this.navigateMeetings('Home');
   }
 
   //FUNKAR KASST
   cancelMeeting() {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
+
         const filterAttendants = this.state.attendants.filter(item => {
           return item !== key;
         });
+        console.log(filterAttendants);
+
         this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: filterAttendants })
+          .then(resp => {
+            this.setState({
+              meetingIsBooked: false
+            })
+            this.navigateMeetings('Home');
+          })
+
+
       })
       .catch(err => {
         console.log(err);
       })
     alert('Du har avbokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.')
-    this.navigateMeetings('Meetings');
+
   }
 
   navigateMeetings = (screen) => {
-    const { params } = this.props.navigation.state;
+
+    this.props.getMeetings();
+    // SKICKAR EJ userId ID TILL FETCHBOOKED I UTILS
+
+
     this.props.navigation.navigate(screen);
-    params.updateScreen();
   }
 
   render() {
@@ -177,9 +193,22 @@ export default class MeetingScreen extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    homePageMeetings: state.meetings.homePageMeetings
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMeetings: () => dispatch((MeetingActions.getMeetings()))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MeetingScreen);
+
 const mapHeight = 150;
 const imageSize = 80;
-const imagePosition = mapHeight - (imageSize / 2);
 
 const styles = StyleSheet.create({
   container: {

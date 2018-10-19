@@ -37,6 +37,7 @@ export default class AuthScreen extends React.Component {
       .then(resp => {
         return AsyncStorage.setItem(config.userIdKey, resp.id)
           .then(() => {
+            config.setUserId(resp.id)
             this.navigate('MainApp');
           })
       })

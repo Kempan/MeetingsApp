@@ -4,6 +4,7 @@ import { Meeting, Button } from '../components';
 import { Text } from 'react-native-elements';
 import config from '../config';
 import Turbo from 'turbo360';
+import utils from '../utils';
 import { connect } from 'react-redux';
 import { MeetingActions } from '../redux/MeetingsRedux';
 
@@ -26,33 +27,62 @@ export class UserMeetingScreen extends React.Component {
   }
 
   fetchMeetings = () => {
-    AsyncStorage.getItem(config.userIdKey)
-      .then(key => {
-        return this.turbo.fetch('Meeting', { attendants: key })
-          .then(data => {
-            this.props.setBookedMeetings(data)
-            this.setState({
-              // meetings: data,
-              loading: false,
-            })
-          })
-          .catch(err => {
-            console.log(err);
-            this.setState({
-              loading: false
-            })
-          })
-      })
-      .catch(err => {
-        this.setState({
-          loading: false
-        })
-        console.log(err.message);
-      })
+    this.props.getMeetings()
+
+    // AsyncStorage.getItem(config.userIdKey)
+    //   .then(userId => {
+    //     console.log(userId)
+    //     utils.fetchBookedMeetings(userId)
+    //       .then(resp => {
+    //         console.log(resp)
+    //         if (resp == null) {
+    //           console.log('hej null')
+    //         }
+    //         this.props.setBookedMeetings(resp)
+    //         this.setState({
+    //           loading: false,
+    //         })
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //         this.setState({
+    //           loading: false,
+    //         })
+    //       })
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     this.setState({
+    //       loading: false,
+    //     })
+    //   })
+
+    // AsyncStorage.getItem(config.userIdKey)
+    //   .then(key => {
+    //     return this.turbo.fetch('meeting', { attendants: key })
+    //       .then(data => {
+    //         this.props.setBookedMeetings(data)
+    //         this.setState({
+    //           loading: false,
+    //         })
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //         this.setState({
+    //           loading: false
+    //         })
+    //       })
+    //   })
+    //   .catch(err => {
+    //     this.setState({
+    //       loading: false
+    //     })
+    //     console.log(err.message);
+    //   })
   }
 
   navigateMeeting(item) {
-    this.props.navigation.navigate('MeetingScreen', { id: item.id, updateScreen: this.fetchMeetings.bind(this) });
+    this.props.navigation.navigate('MeetingScreen', { id: item.id });
   }
 
   navigateEntrants(item) {
@@ -61,11 +91,19 @@ export class UserMeetingScreen extends React.Component {
 
   render() {
 
+    if (this.props.bookedMeetings == null) {
+      return (
+        <ScrollView style={styles.container}>
+          <Text>NULL</Text>
+        </ScrollView>
+      )
+    }
+
     return (
 
       <ScrollView style={styles.container}>
 
-        {this.state.loading ? <ActivityIndicator size='large' /> : null}
+        {/* {this.state.loading ? <ActivityIndicator size='large' /> : null} */}
         {this.props.bookedMeetings.length <= 0 && !this.state.loading ?
 
           <View style={{ alignItems: 'center', width: '100%' }}>
@@ -120,7 +158,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setBookedMeetings: (data) => dispatch((MeetingActions.setBookedMeetings(data)))
+    setBookedMeetings: (data) => dispatch((MeetingActions.setBookedMeetings(data))),
+    getMeetings: () => dispatch((MeetingActions.getMeetings()))
   }
 }
 
