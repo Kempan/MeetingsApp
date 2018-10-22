@@ -15,70 +15,13 @@ export class UserMeetingScreen extends React.Component {
     super(props);
 
     this.state = {
-      // meetings: [],
-      loading: true
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
-    this.fetchMeetings();
-  }
-
-  fetchMeetings = () => {
     this.props.getMeetings()
-
-    // AsyncStorage.getItem(config.userIdKey)
-    //   .then(userId => {
-    //     console.log(userId)
-    //     utils.fetchBookedMeetings(userId)
-    //       .then(resp => {
-    //         console.log(resp)
-    //         if (resp == null) {
-    //           console.log('hej null')
-    //         }
-    //         this.props.setBookedMeetings(resp)
-    //         this.setState({
-    //           loading: false,
-    //         })
-    //       })
-    //       .catch(err => {
-    //         console.log(err);
-    //         this.setState({
-    //           loading: false,
-    //         })
-    //       })
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     this.setState({
-    //       loading: false,
-    //     })
-    //   })
-
-    // AsyncStorage.getItem(config.userIdKey)
-    //   .then(key => {
-    //     return this.turbo.fetch('meeting', { attendants: key })
-    //       .then(data => {
-    //         this.props.setBookedMeetings(data)
-    //         this.setState({
-    //           loading: false,
-    //         })
-    //       })
-    //       .catch(err => {
-    //         console.log(err);
-    //         this.setState({
-    //           loading: false
-    //         })
-    //       })
-    //   })
-    //   .catch(err => {
-    //     this.setState({
-    //       loading: false
-    //     })
-    //     console.log(err.message);
-    //   })
   }
 
   navigateMeeting(item) {
@@ -91,10 +34,10 @@ export class UserMeetingScreen extends React.Component {
 
   render() {
 
-    if (this.props.bookedMeetings == null) {
+    if (this.props.isLoading == null) {
       return (
         <ScrollView style={styles.container}>
-          <Text>NULL</Text>
+          <ActivityIndicator size='large' />
         </ScrollView>
       )
     }
@@ -103,8 +46,7 @@ export class UserMeetingScreen extends React.Component {
 
       <ScrollView style={styles.container}>
 
-        {/* {this.state.loading ? <ActivityIndicator size='large' /> : null} */}
-        {this.props.bookedMeetings.length <= 0 && !this.state.loading ?
+        {this.props.bookedMeetings.length <= 0 ?
 
           <View style={{ alignItems: 'center', width: '100%' }}>
             <View style={{ width: '100%' }}>
@@ -152,7 +94,8 @@ export class UserMeetingScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    bookedMeetings: state.meetings.bookedMeetings
+    bookedMeetings: state.meetings.bookedMeetings,
+    isLoading: state.meetings.isLoading
   }
 }
 

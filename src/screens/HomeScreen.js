@@ -16,7 +16,6 @@ class HomeScreen extends React.Component {
     super(props);
 
     this.state = {
-      loading: true,
       listCategories: [
         { image: Images.business, id: 1 },
         { image: Images.politics, id: 2 },
@@ -28,23 +27,8 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchMeetings();
-  }
-
-  fetchMeetings = () => {
-    utils.fetchMeetings('meeting')
-      .then(responseJson => {
-        this.props.setMeetings(responseJson.data)
-        this.setState({
-          loading: false
-        })
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          loading: false
-        })
-      })
+    console.log(config.userIdKey);
+    this.props.getMeetings()
   }
 
   navigateMeeting(item) {
@@ -108,7 +92,7 @@ class HomeScreen extends React.Component {
         </View>
 
         <View style={{ marginBottom: 20, paddingBottom: 5 }}>
-          {this.state.loading ? <ActivityIndicator size='large' /> : null}
+          {this.props.isLoading ? <ActivityIndicator size='large' /> : null}
           <FlatList
             style={{ width: '100%' }}
             data={this.props.homePageMeetings}
@@ -131,13 +115,15 @@ class HomeScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    homePageMeetings: state.meetings.homePageMeetings
+    homePageMeetings: state.meetings.homePageMeetings,
+    isLoading: state.meetings.isLoading
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setMeetings: (data) => dispatch((MeetingActions.setMeetings(data)))
+    setMeetings: (data) => dispatch((MeetingActions.setMeetings(data))),
+    getMeetings: (data) => dispatch((MeetingActions.getMeetings(data))),
   }
 }
 

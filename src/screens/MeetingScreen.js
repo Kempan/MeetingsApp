@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Image, ActivityIndicator, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Image, ActivityIndicator, AsyncStorage, TouchableOpacity } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
 import { Button } from '../components';
 import { Images } from '../resources/images';
@@ -69,13 +69,13 @@ export class MeetingScreen extends React.Component {
             this.setState({
               meetingIsBooked: true
             })
+            this.navigate('Home');
           })
           .catch(err => {
             console.log(err);
           })
       });
-    alert('Du har bokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.');
-    this.navigateMeetings('Home');
+    // alert('Du har bokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.');
   }
 
   //FUNKAR KASST
@@ -86,14 +86,13 @@ export class MeetingScreen extends React.Component {
         const filterAttendants = this.state.attendants.filter(item => {
           return item !== key;
         });
-        console.log(filterAttendants);
 
         this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: filterAttendants })
           .then(resp => {
             this.setState({
               meetingIsBooked: false
             })
-            this.navigateMeetings('Home');
+            this.navigate('Home');
           })
 
 
@@ -101,22 +100,19 @@ export class MeetingScreen extends React.Component {
       .catch(err => {
         console.log(err);
       })
-    alert('Du har avbokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.')
+    // alert('Du har avbokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.')
 
   }
 
-  navigateMeetings = (screen) => {
-
+  navigate = (screen, item) => {
     this.props.getMeetings();
-    // SKICKAR EJ userId ID TILL FETCHBOOKED I UTILS
-
-
-    this.props.navigation.navigate(screen);
+    this.props.navigation.navigate(screen, { meeting: item });
   }
+
 
   render() {
 
-    const { meeting } = this.state;
+    const { meeting, attendants } = this.state;
 
     const bookedButtonTitle = this.state.meetingIsBooked ? 'Avboka möte' : 'Boka möte';
     const buttonOnpress = this.state.meetingIsBooked ? () => { this.cancelMeeting() } : () => { this.bookMeeting() };
@@ -177,6 +173,14 @@ export class MeetingScreen extends React.Component {
                 <Text style={styles.timeAndLocationText}>{meeting.location}</Text>
               </View>
 
+              <TouchableOpacity onPress={() => { this.navigate('EntrantScreen', meeting) }} style={styles.timeAndLocationContainer}>
+                <Icon
+                  name='account-multiple'
+                  type='material-community'
+                />
+                <Text style={styles.timeAndLocationText}>Visa deltagare ({attendants.length})</Text>
+              </TouchableOpacity>
+
               <View style={styles.buttonContainer}>
                 <Button
                   title={bookedButtonTitle}
@@ -195,7 +199,8 @@ export class MeetingScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    homePageMeetings: state.meetings.homePageMeetings
+    homePageMeetings: state.meetings.homePageMeetings,
+    bookedMeetings: state.meetings.bookedMeetings
   }
 }
 

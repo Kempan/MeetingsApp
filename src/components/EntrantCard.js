@@ -61,11 +61,12 @@ export class EntrantCard extends React.Component {
 
               </View>
 
+              <Divider style={styles.divider} />
+
               <View style={styles.infoRow1}>
                 <Text style={styles.textStyle}>{entrant.email}</Text>
               </View>
 
-              <Divider style={styles.divider} />
 
               <View style={styles.infoRowBot}>
 

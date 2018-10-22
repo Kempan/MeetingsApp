@@ -36,10 +36,10 @@ export default class AuthScreen extends React.Component {
     this.turbo.login(this.state.credentials)
       .then(resp => {
         return AsyncStorage.setItem(config.userIdKey, resp.id)
-          .then(() => {
-            config.setUserId(resp.id)
-            this.navigate('MainApp');
-          })
+      })
+      .then(() => {
+        // config.setUserId(resp.id)
+        this.navigate('MainApp');
       })
       .catch(err => {
         alert(err.message);
@@ -55,7 +55,7 @@ export default class AuthScreen extends React.Component {
 
     return (
 
-      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+      <KeyboardAvoidingView behavior='padding' enabled style={styles.container}>
 
         <View style={styles.header}>
 
