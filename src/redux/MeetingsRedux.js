@@ -21,6 +21,9 @@ export const meetingsReducer = (state = initialState, action) => {
   else if (action.type == MeetingTypes.GET_MEETINGS_FAILURE) {
     return { ...state, isLoading: false, error: true }
   }
+  else if (action.type == MeetingTypes.SET_USER) {
+    return { ...state, user: action.data }
+  }
   else {
     return state;
   }
@@ -47,9 +50,16 @@ export const MeetingActions = {
     type: MeetingTypes.GET_MEETINGS_FAILURE,
     data: {}
   }),
+  setUser: (data) => ({
+    type: MeetingTypes.SET_USER,
+    data: data
+  }),
 }
 
+
+
 export const MeetingTypes = {
+  SET_USER: 'SET_USER',
   SET_MEETINGS: 'SET_MEETINGS',
   SET_BOOKED_MEETINGS: 'SET_BOOKED_MEETINGS',
   GET_MEETINGS: 'GET_MEETINGS',

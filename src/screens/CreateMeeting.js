@@ -177,16 +177,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
     alignItems: 'center',
-    paddingTop: 30
+    padding: 16
   },
   inputContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   lable: {
     color: 'black'
   },
   textInputContainer: {
-    width: 200
+    width: 180
   },
   bookingInfoContainer: {
     marginVertical: 20

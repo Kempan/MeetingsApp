@@ -5,6 +5,7 @@ import { Images } from '../resources/images';
 import Colors from '../styles/Colors';
 import Turbo from 'turbo360';
 import config from '../config';
+import utils from '../utils';
 
 export class EntrantCard extends React.Component {
 
@@ -21,11 +22,7 @@ export class EntrantCard extends React.Component {
 
   componentDidMount() {
     const entrantId = this.props.entrantId.item;
-    this.fetchUser(entrantId);
-  }
-
-  fetchUser(entrantId) {
-    this.turbo.fetchOne('user', entrantId)
+    utils.fetchUser(entrantId)
       .then(entrant => {
         this.setState({
           entrant: entrant,
@@ -37,9 +34,27 @@ export class EntrantCard extends React.Component {
       })
   }
 
+  upperCase = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   render() {
+
+    if (this.state.loading == true) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size='large' />
+        </View>
+      )
+    }
+
     const { entrant } = this.state;
+    let firstName = this.upperCase(entrant.firstName);
+    let lastName = this.upperCase(entrant.lastName);
+    let email = this.upperCase(entrant.email);
+
     return (
+
       <View>
         {this.state.loading ? <ActivityIndicator /> : (
           <TouchableOpacity
@@ -52,7 +67,7 @@ export class EntrantCard extends React.Component {
 
               <View style={styles.infoRow1}>
 
-                <Text style={styles.titleText}>{entrant.firstName} {entrant.lastName}</Text>
+                <Text style={styles.titleText}>{firstName} {lastName}</Text>
 
                 <View style={styles.ratingContainer}>
                   <Text style={styles.textStyle}>Rating: 97%</Text>
@@ -64,7 +79,7 @@ export class EntrantCard extends React.Component {
               <Divider style={styles.divider} />
 
               <View style={styles.infoRow1}>
-                <Text style={styles.textStyle}>{entrant.email}</Text>
+                <Text style={styles.textStyle}>{email}</Text>
               </View>
 
 

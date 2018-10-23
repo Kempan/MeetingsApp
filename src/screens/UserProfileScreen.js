@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
-import { Button, Icon, Divider } from 'react-native-elements';
+import { Icon, Divider } from 'react-native-elements';
 import { Images } from '../resources/images';
 import config from '../config';
 import Turbo from 'turbo360';
+import utils from '../utils';
 
 export default class UserProfileScreen extends React.Component {
 
@@ -19,8 +20,9 @@ export default class UserProfileScreen extends React.Component {
   }
 
   componentDidMount() {
+
     const { userId } = this.props.navigation.state.params;
-    this.turbo.fetchOne('user', userId)
+    utils.fetchUser(userId)
       .then(resp => {
         this.setState({
           user: resp,
@@ -32,9 +34,11 @@ export default class UserProfileScreen extends React.Component {
       })
   }
 
-  render() {
+  upperCase = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
-    const { user } = this.state;
+  render() {
 
     if (this.state.loading == true) {
       return (
@@ -43,6 +47,12 @@ export default class UserProfileScreen extends React.Component {
         </View>
       )
     }
+
+    const { user } = this.state;
+    let firstName = this.upperCase(user.firstName);
+    let lastName = this.upperCase(user.lastName);
+    let email = this.upperCase(user.email);
+    let address = this.upperCase(user.address);
 
     return (
 
@@ -54,7 +64,7 @@ export default class UserProfileScreen extends React.Component {
 
           <View style={styles.userContainer}>
             <Image source={Images.profilPic} style={styles.profilPic} />
-            <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
+            <Text style={styles.title}>{firstName} {lastName}</Text>
             <Text>Junior Developer, React-Native</Text>
             <Text>Inserve Technology</Text>
           </View>
@@ -71,7 +81,7 @@ export default class UserProfileScreen extends React.Component {
 
           <View style={styles.infoRow}>
             <Image source={Images.mail} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{user.email}</Text>
+            <Text style={styles.infoText}>{email}</Text>
           </View>
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>
@@ -81,7 +91,7 @@ export default class UserProfileScreen extends React.Component {
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.address} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{user.address}</Text>
+            <Text style={styles.infoText}>{address}</Text>
           </View>
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>
@@ -159,6 +169,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
+  },
+  infoText: {
+    fontSize: 16,
+    letterSpacing: 1,
+    fontFamily: 'notoserif'
   },
   smallIcons: {
     height: 30,

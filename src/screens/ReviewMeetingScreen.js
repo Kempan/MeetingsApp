@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image, ActivityIndicator } from 'react-native';
-import { Button, Text, FormInput, FormLabel } from 'react-native-elements';
+import { Button, Text, FormInput, FormLabel, Rating } from 'react-native-elements';
 import { Images } from '../resources/images';
 import config from '../config';
 import Turbo from 'turbo360';
@@ -61,7 +61,17 @@ export default class ReviewMeetingScreen extends React.Component {
             </View>
 
             <View style={styles.formContainer}>
-              <Image source={Images.rating} style={{ height: 40, width: 250, marginBottom: 20 }} />
+              <Rating
+                showRating
+                type="star"
+                fractions={1}
+                startingValue={3.6}
+                imageSize={40}
+                onFinishRating={this.ratingCompleted}
+                onStartRating={this.ratingStarted}
+                style={{ paddingVertical: 10 }}
+              />
+              {/* <Image source={Images.rating} style={{ height: 40, width: 250, marginBottom: 20 }} /> */}
               <FormLabel>Övriga kommentarer</FormLabel>
               <FormInput />
             </View>

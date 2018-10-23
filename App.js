@@ -34,7 +34,7 @@ const MainTabs = createBottomTabNavigator({
   Home: HomeScreen,
   Meetings: TopTabs,
   Profil: ProfilScreen,
-  Settings: SupportScreen
+  Settings: SupportScreen,
 },
   {
     navigationOptions: ({ navigation }) => ({
@@ -110,11 +110,9 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    //AUTO INLOGG
     return AsyncStorage.getItem(config.userIdKey)
       .then(key => {
         if (key) {
-          console.log(key)
           this.setState({
             authCheck: true,
             authed: true
@@ -135,8 +133,10 @@ export default class App extends React.Component {
   }
 
   render() {
+
     const Switch = RootNav(this.state.authed);
     const appContent = this.state.authCheck ? <Switch /> : <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }} size='large' />;
+
     return (
       <Provider store={store}>
         {appContent}

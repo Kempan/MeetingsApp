@@ -16,7 +16,6 @@ export default class EntrantScreen extends React.Component {
 
   componentWillMount() {
     const entrants = this.props.navigation.state.params.meeting.attendants;
-    console.log(entrants)
     this.setState({
       entrants: entrants,
       loading: false
@@ -32,8 +31,10 @@ export default class EntrantScreen extends React.Component {
     return (
 
       <View style={styles.container}>
+
         {this.state.loading ? <ActivityIndicator size='large' /> : null}
         {!this.state.loading && this.state.entrants.length > 0 ?
+
           <FlatList
             data={this.state.entrants}
             keyExtractor={(index) => index.toString()}
@@ -48,8 +49,8 @@ export default class EntrantScreen extends React.Component {
           :
 
           <View style={styles.container2}><Text style={styles.text}>Inga deltagare</Text></View>
-
         }
+
       </View>
     )
 

@@ -38,13 +38,11 @@ export default class AuthScreen extends React.Component {
         return AsyncStorage.setItem(config.userIdKey, resp.id)
       })
       .then(() => {
-        // config.setUserId(resp.id)
         this.navigate('MainApp');
       })
       .catch(err => {
         alert(err.message);
       })
-
   }
 
   navigate(screen) {
@@ -66,6 +64,9 @@ export default class AuthScreen extends React.Component {
         </View>
 
         <View style={styles.body}>
+
+          <Text style={styles.welcomeText}>Welcome to iBusinez!</Text>
+          <Text style={styles.welcomeText}>Please login to continue</Text>
 
           <View style={styles.formContainer}>
 
@@ -126,8 +127,8 @@ export default class AuthScreen extends React.Component {
           </View>
 
         </View>
-        <View style={styles.curvedView}></View>
 
+        <View style={styles.curvedView}></View>
 
       </KeyboardAvoidingView>
 
@@ -141,10 +142,18 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   header: {
-    height: 250,
+    height: 200,
     width: '100%',
     backgroundColor: 'rgb(66, 134, 244)',
     justifyContent: 'center'
+  },
+  titleContainer: {
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: 'white'
   },
   curvedView: {
     width: 105,
@@ -155,21 +164,18 @@ const styles = StyleSheet.create({
     ],
     backgroundColor: 'rgb(66, 134, 244)',
     position: 'absolute',
-    top: 200
+    top: 150
   },
   body: {
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
-    paddingTop: 90
+    paddingTop: 80
   },
-  titleContainer: {
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 38,
-    fontWeight: 'bold',
-    color: 'white'
+  welcomeText: {
+    fontSize: 22,
+    letterSpacing: 1,
+    fontFamily: 'notoserif'
   },
   formContent: {
     alignItems: 'center',
@@ -181,7 +187,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   formContainer: {
-    marginBottom: 15
+    marginBottom: 15,
+    marginTop: 20
   },
   inputContainer: {
     flexDirection: 'row',
@@ -191,13 +198,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: 280,
     height: 60,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   icon: {
     marginLeft: 25
   },
   textInput: {
-    width: 200,
+    flex: 1,
     borderRadius: 15,
     marginBottom: 10,
     backgroundColor: 'white',

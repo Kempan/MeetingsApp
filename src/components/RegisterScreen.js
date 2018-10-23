@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, AsyncStorage } from 'react-native';
-import { FormInput, Icon, Text } from 'react-native-elements';
+import { View, Text, StyleSheet, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import { FormInput, Icon } from 'react-native-elements';
 import { Button } from '../components';
 import config from '../config';
 import Turbo from 'turbo360';
@@ -66,9 +66,6 @@ export default class AuthScreen extends React.Component {
         </View>
 
         <View style={styles.body}>
-
-          <Text style={styles.welcomeText}>Welcome to iBusinez!</Text>
-          <Text style={styles.welcomeText}>Please register to continue</Text>
 
           <View style={styles.formContainer}>
 
@@ -172,7 +169,7 @@ export default class AuthScreen extends React.Component {
 
           </View>
 
-          <View style={styles.buttonContainer}>
+          <View style={styles.formContent}>
             <Button
               buttonStyle={styles.button}
               title='Submit'
@@ -208,14 +205,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center'
   },
-  titleContainer: {
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 38,
-    fontWeight: 'bold',
-    color: 'white'
-  },
   header: {
     height: 175,
     width: '100%',
@@ -231,7 +220,7 @@ const styles = StyleSheet.create({
     ],
     backgroundColor: 'rgb(66, 134, 244)',
     position: 'absolute',
-    top: 110
+    top: 125
   },
   body: {
     flex: 1,
@@ -239,14 +228,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 70
   },
-  welcomeText: {
-    fontSize: 22,
-    letterSpacing: 1,
-    fontFamily: 'notoserif'
-  },
-  buttonContainer: {
+  titleContainer: {
     alignItems: 'center',
-    marginTop: 20
+  },
+  title: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  formContent: {
+    alignItems: 'center',
   },
   button: {
     width: 200,
@@ -255,11 +246,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   formContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: 20
+    marginBottom: 15,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -267,14 +254,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 2,
     marginBottom: 10,
-    width: 190,
+    width: 280,
     alignItems: 'center'
   },
   icon: {
     marginLeft: 25
   },
   textInput: {
-    flex: 1,
+    width: 200,
     borderRadius: 15,
     backgroundColor: 'white',
     alignSelf: 'center'

@@ -1,47 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, AsyncStorage } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { View, Text, StyleSheet, Image, AsyncStorage, ActivityIndicator } from 'react-native';
+import { Icon, Divider } from 'react-native-elements';
 import { Images } from '../resources/images';
 import config from '../config';
 import Turbo from 'turbo360';
+import { connect } from 'react-redux';
 
 
-export default class ProfilScreen extends React.Component {
+export class ProfilScreen extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      user: {}
+
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
-  componentDidMount() {
-    AsyncStorage.getItem(config.userIdKey)
-      .then(key => {
-        console.log(key)
-        this.turbo.fetchOne('user', key)
-          .then(resp => {
-            let newUser = Object.assign(this.state.user);
-            newUser = resp;
-            this.setState({
-              user: newUser
-            })
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  upperCase = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   render() {
 
-    const { user } = this.state;
+    const { user } = this.props;
+    let firstName = this.upperCase(user.firstName);
+    let lastName = this.upperCase(user.lastName);
+    let email = this.upperCase(user.email);
+    let address = this.upperCase(user.address);
 
     return (
 
@@ -53,7 +41,7 @@ export default class ProfilScreen extends React.Component {
 
           <View style={styles.userContainer}>
             <Image source={Images.profilPic} style={styles.profilPic} />
-            <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
+            <Text style={styles.title}>{firstName} {lastName}</Text>
             <Text>Junior Developer, React-Native</Text>
             <Text>Inserve Technology</Text>
           </View>
@@ -70,23 +58,17 @@ export default class ProfilScreen extends React.Component {
 
           <View style={styles.infoRow}>
             <Image source={Images.mail} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{user.email}</Text>
+            <Text style={styles.infoText}>{email}</Text>
           </View>
+          <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.phone} style={styles.smallIcons} />
             <Text style={styles.infoText}>{user.phoneNumber}</Text>
           </View>
+          <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.address} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{user.address}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Image source={Images.chatBlue} style={styles.smallIcons} />
-            <Text style={styles.infoText}>Create message</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Image source={Images.addToGroup} style={styles.smallIcons} />
-            <Text style={styles.infoText}>Add to group</Text>
+            <Text style={styles.infoText}>{address}</Text>
           </View>
 
         </View>
@@ -95,6 +77,20 @@ export default class ProfilScreen extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.meetings.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -154,11 +150,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 10
+  },
+  infoText: {
+    fontSize: 16,
+    letterSpacing: 1,
+    fontFamily: 'notoserif'
   },
   smallIcons: {
     height: 30,
     width: 30,
     marginRight: 10
+  },
+  divider: {
+    marginVertical: 5
   }
 })

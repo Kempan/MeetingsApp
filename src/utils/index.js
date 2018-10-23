@@ -16,10 +16,8 @@ export default {
   },
 
   fetchBookedMeetings: (userId) => {
-    console.log(userId);
     return Turbo({ site_id: config.turboAppId }).fetch('meeting', { attendants: userId })
       .then(resp => {
-        console.log(resp);
         return resp;
       })
       .catch(err => {
@@ -40,4 +38,14 @@ export default {
         return response.json();
       })
   },
+
+  fetchUser: (userId) => {
+    return Turbo({ site_id: config.turboAppId }).fetchOne('user', userId)
+      .then(resp => {
+        return resp;
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 }
