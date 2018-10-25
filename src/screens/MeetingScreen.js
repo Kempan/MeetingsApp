@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Image, ActivityIndicator, AsyncStorage, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, ActivityIndicator, AsyncStorage, TouchableOpacity, ScrollView } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
 import { Button } from '../components';
 import { Images } from '../resources/images';
@@ -18,7 +18,8 @@ export class MeetingScreen extends React.Component {
       meeting: null,
       loading: true,
       attendants: [],
-      meetingIsBooked: false
+      meetingIsBooked: false,
+      created: true
     }
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
@@ -31,34 +32,38 @@ export class MeetingScreen extends React.Component {
     const meetingId = this.props.navigation.state.params.id;
     this.turbo.fetchOne('meeting', meetingId)
       .then(data => {
-        this.setState({
-          meeting: data,
-          loading: false,
-          attendants: data.attendants
-        })
+        if (data.userId === this.props.user.id) {
+          this.setState({
+            meeting: data,
+            loading: false,
+            attendants: data.attendants,
+          })
+        }
+        else {
+          this.setState({
+            created: false
+          })
+        }
       })
       .then(() => {
-        AsyncStorage.getItem(config.userIdKey)
-          .then(key => {
-            this.state.attendants.forEach(item => {
-              if (item === key) {
-                this.setState({
-                  meetingIsBooked: true
-                })
-              } else {
-                this.setState({
-                  meetingIsBooked: false
-                })
-              }
+        this.state.attendants.forEach(item => {
+          if (item === this.props.user.id) {
+            this.setState({
+              meetingIsBooked: true
             })
-          })
+          }
+          else {
+            this.setState({
+              meetingIsBooked: false
+            })
+          }
+        })
       })
       .catch(err => {
         console.log(err);
       })
   }
 
-  //UPPDATERAR EJ USER MEETING SCREEN, FIX
   bookMeeting() {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
@@ -75,18 +80,14 @@ export class MeetingScreen extends React.Component {
             console.log(err);
           })
       });
-    // alert('Du har bokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.');
   }
 
-  //FUNKAR KASST
   cancelMeeting() {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
-
         const filterAttendants = this.state.attendants.filter(item => {
           return item !== key;
         });
-
         this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: filterAttendants })
           .then(resp => {
             this.setState({
@@ -94,14 +95,22 @@ export class MeetingScreen extends React.Component {
             })
             this.navigate('Home');
           })
-
-
       })
       .catch(err => {
         console.log(err);
       })
-    // alert('Du har avbokat ' + this.state.meeting.title + ' med ' + this.state.meeting.leader + '.')
+  }
 
+  removeMeeting() {
+    this.turbo.removeEntity('meeting', this.state.meeting.id)
+      .then(resp => {
+        alert('Mötet har tagits bort');
+        this.props.getMeetings();
+        this.props.navigation.navigate('MainTabs');
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   navigate = (screen, item) => {
@@ -109,21 +118,21 @@ export class MeetingScreen extends React.Component {
     this.props.navigation.navigate(screen, { meeting: item });
   }
 
-
   render() {
 
-    const { meeting, attendants } = this.state;
+    const { meeting, attendants, created, meetingIsBooked } = this.state;
 
-    const bookedButtonTitle = this.state.meetingIsBooked ? 'Avboka möte' : 'Boka möte';
-    const buttonOnpress = this.state.meetingIsBooked ? () => { this.cancelMeeting() } : () => { this.bookMeeting() };
+    let bookedButtonTitle = meetingIsBooked ? 'Avboka möte' : 'Boka möte';
+    bookedButtonTitle = created ? 'Redigera möte' : bookedButtonTitle;
+    const buttonOnpress = meetingIsBooked ? () => { this.cancelMeeting() } : () => { this.bookMeeting() };
 
     const bookedButtonStyle = [styles.button];
-    const bookedButton = this.state.meetingIsBooked ? { backgroundColor: 'red' } : { backgroundColor: 'green' };
+    const bookedButton = meetingIsBooked ? { backgroundColor: 'red' } : { backgroundColor: 'rgb(66, 134, 244)' };
     bookedButtonStyle.push(bookedButton);
 
     return (
 
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {this.state.loading ? <ActivityIndicator size='large' /> : (
           <View style={styles.container}>
             <View style={styles.mapContainer}>
@@ -153,7 +162,7 @@ export class MeetingScreen extends React.Component {
 
               <View style={styles.meetingDescContainer}>
                 <Text style={styles.careerInfoText1}>Mötesbeskrivning</Text>
-                {/* <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text> */}
+                <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text>
                 <Text style={styles.careerInfoText2}>{meeting.meetingDesc}</Text>
               </View>
 
@@ -181,18 +190,36 @@ export class MeetingScreen extends React.Component {
                 <Text style={styles.timeAndLocationText}>Visa deltagare ({attendants.length})</Text>
               </TouchableOpacity>
 
-              <View style={styles.buttonContainer}>
-                <Button
-                  title={bookedButtonTitle}
-                  buttonStyle={bookedButtonStyle}
-                  onPress={buttonOnpress}
-                />
-              </View>
+
+
+              {created ?
+                <View style={styles.buttonContainer}>
+                  <Button
+                    title={bookedButtonTitle}
+                    buttonStyle={bookedButtonStyle}
+                    onPress={() => { this.editMeeting() }}
+                  />
+                  <Button
+                    title='ta bort möte'
+                    buttonStyle={[bookedButtonStyle, { backgroundColor: 'red' }]}
+                    onPress={() => { this.removeMeeting() }}
+                  />
+                </View>
+                :
+                <View style={styles.buttonContainer}>
+                  <Button
+                    title={bookedButtonTitle}
+                    buttonStyle={bookedButtonStyle}
+                    onPress={buttonOnpress}
+                  />
+                </View>
+              }
+
 
             </View>
           </View>
         )}
-      </View >
+      </ScrollView>
     )
   }
 }
@@ -200,7 +227,8 @@ export class MeetingScreen extends React.Component {
 const mapStateToProps = (state) => {
   return {
     homePageMeetings: state.meetings.homePageMeetings,
-    bookedMeetings: state.meetings.bookedMeetings
+    bookedMeetings: state.meetings.bookedMeetings,
+    user: state.user.user
   }
 }
 
@@ -237,7 +265,7 @@ const styles = StyleSheet.create({
   meetingTitleText: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: 'green'
+    color: 'rgb(66, 134, 244)'
   },
   profilPic: {
     height: imageSize,
@@ -278,13 +306,14 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     borderRadius: 5,
+    marginBottom: 10
   },
   timeAndLocationContainer: {
     flexDirection: 'row',
     padding: 8,
   },
   timeAndLocationText: {
-    color: 'green',
+    color: 'black',
     marginLeft: 10
   }
 })

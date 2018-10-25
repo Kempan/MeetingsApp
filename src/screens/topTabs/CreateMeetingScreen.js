@@ -1,21 +1,29 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import { FormInput, Text, FormLabel } from 'react-native-elements';
-import { Button } from '../components';
-import { Images } from '../resources/images';
-import Colors from '../styles/Colors';
+import { Button } from '../../components';
+import { Images } from '../../resources/images';
+import Colors from '../../styles/Colors';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Moment from 'moment';
-import utils from '../utils';
+import utils from '../../utils';
+import { connect } from 'react-redux';
+import { MeetingActions } from '../../redux/MeetingsRedux';
+import config from '../../config';
 
 
-export default class CreateMeeting extends React.Component {
+export class CreateMeetingScreen extends React.Component {
+
+  static navigationOptions = {
+    title: 'skapa möte'
+  }
 
   constructor(props) {
     super(props);
 
     this.state = {
       meetingInfo: {
+        userId: null,
         leader: '',
         leaderDesc: '',
         title: '',
@@ -28,6 +36,17 @@ export default class CreateMeeting extends React.Component {
       },
       datePickerVisible: false,
     }
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem(config.userIdKey)
+      .then(key => {
+        const newState = Object.assign(this.state.meetingInfo);
+        newState['userId'] = key;
+        this.setState({
+          meetingInfo: newState
+        })
+      })
   }
 
   textUpdate(text, field) {
@@ -64,7 +83,9 @@ export default class CreateMeeting extends React.Component {
   createMeeting(data) {
     utils.createMeeting('create/meeting', data)
       .then(resp => {
-        console.log(resp)
+        alert('Ditt möte har skapats');
+        this.props.getMeetings();
+        this.props.navigation.navigate('Home')
       })
       .catch(err => {
         console.log(err)
@@ -171,6 +192,20 @@ export default class CreateMeeting extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMeetings: (data) => dispatch((MeetingActions.getMeetings(data)))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateMeetingScreen);
 
 const styles = StyleSheet.create({
   container: {

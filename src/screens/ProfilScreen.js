@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, AsyncStorage, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { Icon, Divider } from 'react-native-elements';
 import { Images } from '../resources/images';
 import config from '../config';
@@ -19,17 +19,10 @@ export class ProfilScreen extends React.Component {
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
-  upperCase = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
   render() {
 
     const { user } = this.props;
-    let firstName = this.upperCase(user.firstName);
-    let lastName = this.upperCase(user.lastName);
-    let email = this.upperCase(user.email);
-    let address = this.upperCase(user.address);
 
     return (
 
@@ -41,7 +34,7 @@ export class ProfilScreen extends React.Component {
 
           <View style={styles.userContainer}>
             <Image source={Images.profilPic} style={styles.profilPic} />
-            <Text style={styles.title}>{firstName} {lastName}</Text>
+            <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
             <Text>Junior Developer, React-Native</Text>
             <Text>Inserve Technology</Text>
           </View>
@@ -58,7 +51,7 @@ export class ProfilScreen extends React.Component {
 
           <View style={styles.infoRow}>
             <Image source={Images.mail} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{email}</Text>
+            <Text style={styles.infoText}>{user.email}</Text>
           </View>
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>
@@ -68,7 +61,7 @@ export class ProfilScreen extends React.Component {
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.address} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{address}</Text>
+            <Text style={styles.infoText}>{user.address}</Text>
           </View>
 
         </View>
@@ -80,7 +73,7 @@ export class ProfilScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.meetings.user
+    user: state.user.user
   }
 }
 

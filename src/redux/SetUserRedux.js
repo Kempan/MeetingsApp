@@ -3,7 +3,7 @@ const initialState = {
 };
 
 export const userReducer = (state = initialState, action) => {
-  if (action.type == MeetingTypes.SET_USER) {
+  if (action.type == UserTypes.SET_USER) {
     return { ...state, user: action.data }
   }
   else {
@@ -11,13 +11,18 @@ export const userReducer = (state = initialState, action) => {
   }
 }
 
-export const userActions = {
+export const UserActions = {
   setUser: (data) => ({
-    type: MeetingTypes.SET_USER,
+    type: UserTypes.SET_USER,
     data: data
   }),
+  getUser: () => ({
+    type: UserTypes.GET_USER,
+    data: {}
+  })
 }
 
-export const MeetingTypes = {
+export const UserTypes = {
   SET_USER: 'SET_USER',
+  GET_USER: 'GET_USER'
 };

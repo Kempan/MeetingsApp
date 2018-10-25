@@ -34,10 +34,6 @@ export default class UserProfileScreen extends React.Component {
       })
   }
 
-  upperCase = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   render() {
 
     if (this.state.loading == true) {
@@ -49,10 +45,6 @@ export default class UserProfileScreen extends React.Component {
     }
 
     const { user } = this.state;
-    let firstName = this.upperCase(user.firstName);
-    let lastName = this.upperCase(user.lastName);
-    let email = this.upperCase(user.email);
-    let address = this.upperCase(user.address);
 
     return (
 
@@ -64,7 +56,7 @@ export default class UserProfileScreen extends React.Component {
 
           <View style={styles.userContainer}>
             <Image source={Images.profilPic} style={styles.profilPic} />
-            <Text style={styles.title}>{firstName} {lastName}</Text>
+            <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
             <Text>Junior Developer, React-Native</Text>
             <Text>Inserve Technology</Text>
           </View>
@@ -81,7 +73,7 @@ export default class UserProfileScreen extends React.Component {
 
           <View style={styles.infoRow}>
             <Image source={Images.mail} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{email}</Text>
+            <Text style={styles.infoText}>{user.email}</Text>
           </View>
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>
@@ -91,7 +83,7 @@ export default class UserProfileScreen extends React.Component {
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>
             <Image source={Images.address} style={styles.smallIcons} />
-            <Text style={styles.infoText}>{address}</Text>
+            <Text style={styles.infoText}>{user.address}</Text>
           </View>
           <Divider style={styles.divider} />
           <View style={styles.infoRow}>

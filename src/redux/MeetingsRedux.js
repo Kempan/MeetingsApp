@@ -1,6 +1,7 @@
 const initialState = {
   homePageMeetings: [],
   bookedMeetings: [],
+  createdMeetings: [],
   isLoading: false,
   error: false
 };
@@ -12,6 +13,9 @@ export const meetingsReducer = (state = initialState, action) => {
   else if (action.type == MeetingTypes.SET_BOOKED_MEETINGS) {
     return { ...state, bookedMeetings: action.data }
   }
+  else if (action.type == MeetingTypes.SET_CREATED_MEETINGS) {
+    return { ...state, createdMeetings: action.data }
+  }
   else if (action.type == MeetingTypes.GET_MEETINGS) {
     return { ...state, isLoading: true, error: false }
   }
@@ -21,9 +25,6 @@ export const meetingsReducer = (state = initialState, action) => {
   else if (action.type == MeetingTypes.GET_MEETINGS_FAILURE) {
     return { ...state, isLoading: false, error: true }
   }
-  else if (action.type == MeetingTypes.SET_USER) {
-    return { ...state, user: action.data }
-  }
   else {
     return state;
   }
@@ -32,6 +33,10 @@ export const meetingsReducer = (state = initialState, action) => {
 export const MeetingActions = {
   setMeetings: (data) => ({
     type: MeetingTypes.SET_MEETINGS,
+    data: data
+  }),
+  setCreatedMeetings: (data) => ({
+    type: MeetingTypes.SET_CREATED_MEETINGS,
     data: data
   }),
   setBookedMeetings: (data) => ({
@@ -49,19 +54,15 @@ export const MeetingActions = {
   getMeetingsFailure: () => ({
     type: MeetingTypes.GET_MEETINGS_FAILURE,
     data: {}
-  }),
-  setUser: (data) => ({
-    type: MeetingTypes.SET_USER,
-    data: data
-  }),
+  })
 }
 
 
 
 export const MeetingTypes = {
-  SET_USER: 'SET_USER',
   SET_MEETINGS: 'SET_MEETINGS',
   SET_BOOKED_MEETINGS: 'SET_BOOKED_MEETINGS',
+  SET_CREATED_MEETINGS: 'SET_CREATED_MEETINGS',
   GET_MEETINGS: 'GET_MEETINGS',
   GET_MEETINGS_SUCCESS: 'GET_MEETING_SUCCESS',
   GET_MEETINGS_FAILURE: 'GET_MEETING_FAILURE'

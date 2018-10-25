@@ -1,4 +1,5 @@
 import config from '../config';
+import functions from '../functions';
 import Turbo from 'turbo360';
 
 export default {
@@ -12,6 +13,16 @@ export default {
     })
       .then(response => {
         return response.json();
+      })
+  },
+
+  fetchUserMadeMeetings: (userId) => {
+    return Turbo({ site_id: config.turboAppId }).fetch('meeting', { userId: userId })
+      .then(resp => {
+        return resp;
+      })
+      .catch(err => {
+        console.log(err);
       })
   },
 
@@ -41,8 +52,25 @@ export default {
 
   fetchUser: (userId) => {
     return Turbo({ site_id: config.turboAppId }).fetchOne('user', userId)
-      .then(resp => {
-        return resp;
+      .then(user => {
+
+        const newCredentials = Object.assign(user);
+        newCredentials['firstName'] = functions.upperCase(user.firstName);
+        newCredentials['lastName'] = functions.upperCase(user.lastName);
+        newCredentials['email'] = functions.upperCase(user.email);
+        newCredentials['address'] = functions.upperCase(user.address);
+
+        return newCredentials;
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  },
+
+  updateUser(userId, cred) {
+    return Turbo({ site_id: config.turboAppId }).updateUser(userId, cred)
+      .then(updatedUser => {
+        return updatedUser;
       })
       .catch(err => {
         console.log(err);

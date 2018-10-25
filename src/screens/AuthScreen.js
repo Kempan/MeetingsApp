@@ -16,8 +16,8 @@ export default class AuthScreen extends React.Component {
 
     this.state = {
       credentials: {
-        email: '',
-        password: ''
+        email: 'joakim.edwardh@hotmail.com',
+        password: 'password'
       }
     }
 
@@ -35,10 +35,10 @@ export default class AuthScreen extends React.Component {
   login() {
     this.turbo.login(this.state.credentials)
       .then(resp => {
-        return AsyncStorage.setItem(config.userIdKey, resp.id)
-      })
-      .then(() => {
-        this.navigate('MainApp');
+        AsyncStorage.setItem(config.userIdKey, resp.id)
+          .then(() => {
+            this.navigate('MainApp');
+          })
       })
       .catch(err => {
         alert(err.message);
@@ -53,7 +53,7 @@ export default class AuthScreen extends React.Component {
 
     return (
 
-      <KeyboardAvoidingView behavior='padding' enabled style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} enabled>
 
         <View style={styles.header}>
 
@@ -139,7 +139,6 @@ export default class AuthScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
   },
   header: {
     height: 200,
@@ -164,7 +163,8 @@ const styles = StyleSheet.create({
     ],
     backgroundColor: 'rgb(66, 134, 244)',
     position: 'absolute',
-    top: 150
+    top: 150,
+    alignSelf: 'center'
   },
   body: {
     flex: 1,
@@ -182,26 +182,25 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 200,
-    borderRadius: 15,
     marginBottom: 10,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   formContainer: {
-    marginBottom: 15,
+    marginBottom: 10,
     marginTop: 20
   },
   inputContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    borderRadius: 15,
-    borderWidth: 2,
+    borderRadius: 5,
+    borderWidth: 1,
     marginBottom: 10,
     width: 280,
     height: 60,
     alignItems: 'center',
   },
   icon: {
-    marginLeft: 25
+    marginLeft: 16
   },
   textInput: {
     flex: 1,

@@ -6,35 +6,31 @@ import {
   AuthScreen,
   HomeScreen,
   RegisterScreen,
-  UserMeetingScreen,
-  MeetingScreen,
   ProfilScreen,
-  SupportScreen,
+  SettingScreen,
   ReviewMeetingScreen,
-  CreateMeeting,
   EntrantScreen,
-  UserProfileScreen
+  UserProfileScreen,
+  MeetingScreen
 } from './src/screens';
+import { NameScreen, EmailScreen, PhoneScreen, AddressScreen } from './src/screens/settingScreens';
+import { BookedMeetingScreen, CreateMeetingScreen, UserMadeMeetingScreen } from './src/screens/topTabs';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 import { store } from './src/redux/Store';
 import { Provider } from 'react-redux';
 
 
 const TopTabs = createMaterialTopTabNavigator({
-  Meetings: UserMeetingScreen,
-  Create: CreateMeeting,
-},
-  {
-    navigationOptions: {
-
-    }
-  });
+  Meetings: BookedMeetingScreen,
+  UserMadeMeetings: UserMadeMeetingScreen,
+  Create: CreateMeetingScreen,
+});
 
 const MainTabs = createBottomTabNavigator({
   Home: HomeScreen,
   Meetings: TopTabs,
   Profil: ProfilScreen,
-  Settings: SupportScreen,
+  Settings: SettingScreen
 },
   {
     navigationOptions: ({ navigation }) => ({
@@ -70,7 +66,11 @@ const MainApp = createStackNavigator({
   MeetingScreen: MeetingScreen,
   ReviewMeetingScreen: ReviewMeetingScreen,
   EntrantScreen: EntrantScreen,
-  UserProfileScreen: UserProfileScreen
+  UserProfileScreen: UserProfileScreen,
+  NameScreen: NameScreen,
+  EmailScreen: EmailScreen,
+  PhoneScreen: PhoneScreen,
+  AddressScreen: AddressScreen
 },
   {
     navigationOptions: {

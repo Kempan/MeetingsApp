@@ -1,19 +1,29 @@
 import React from 'react';
-import { View, StyleSheet, AsyncStorage, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, AsyncStorage, TouchableOpacity } from 'react-native';
 import { Text, Divider } from 'react-native-elements';
 import { Button } from '../components';
 import config from '../config';
 import { connect } from 'react-redux';
 
-export class SupportScreen extends React.Component {
+export class SettingScreen extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+
+    }
   }
 
-  signout() {
-    AsyncStorage.removeItem(config.userIdKey);
-    this.props.navigation.navigate('Auth');
+  signOut() {
+    AsyncStorage.removeItem(config.userIdKey)
+      .then(resp => {
+        this.props.navigation.navigate('Auth');
+      })
+  }
+
+  navigate(screen) {
+    this.props.navigation.navigate(screen);
   }
 
   render() {
@@ -29,25 +39,25 @@ export class SupportScreen extends React.Component {
         </View>
         <Divider style={styles.divider} />
 
-        <TouchableOpacity style={styles.row}>
+        <TouchableOpacity onPress={() => { this.navigate('NameScreen') }} style={styles.row}>
           <Text style={styles.titles}>Namn</Text>
           <Text style={styles.text}>{user.firstName} {user.lastName}</Text>
         </TouchableOpacity>
         <Divider style={styles.divider} />
 
-        <TouchableOpacity style={styles.row}>
+        <TouchableOpacity onPress={() => { this.navigate('EmailScreen') }} style={styles.row}>
           <Text style={styles.titles}>Email</Text>
           <Text style={styles.text}>{user.email}</Text>
         </TouchableOpacity>
         <Divider style={styles.divider} />
 
-        <TouchableOpacity style={styles.row}>
+        <TouchableOpacity onPress={() => { this.navigate('PhoneScreen') }} style={styles.row}>
           <Text style={styles.titles}>Telefon</Text>
           <Text style={styles.text}>{user.phoneNumber}</Text>
         </TouchableOpacity>
         <Divider style={styles.divider} />
 
-        <TouchableOpacity style={styles.row}>
+        <TouchableOpacity onPress={() => { this.navigate('AddressScreen') }} style={styles.row}>
           <Text style={styles.titles}>Address</Text>
           <Text style={styles.text}>{user.address}</Text>
         </TouchableOpacity>
@@ -55,7 +65,7 @@ export class SupportScreen extends React.Component {
 
         <Button
           title='Sign out'
-          onPress={() => { this.signout() }}
+          onPress={() => { this.signOut() }}
           buttonStyle={styles.button}
         />
       </View>
@@ -76,12 +86,12 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SupportScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingScreen);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16
+    padding: 16,
   },
   row: {
 
@@ -90,19 +100,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     letterSpacing: 1,
     fontFamily: 'notoserif',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginVertical: 5
   },
   text: {
     fontSize: 16,
+    color: 'grey'
   },
   divider: {
     backgroundColor: 'grey',
     marginVertical: 5
   },
   button: {
-    backgroundColor: 'rgb(66, 134, 244)',
-    width: 150,
-    borderRadius: 15,
-    borderWidth: 2,
+    width: '100%',
+    marginTop: 15,
+    backgroundColor: 'red'
   }
 })

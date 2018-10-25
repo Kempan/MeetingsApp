@@ -199,11 +199,6 @@ export default class AuthScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   container: {
     flex: 1,
     alignItems: 'center'
@@ -217,7 +212,7 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   header: {
-    height: 175,
+    height: 200,
     width: '100%',
     backgroundColor: 'rgb(66, 134, 244)',
     justifyContent: 'center'
@@ -231,13 +226,13 @@ const styles = StyleSheet.create({
     ],
     backgroundColor: 'rgb(66, 134, 244)',
     position: 'absolute',
-    top: 110
+    top: 150
   },
   body: {
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
-    paddingTop: 70
+    paddingTop: 70,
   },
   welcomeText: {
     fontSize: 22,
@@ -246,32 +241,33 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    marginTop: 20
+    marginTop: 15
   },
   button: {
     width: 200,
-    borderRadius: 15,
+    borderRadius: 5,
     marginBottom: 10,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   formContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: 20
+    justifyContent: 'space-between',
+    marginTop: 15,
+    paddingHorizontal: 16
   },
   inputContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    borderRadius: 15,
-    borderWidth: 2,
+    borderRadius: 5,
+    borderWidth: 1,
     marginBottom: 10,
-    width: 190,
+    width: 160,
     alignItems: 'center'
   },
   icon: {
-    marginLeft: 25
+    marginLeft: 16
   },
   textInput: {
     flex: 1,

@@ -8,8 +8,9 @@ import Turbo from 'turbo360';
 import config from '../config';
 import { connect } from 'react-redux';
 import { MeetingActions } from '../redux/MeetingsRedux';
+import { UserActions } from '../redux/SetUserRedux';
 
-class HomeScreen extends React.Component {
+export class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -26,8 +27,8 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
+    this.props.getUser();
     this.props.getMeetings();
-    this.props.setUser();
   }
 
   navigateMeeting(item) {
@@ -38,6 +39,9 @@ class HomeScreen extends React.Component {
     this.props.navigation.navigate('EntrantScreen', { meeting: item });
   }
 
+  test() {
+    console.log(this.props.createdMeetings)
+  }
 
   render() {
 
@@ -55,7 +59,7 @@ class HomeScreen extends React.Component {
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item }) =>
-              <TouchableOpacity onPress={() => { console.log(this.props.user) }} style={styles.cardContainer}>
+              <TouchableOpacity onPress={() => { this.test() }} style={styles.cardContainer}>
                 <Image source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }
@@ -116,14 +120,15 @@ const mapStateToProps = (state) => {
   return {
     homePageMeetings: state.meetings.homePageMeetings,
     isLoading: state.meetings.isLoading,
-    user: state.meetings.user
+    user: state.user.user,
+    createdMeetings: state.meetings.createdMeetings
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getMeetings: (data) => dispatch((MeetingActions.getMeetings(data))),
-    setUser: (data) => dispatch((MeetingActions.setUser(data))),
+    getUser: () => dispatch((UserActions.getUser()))
   }
 }
 

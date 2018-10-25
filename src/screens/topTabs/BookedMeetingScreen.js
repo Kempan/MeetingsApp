@@ -1,15 +1,18 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, FlatList, AsyncStorage, ActivityIndicator } from 'react-native';
-import { Meeting, Button } from '../components';
+import { View, StyleSheet, ScrollView, FlatList, ActivityIndicator } from 'react-native';
+import { Meeting, Button } from '../../components';
 import { Text } from 'react-native-elements';
-import config from '../config';
+import config from '../../config';
 import Turbo from 'turbo360';
-import utils from '../utils';
 import { connect } from 'react-redux';
-import { MeetingActions } from '../redux/MeetingsRedux';
+import { MeetingActions } from '../../redux/MeetingsRedux';
 
 
-export class UserMeetingScreen extends React.Component {
+export class BookedMeetingScreen extends React.Component {
+
+  static navigationOptions = {
+    title: 'bookade möten'
+  }
 
   constructor(props) {
     super(props);
@@ -56,7 +59,7 @@ export class UserMeetingScreen extends React.Component {
               <Button
                 buttonStyle={styles.buttons}
                 title='refresh'
-                onPress={() => { this.fetchMeetings() }}
+                onPress={() => { }}
               />
             </View>
           </View>
@@ -65,7 +68,7 @@ export class UserMeetingScreen extends React.Component {
 
           <View style={{ paddingBottom: 15 }}>
             <View style={styles.listTitleContainer}>
-              <Text style={styles.listTitleText}>Idag, 12e Okt</Text>
+              <Text style={styles.listTitleText}>Idag, 24e Okt</Text>
             </View>
             <FlatList
               data={this.props.bookedMeetings}
@@ -82,7 +85,7 @@ export class UserMeetingScreen extends React.Component {
             <Button
               buttonStyle={styles.buttons}
               title='refresh'
-              onPress={() => { this.fetchMeetings() }}
+              onPress={() => { }}
             />
           </View>
         }
@@ -106,7 +109,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserMeetingScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(BookedMeetingScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -117,7 +120,6 @@ const styles = StyleSheet.create({
   },
   listTitleContainer: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    width: '80%',
     alignSelf: 'center'
   },
   listTitleText: {
