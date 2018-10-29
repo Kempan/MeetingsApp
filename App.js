@@ -13,7 +13,7 @@ import {
   UserProfileScreen,
   MeetingScreen
 } from './src/screens';
-import { NameScreen, EmailScreen, PhoneScreen, AddressScreen } from './src/screens/settingScreens';
+import { NameScreen, EmailScreen, PhoneScreen, AddressScreen, ProfilePictureScreen } from './src/screens/settingScreens';
 import { BookedMeetingScreen, CreateMeetingScreen, UserMadeMeetingScreen } from './src/screens/topTabs';
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 import { store } from './src/redux/Store';
@@ -70,11 +70,12 @@ const MainApp = createStackNavigator({
   NameScreen: NameScreen,
   EmailScreen: EmailScreen,
   PhoneScreen: PhoneScreen,
-  AddressScreen: AddressScreen
+  AddressScreen: AddressScreen,
+  ProfilePictureScreen: ProfilePictureScreen
 },
   {
     navigationOptions: {
-      title: 'iBusinez',
+      title: 'iBusinez.com',
       headerTitleStyle: {
         flex: 1,
         color: 'white',

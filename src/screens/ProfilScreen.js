@@ -40,9 +40,10 @@ export class ProfilScreen extends React.Component {
           </View>
 
           <View style={styles.iconsContainer}>
-            <Icon onPress={() => { console.log(this.state.user) }} iconStyle={styles.bigIcons} size={60} name='linkedin-box' type='material-community' />
-            <Icon iconStyle={[styles.bigIcons, { marginHorizontal: 20 }]} size={60} name='facebook-box' type='material-community' />
+            <Icon iconStyle={styles.bigIcons} size={60} name='linkedin-box' type='material-community' />
+            <Icon iconStyle={styles.bigIcons} size={60} name='facebook-box' type='material-community' />
             <Icon iconStyle={styles.bigIcons} size={60} name='twitter-box' type='material-community' />
+            <Icon iconStyle={styles.bigIcons} size={60} name='instagram' type='material-community' />
           </View>
 
         </View>

@@ -63,6 +63,12 @@ export class SettingScreen extends React.Component {
         </TouchableOpacity>
         <Divider style={styles.divider} />
 
+        <TouchableOpacity onPress={() => { this.navigate('ProfilePictureScreen') }} style={styles.row}>
+          <Text style={styles.titles}>Profile picture</Text>
+          <Text style={styles.text}></Text>
+        </TouchableOpacity>
+        <Divider style={styles.divider} />
+
         <Button
           title='Sign out'
           onPress={() => { this.signOut() }}

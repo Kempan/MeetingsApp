@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, AsyncStorage } from 'react-native';
-import { FormInput, Text, FormLabel } from 'react-native-elements';
+import { View, StyleSheet, AsyncStorage, ScrollView } from 'react-native';
+import { FormInput, FormLabel } from 'react-native-elements';
 import { Button } from '../../components';
 import { Images } from '../../resources/images';
 import Colors from '../../styles/Colors';
@@ -96,99 +96,86 @@ export class CreateMeetingScreen extends React.Component {
 
     return (
 
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
+        <View style={{ marginBottom: 40 }}>
 
-        <View style={styles.inputContainer}>
+          <DateTimePicker
+            isVisible={this.state.datePickerVisible}
+            onConfirm={this._handleDatePicked}
+            onCancel={this._hideDatePicker}
+            mode='datetime'
+          />
 
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>Meeting title</FormLabel>
+            <FormLabel labelStyle={styles.lable}>MÖTES NAMN</FormLabel>
             <FormInput
-              underlineColorAndroid='black'
+              underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}
               onChangeText={(text) => { this.textUpdate(text, 'title') }}
             />
           </View>
 
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>Leader title</FormLabel>
+            <FormLabel labelStyle={styles.lable}>MÖTES BESK</FormLabel>
             <FormInput
-              underlineColorAndroid='black'
-              inputStyle={{ color: 'black' }}
-              onChangeText={(text) => { this.textUpdate(text, 'leader') }}
-            />
-          </View>
-
-        </View>
-
-        <View style={styles.inputContainer}>
-
-          <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>Meeting desc</FormLabel>
-            <FormInput
-              underlineColorAndroid='black'
+              underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}
               onChangeText={(text) => { this.textUpdate(text, 'meetingDesc') }}
             />
           </View>
 
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>Leader desc</FormLabel>
+            <FormLabel labelStyle={styles.lable}>VÄRDENS NAMN</FormLabel>
             <FormInput
-              underlineColorAndroid='black'
+              underlineColorAndroid='grey'
+              inputStyle={{ color: 'black' }}
+              onChangeText={(text) => { this.textUpdate(text, 'leader') }}
+            />
+          </View>
+
+          <View style={styles.textInputContainer}>
+            <FormLabel labelStyle={styles.lable}>VÄRDENS BESK</FormLabel>
+            <FormInput
+              underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}
               onChangeText={(text) => { this.textUpdate(text, 'leaderDesc') }}
             />
           </View>
 
-        </View>
-
-        <View style={styles.inputContainer}>
-
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>Location</FormLabel>
+            <FormLabel labelStyle={styles.lable}>ADRESS</FormLabel>
             <FormInput
-              underlineColorAndroid='black'
+              underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}
               onChangeText={(text) => { this.textUpdate(text, 'location') }}
             />
           </View>
 
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>Max attendants</FormLabel>
+            <FormLabel labelStyle={styles.lable}>MAX DELTAGARE</FormLabel>
             <FormInput
-              underlineColorAndroid='black'
+              underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}
               onChangeText={(text) => { this.textUpdate(text, 'maxAttendants') }}
             />
           </View>
 
+          <Button
+            buttonStyle={styles.button}
+            onPress={this._showDatePicker}
+            title='datum & tid'
+            backgroundColor='rgb(66, 134, 244)'
+          />
+          <Button
+            buttonStyle={styles.button}
+            title='skapa möte'
+            color='white'
+            backgroundColor='rgb(66, 134, 244)'
+            onPress={() => { this.createMeeting(this.state.meetingInfo) }}
+          />
+
         </View>
-
-        <View style={styles.bookingInfoContainer}>
-          <TouchableOpacity style={styles.dateContainer} onPress={this._showDatePicker}>
-            <Image
-              source={Images.date}
-              style={{ height: 20, width: 20, marginHorizontal: 5 }}
-            />
-            <Text style={styles.dateText}>Datum</Text>
-            <DateTimePicker
-              isVisible={this.state.datePickerVisible}
-              onConfirm={this._handleDatePicked}
-              onCancel={this._hideDatePicker}
-              mode='datetime'
-            />
-          </TouchableOpacity>
-        </View>
-
-        <Button
-          buttonStyle={styles.button}
-          title='Create meeting'
-          color='white'
-          backgroundColor='rgb(66, 134, 244)'
-          onPress={() => { this.createMeeting(this.state.meetingInfo) }}
-        />
-
-      </View>
+      </ScrollView>
     )
   }
 }
@@ -211,29 +198,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    alignItems: 'center',
     padding: 16
-  },
-  inputContainer: {
-    flexDirection: 'row',
   },
   lable: {
     color: 'black'
   },
   textInputContainer: {
-    width: 180
-  },
-  bookingInfoContainer: {
-    marginVertical: 20
+    marginRight: 5
   },
   dateContainer: {
+    width: '100%',
     padding: 5,
     borderRadius: 5,
     backgroundColor: 'rgb(66, 134, 244)',
     alignItems: 'center',
     flexDirection: 'row',
     marginTop: 10,
-    borderWidth: 1
   },
   dateText: {
     color: 'white',
@@ -241,9 +221,9 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   button: {
-    width: 200,
-    borderRadius: 5,
-    marginTop: 10,
-    borderWidth: 1,
+    width: '100%',
+    marginTop: 15,
+    backgroundColor: 'rgb(66, 134, 244)',
+    alignItems: 'center'
   }
 })

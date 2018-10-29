@@ -60,14 +60,14 @@ export default class AuthScreen extends React.Component {
 
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>#iBusinez</Text>
+            <Text style={styles.title}>iBusinez.com</Text>
           </View>
 
         </View>
 
         <View style={styles.body}>
 
-          <Text style={styles.welcomeText}>Welcome to iBusinez!</Text>
+          <Text style={styles.welcomeText}>Welcome to iBusinez.com!</Text>
           <Text style={styles.welcomeText}>Please register to continue</Text>
 
           <View style={styles.formContainer}>
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     marginBottom: 10,
-    width: 160,
+    width: 180,
     alignItems: 'center'
   },
   icon: {

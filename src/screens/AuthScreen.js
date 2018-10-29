@@ -58,14 +58,14 @@ export default class AuthScreen extends React.Component {
         <View style={styles.header}>
 
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>#iBusinez</Text>
+            <Text style={styles.title}>iBusinez.com</Text>
           </View>
 
         </View>
 
         <View style={styles.body}>
 
-          <Text style={styles.welcomeText}>Welcome to iBusinez!</Text>
+          <Text style={styles.welcomeText}>Welcome to iBusinez.com!</Text>
           <Text style={styles.welcomeText}>Please login to continue</Text>
 
           <View style={styles.formContainer}>

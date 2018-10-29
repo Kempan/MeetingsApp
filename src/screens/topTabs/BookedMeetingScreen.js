@@ -68,7 +68,7 @@ export class BookedMeetingScreen extends React.Component {
 
           <View style={{ paddingBottom: 15 }}>
             <View style={styles.listTitleContainer}>
-              <Text style={styles.listTitleText}>Idag, 24e Okt</Text>
+              <Text style={styles.listTitleText}>Idag, 29e Okt</Text>
             </View>
             <FlatList
               data={this.props.bookedMeetings}

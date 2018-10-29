@@ -7,6 +7,9 @@ import Turbo from 'turbo360';
 import config from '../config';
 import { connect } from 'react-redux';
 import { MeetingActions } from '../redux/MeetingsRedux';
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+
 
 export class MeetingScreen extends React.Component {
 
@@ -19,13 +22,46 @@ export class MeetingScreen extends React.Component {
       loading: true,
       attendants: [],
       meetingIsBooked: false,
-      created: true
+      created: true,
+      map: {
+        check: true,
+        long: null,
+        lat: null,
+        LatLng: {
+          latitude: null,
+          longitude: null,
+        }
+      },
+
     }
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
     this.fetchMeeting();
+
+  }
+
+  fetchGoogleApi(address) {
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=AIzaSyBpsV4bz_yvOVNCwLnIeRQwbM01DZuWHSY')
+      .then(resp => {
+        return resp.json()
+          .then(respsoneJson => {
+            this.setState({
+              map: {
+                check: false,
+                lat: respsoneJson.results[0].geometry.location.lat,
+                long: respsoneJson.results[0].geometry.location.lng,
+                LatLng: {
+                  latitude: respsoneJson.results[0].geometry.location.lat,
+                  longitude: respsoneJson.results[0].geometry.location.lng,
+                }
+              }
+            })
+            console.log(respsoneJson.results[0]);
+            console.log(this.state.map)
+          })
+      })
   }
 
   fetchMeeting = () => {
@@ -38,11 +74,16 @@ export class MeetingScreen extends React.Component {
             loading: false,
             attendants: data.attendants,
           })
+          this.fetchGoogleApi(this.state.meeting.location);
         }
         else {
           this.setState({
+            meeting: data,
+            loading: false,
+            attendants: data.attendants,
             created: false
           })
+          this.fetchGoogleApi(this.state.meeting.location);
         }
       })
       .then(() => {
@@ -106,7 +147,7 @@ export class MeetingScreen extends React.Component {
       .then(resp => {
         alert('Mötet har tagits bort');
         this.props.getMeetings();
-        this.props.navigation.navigate('MainTabs');
+        this.props.navigation.navigate('Home');
       })
       .catch(err => {
         console.log(err);
@@ -119,6 +160,12 @@ export class MeetingScreen extends React.Component {
   }
 
   render() {
+    console.log(this.state.meeting);
+    if (!this.state.meeting === null) {
+      console.log('körs')
+      this.test(this.meeting.location);
+    }
+
 
     const { meeting, attendants, created, meetingIsBooked } = this.state;
 
@@ -133,10 +180,24 @@ export class MeetingScreen extends React.Component {
     return (
 
       <ScrollView style={styles.container}>
-        {this.state.loading ? <ActivityIndicator size='large' /> : (
+        {this.state.loading || this.state.map.check ? <ActivityIndicator size='large' /> : (
           <View style={styles.container}>
             <View style={styles.mapContainer}>
-              <Image source={require('../resources/images/map.png')} style={{ height: '100%', width: '100%' }} />
+              <MapView
+                showsUserLocation
+                style={styles.map}
+                region={{
+                  latitude: this.state.map.lat,
+                  longitude: this.state.map.long,
+                  latitudeDelta: 0.01552223,
+                  longitudeDelta: 0.01552223,
+                }}
+              >
+                <Marker
+                  coordinate={this.state.map.LatLng}
+                  title={meeting.title}
+                />
+              </MapView>
             </View>
 
             <View style={styles.content}>
@@ -162,7 +223,7 @@ export class MeetingScreen extends React.Component {
 
               <View style={styles.meetingDescContainer}>
                 <Text style={styles.careerInfoText1}>Mötesbeskrivning</Text>
-                <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering. Det kommer att vara ett öppet och frispråkigt möte där tanken är att dela med sig och ta del av nya tillvägagångssätt och ideér.</Text>
+                {/* <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering.</Text> */}
                 <Text style={styles.careerInfoText2}>{meeting.meetingDesc}</Text>
               </View>
 
@@ -197,7 +258,7 @@ export class MeetingScreen extends React.Component {
                   <Button
                     title={bookedButtonTitle}
                     buttonStyle={bookedButtonStyle}
-                    onPress={() => { this.editMeeting() }}
+                    onPress={() => { this.test(this.state.meeting.location) }}
                   />
                   <Button
                     title='ta bort möte'
@@ -251,6 +312,9 @@ const styles = StyleSheet.create({
   mapContainer: {
     height: mapHeight,
     width: '100%'
+  },
+  map: {
+    flex: 1
   },
   content: {
     flex: 1,

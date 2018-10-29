@@ -20,7 +20,11 @@ export class HomeScreen extends React.Component {
         { image: Images.business, id: 1 },
         { image: Images.politics, id: 2 },
         { image: Images.programming, id: 3 }
-      ]
+      ],
+      map: {
+        lat: null,
+        lng: null
+      }
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
@@ -40,7 +44,21 @@ export class HomeScreen extends React.Component {
   }
 
   test() {
-    console.log(this.props.createdMeetings)
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=Storgatan,mölndal&key=AIzaSyBpsV4bz_yvOVNCwLnIeRQwbM01DZuWHSY', {
+    })
+      .then(resp => {
+        return resp.json()
+          .then(respsoneJson => {
+            this.setState({
+              map: {
+                lat: respsoneJson.results[0].geometry.location.lat,
+                long: respsoneJson.results[0].geometry.location.lng
+              }
+            })
+            console.log(respsoneJson.results[0].geometry.location);
+            console.log(this.state.map)
+          })
+      })
   }
 
   render() {
@@ -48,6 +66,7 @@ export class HomeScreen extends React.Component {
     return (
 
       <ScrollView style={styles.container}>
+
         <View style={styles.categoriesContainer}>
           <Text style={styles.categoriesText}>Topp-betyg</Text>
         </View>
@@ -60,27 +79,6 @@ export class HomeScreen extends React.Component {
             horizontal={true}
             renderItem={({ item }) =>
               <TouchableOpacity onPress={() => { this.test() }} style={styles.cardContainer}>
-                <Image source={item.image} style={styles.image} resizeMode='stretch' />
-              </TouchableOpacity>
-            }
-          />
-
-        </View>
-
-        <Divider style={{ marginVertical: 10 }} />
-
-        <View style={styles.categoriesContainer}>
-          <Text style={styles.categoriesText}>Populära kategorier</Text>
-        </View>
-
-        <View>
-
-          <FlatList
-            data={this.state.listCategories}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal={true}
-            renderItem={({ item }) =>
-              <TouchableOpacity style={styles.cardContainer}>
                 <Image source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }
