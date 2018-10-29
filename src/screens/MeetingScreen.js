@@ -209,7 +209,7 @@ export class MeetingScreen extends React.Component {
               <View style={styles.leaderContainer}>
 
                 <Image
-                  source={Images.profilPic}
+                  source={{ uri: meeting.image }}
                   style={styles.profilPic}
                 />
 
@@ -223,7 +223,7 @@ export class MeetingScreen extends React.Component {
 
               <View style={styles.meetingDescContainer}>
                 <Text style={styles.careerInfoText1}>Mötesbeskrivning</Text>
-                {/* <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering.</Text> */}
+                <Text style={styles.careerInfoText2}>Jag kommer att hålla en sammankomst för oss med intresse av programmeringsspråket 'React Native' eller generell programmering.</Text>
                 <Text style={styles.careerInfoText2}>{meeting.meetingDesc}</Text>
               </View>
 

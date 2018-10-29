@@ -13,7 +13,7 @@ export default class ProfilePictureScreen extends React.Component {
 
     this.state = {
       credentials: {
-        address: ''
+        image: ''
       }
     }
   }
@@ -50,9 +50,9 @@ export default class ProfilePictureScreen extends React.Component {
           placeholderTextColor='grey'
           containerStyle={styles.inputContainerStyle}
           inputStyle={styles.inputStyle}
-          placeholder='Enter new address..'
+          placeholder='Enter new url..'
           underlineColorAndroid='grey'
-          onChangeText={(text) => { this.onTextUpdate(text, 'address') }}
+          onChangeText={(text) => { this.onTextUpdate(text, 'image') }}
         />
 
         <View style={styles.buttonContainer}>

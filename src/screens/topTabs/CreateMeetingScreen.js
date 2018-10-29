@@ -24,15 +24,16 @@ export class CreateMeetingScreen extends React.Component {
     this.state = {
       meetingInfo: {
         userId: null,
-        leader: '',
-        leaderDesc: '',
-        title: '',
+        leader: 'David Franzén',
+        leaderDesc: 'Entrepreneur',
+        title: `It's all about ART`,
         meetingDesc: '',
-        location: '',
+        location: 'Häggvägen 15, Mölnlycke',
         dateTime: '',
-        maxAttendants: '',
+        maxAttendants: '12',
         rating: '97% +',
-        attendants: []
+        attendants: [],
+        image: this.props.user.image
       },
       datePickerVisible: false,
     }
@@ -182,7 +183,7 @@ export class CreateMeetingScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-
+    user: state.user.user
   }
 }
 

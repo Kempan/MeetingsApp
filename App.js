@@ -46,7 +46,6 @@ const MainTabs = createBottomTabNavigator({
         } else if (routeName === 'Settings') {
           iconName = focused ? Images.settingsBlack : Images.settings;
         }
-
         return <Image source={iconName} style={{ height: 25, width: 25 }} />;
       },
     }),

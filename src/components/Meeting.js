@@ -10,6 +10,9 @@ export class Meeting extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    console.log(this.props.image)
+  }
 
   render() {
     return (
@@ -22,7 +25,7 @@ export class Meeting extends React.Component {
         }}
       >
 
-        <Image source={Images.profilPic} style={styles.profilPic} />
+        <Image source={{ uri: this.props.image }} style={styles.profilPic} />
 
         <View style={styles.content}>
 

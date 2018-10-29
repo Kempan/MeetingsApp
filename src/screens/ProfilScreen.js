@@ -33,7 +33,7 @@ export class ProfilScreen extends React.Component {
         <View style={styles.header}>
 
           <View style={styles.userContainer}>
-            <Image source={Images.profilPic} style={styles.profilPic} />
+            <Image source={{ uri: user.image }} style={styles.profilPic} />
             <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
             <Text>Junior Developer, React-Native</Text>
             <Text>Inserve Technology</Text>

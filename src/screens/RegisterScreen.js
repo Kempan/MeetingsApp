@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import { View, StyleSheet, AsyncStorage, ActivityIndicator } from 'react-native';
 import { FormInput, Icon, Text } from 'react-native-elements';
+import { Images } from '../resources/images';
 import { Button } from '../components';
 import config from '../config';
 import Turbo from 'turbo360';
@@ -16,18 +17,23 @@ export default class AuthScreen extends React.Component {
 
     this.state = {
       credentials: {
-        email: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        address: '',
-        phoneNumber: ''
-      }
+        email: 'David.franzen@ibusinez.com',
+        password: 'password',
+        firstName: 'David',
+        lastName: 'Franzen',
+        address: 'Kaptensgatan 15, Göteborg',
+        phoneNumber: '0756464646',
+        image: 'https://ca.slack-edge.com/T0359QS6Q-UDCQ03DAQ-3b9db6efcac9-1024'
+      },
+      loading: false
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
+  componentDidMount() {
+    console.log(this.state.credentials.image)
+  }
   textUpdate(text, field) {
     const newCredentials = Object.assign(this.state.credentials);
     newCredentials[field] = text;
@@ -37,6 +43,9 @@ export default class AuthScreen extends React.Component {
   }
 
   register(cred) {
+    this.setState({
+      loading: true
+    })
     this.turbo.createUser(cred)
       .then(resp => {
         return AsyncStorage.setItem(config.userIdKey, resp.id)
@@ -56,144 +65,147 @@ export default class AuthScreen extends React.Component {
   render() {
 
     return (
-      <KeyboardAvoidingView behavior='padding' style={styles.container}>
 
-        <View style={styles.header}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>iBusinez.com</Text>
+      this.state.loading ? <ActivityIndicator size='large' /> : (
+        <View style={styles.container} >
+
+          <View style={styles.header}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>iBusinez.com</Text>
+            </View>
           </View>
 
+          <View style={styles.body}>
+
+            <Text style={styles.welcomeText}>Welcome to iBusinez.com!</Text>
+            <Text style={styles.welcomeText}>Please register to continue</Text>
+
+            <View style={styles.formContainer}>
+
+              <View style={styles.inputContainer}>
+                <Icon
+                  type='material-community'
+                  name='account'
+                  containerStyle={styles.icon}
+                />
+                <FormInput
+                  placeholder='First Name'
+                  placeholderTextColor='black'
+                  inputStyle={{ color: 'black' }}
+                  containerStyle={styles.textInput}
+                  onChangeText={(text) => { this.textUpdate(text, 'firstName') }}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Icon
+                  type='material-community'
+                  name='account'
+                  containerStyle={styles.icon}
+                />
+                <FormInput
+                  placeholder='Last Name'
+                  placeholderTextColor='black'
+                  inputStyle={{ color: 'black' }}
+                  containerStyle={styles.textInput}
+                  onChangeText={(text) => { this.textUpdate(text, 'lastName') }}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Icon
+                  type='material-community'
+                  name='email'
+                  containerStyle={styles.icon}
+                />
+                <FormInput
+                  placeholder='Email'
+                  placeholderTextColor='black'
+                  inputStyle={{ color: 'black' }}
+                  containerStyle={styles.textInput}
+                  keyboardType='email-address'
+                  onChangeText={(text) => { this.textUpdate(text, 'email') }}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Icon
+                  type='material-community'
+                  name='map-marker'
+                  containerStyle={styles.icon}
+                />
+                <FormInput
+                  placeholder='Address'
+                  placeholderTextColor='black'
+                  inputStyle={{ color: 'black' }}
+                  containerStyle={styles.textInput}
+                  onChangeText={(text) => { this.textUpdate(text, 'address') }}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Icon
+                  type='material-community'
+                  name='cellphone-android'
+                  containerStyle={styles.icon}
+                />
+                <FormInput
+                  placeholder='Phone-number'
+                  placeholderTextColor='black'
+                  inputStyle={{ color: 'black' }}
+                  containerStyle={styles.textInput}
+                  onChangeText={(text) => { this.textUpdate(text, 'phoneNumber') }}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Icon
+                  type='material-community'
+                  name='key'
+                  containerStyle={styles.icon}
+                />
+                <FormInput
+                  placeholder='Password'
+                  placeholderTextColor='black'
+                  inputStyle={{ color: 'black' }}
+                  containerStyle={styles.textInput}
+                  onChangeText={(text) => { this.textUpdate(text, 'password') }}
+                  underlineColorAndroid="transparent"
+                  secureTextEntry
+                />
+              </View>
+
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <Button
+                buttonStyle={styles.button}
+                title='Submit'
+                color='white'
+                backgroundColor='rgb(66, 134, 244)'
+                onPress={() => { this.register(this.state.credentials) }}
+              />
+              <Button
+                buttonStyle={styles.button}
+                title='Return'
+                color='rgb(66, 134, 244)'
+                backgroundColor='white'
+                onPress={() => { this.navigate('AuthScreen') }}
+              />
+            </View>
+
+          </View>
+
+          <View style={styles.curvedView}></View>
         </View>
 
-        <View style={styles.body}>
+      )
 
-          <Text style={styles.welcomeText}>Welcome to iBusinez.com!</Text>
-          <Text style={styles.welcomeText}>Please register to continue</Text>
-
-          <View style={styles.formContainer}>
-
-            <View style={styles.inputContainer}>
-              <Icon
-                type='material-community'
-                name='account'
-                containerStyle={styles.icon}
-              />
-              <FormInput
-                placeholder='First Name'
-                placeholderTextColor='black'
-                inputStyle={{ color: 'black' }}
-                containerStyle={styles.textInput}
-                onChangeText={(text) => { this.textUpdate(text, 'firstName') }}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Icon
-                type='material-community'
-                name='account'
-                containerStyle={styles.icon}
-              />
-              <FormInput
-                placeholder='Last Name'
-                placeholderTextColor='black'
-                inputStyle={{ color: 'black' }}
-                containerStyle={styles.textInput}
-                onChangeText={(text) => { this.textUpdate(text, 'lastName') }}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Icon
-                type='material-community'
-                name='email'
-                containerStyle={styles.icon}
-              />
-              <FormInput
-                placeholder='Email'
-                placeholderTextColor='black'
-                inputStyle={{ color: 'black' }}
-                containerStyle={styles.textInput}
-                keyboardType='email-address'
-                onChangeText={(text) => { this.textUpdate(text, 'email') }}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Icon
-                type='material-community'
-                name='map-marker'
-                containerStyle={styles.icon}
-              />
-              <FormInput
-                placeholder='Address'
-                placeholderTextColor='black'
-                inputStyle={{ color: 'black' }}
-                containerStyle={styles.textInput}
-                onChangeText={(text) => { this.textUpdate(text, 'address') }}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Icon
-                type='material-community'
-                name='cellphone-android'
-                containerStyle={styles.icon}
-              />
-              <FormInput
-                placeholder='Phone-number'
-                placeholderTextColor='black'
-                inputStyle={{ color: 'black' }}
-                containerStyle={styles.textInput}
-                onChangeText={(text) => { this.textUpdate(text, 'phoneNumber') }}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Icon
-                type='material-community'
-                name='key'
-                containerStyle={styles.icon}
-              />
-              <FormInput
-                placeholder='Password'
-                placeholderTextColor='black'
-                inputStyle={{ color: 'black' }}
-                containerStyle={styles.textInput}
-                onChangeText={(text) => { this.textUpdate(text, 'password') }}
-                underlineColorAndroid="transparent"
-                secureTextEntry
-              />
-            </View>
-
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <Button
-              buttonStyle={styles.button}
-              title='Submit'
-              color='white'
-              backgroundColor='rgb(66, 134, 244)'
-              onPress={() => { this.register(this.state.credentials) }}
-            />
-            <Button
-              buttonStyle={styles.button}
-              title='Return'
-              color='rgb(66, 134, 244)'
-              backgroundColor='white'
-              onPress={() => { this.navigate('AuthScreen') }}
-            />
-          </View>
-
-        </View>
-
-        <View style={styles.curvedView}></View>
-
-      </KeyboardAvoidingView>
     )
   }
 }

@@ -65,7 +65,7 @@ export class SettingScreen extends React.Component {
 
         <TouchableOpacity onPress={() => { this.navigate('ProfilePictureScreen') }} style={styles.row}>
           <Text style={styles.titles}>Profile picture</Text>
-          <Text style={styles.text}></Text>
+          <Text style={styles.text}>Url</Text>
         </TouchableOpacity>
         <Divider style={styles.divider} />
 
