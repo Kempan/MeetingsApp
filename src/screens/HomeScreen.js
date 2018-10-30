@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, FlatList, ActivityIndicator, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, FlatList, ActivityIndicator, Image, AsyncStorage } from 'react-native';
 import { Text, Divider } from 'react-native-elements';
 import Colors from '../styles/Colors';
 import { Images } from '../resources/images';
@@ -20,11 +20,7 @@ export class HomeScreen extends React.Component {
         { image: Images.business, id: 1 },
         { image: Images.politics, id: 2 },
         { image: Images.programming, id: 3 }
-      ],
-      map: {
-        lat: null,
-        lng: null
-      }
+      ]
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
@@ -41,24 +37,6 @@ export class HomeScreen extends React.Component {
 
   navigateEntrants(item) {
     this.props.navigation.navigate('EntrantScreen', { meeting: item });
-  }
-
-  test() {
-    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=Storgatan,mölndal&key=AIzaSyBpsV4bz_yvOVNCwLnIeRQwbM01DZuWHSY', {
-    })
-      .then(resp => {
-        return resp.json()
-          .then(respsoneJson => {
-            this.setState({
-              map: {
-                lat: respsoneJson.results[0].geometry.location.lat,
-                long: respsoneJson.results[0].geometry.location.lng
-              }
-            })
-            console.log(respsoneJson.results[0].geometry.location);
-            console.log(this.state.map)
-          })
-      })
   }
 
   render() {
@@ -78,7 +56,7 @@ export class HomeScreen extends React.Component {
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item }) =>
-              <TouchableOpacity onPress={() => { this.test() }} style={styles.cardContainer}>
+              <TouchableOpacity onPress={() => { }} style={styles.cardContainer}>
                 <Image source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }

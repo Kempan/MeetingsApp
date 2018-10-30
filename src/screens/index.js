@@ -7,6 +7,7 @@ import SettingScreen from './SettingScreen';
 import ReviewMeetingScreen from './ReviewMeetingScreen';
 import EntrantScreen from './EntrantScreen';
 import UserProfileScreen from './UserProfileScreen';
+import EditMeetingScreen from './EditMeetingScreen';
 
 
 
@@ -19,5 +20,6 @@ export {
   SettingScreen,
   ReviewMeetingScreen,
   EntrantScreen,
-  UserProfileScreen
+  UserProfileScreen,
+  EditMeetingScreen
 }

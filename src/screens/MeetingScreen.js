@@ -258,7 +258,7 @@ export class MeetingScreen extends React.Component {
                   <Button
                     title={bookedButtonTitle}
                     buttonStyle={bookedButtonStyle}
-                    onPress={() => { this.test(this.state.meeting.location) }}
+                    onPress={() => { this.navigate('EditMeetingScreen', meeting) }}
                   />
                   <Button
                     title='ta bort möte'

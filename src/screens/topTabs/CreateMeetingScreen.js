@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet, AsyncStorage, ScrollView } from 'react-native';
 import { FormInput, FormLabel } from 'react-native-elements';
 import { Button } from '../../components';
-import { Images } from '../../resources/images';
 import Colors from '../../styles/Colors';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Moment from 'moment';

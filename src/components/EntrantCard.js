@@ -61,7 +61,7 @@ export class EntrantCard extends React.Component {
             style={styles.meetingContainer}
             onPress={() => { this.props.nav(this.state.entrant) }}
           >
-            <Image source={Images.profilPic} style={styles.profilPic} />
+            <Image source={{ uri: entrant.image }} style={styles.profilPic} />
 
             <View style={styles.content}>
 

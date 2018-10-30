@@ -11,7 +11,8 @@ import {
   ReviewMeetingScreen,
   EntrantScreen,
   UserProfileScreen,
-  MeetingScreen
+  MeetingScreen,
+  EditMeetingScreen
 } from './src/screens';
 import { NameScreen, EmailScreen, PhoneScreen, AddressScreen, ProfilePictureScreen } from './src/screens/settingScreens';
 import { BookedMeetingScreen, CreateMeetingScreen, UserMadeMeetingScreen } from './src/screens/topTabs';
@@ -70,7 +71,8 @@ const MainApp = createStackNavigator({
   EmailScreen: EmailScreen,
   PhoneScreen: PhoneScreen,
   AddressScreen: AddressScreen,
-  ProfilePictureScreen: ProfilePictureScreen
+  ProfilePictureScreen: ProfilePictureScreen,
+  EditMeetingScreen: EditMeetingScreen
 },
   {
     navigationOptions: {
