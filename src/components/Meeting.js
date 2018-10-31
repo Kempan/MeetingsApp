@@ -10,10 +10,6 @@ export class Meeting extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    console.log(this.props.image)
-  }
-
   render() {
     return (
 
@@ -53,10 +49,10 @@ export class Meeting extends React.Component {
               <Text style={styles.textStyle}>{this.props.attendants.length}</Text>
             </TouchableOpacity>
 
-            <View style={styles.chatContainer}>
+            <TouchableOpacity style={styles.chatContainer} onPress={() => { this.props.navigateMessage() }}>
               <Image source={Images.chat} style={styles.chatImage} />
               <Text>2</Text>
-            </View>
+            </TouchableOpacity>
 
           </View>
 

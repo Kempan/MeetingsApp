@@ -55,7 +55,7 @@ export default class UserProfileScreen extends React.Component {
         <View style={styles.header}>
 
           <View style={styles.userContainer}>
-            <Image source={Images.profilPic} style={styles.profilPic} />
+            <Image source={{ uri: user.image }} style={styles.profilPic} />
             <Text style={styles.title}>{user.firstName} {user.lastName}</Text>
             <Text>Junior Developer, React-Native</Text>
             <Text>Inserve Technology</Text>
@@ -63,8 +63,9 @@ export default class UserProfileScreen extends React.Component {
 
           <View style={styles.iconsContainer}>
             <Icon iconStyle={styles.bigIcons} size={60} name='linkedin-box' type='material-community' />
-            <Icon iconStyle={[styles.bigIcons, { marginHorizontal: 20 }]} size={60} name='facebook-box' type='material-community' />
+            <Icon iconStyle={styles.bigIcons} size={60} name='facebook-box' type='material-community' />
             <Icon iconStyle={styles.bigIcons} size={60} name='twitter-box' type='material-community' />
+            <Icon iconStyle={styles.bigIcons} size={60} name='instagram' type='material-community' />
           </View>
 
         </View>
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   iconsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     marginTop: 10
   },
   bigIcons: {

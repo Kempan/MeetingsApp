@@ -38,6 +38,20 @@ router.post('/create/meeting', (req, res) => {
 		})
 })
 
+router.post('/push', (req, res) => {
+	const token = req.body.token;
+	console.log(token);
+
+	res.json({
+		confirmation: 'success',
+		data: 'hejsan'
+	})
+	res.json({
+		confirmation: 'fail',
+		message: err.message
+	})
+})
+
 router.get('/:resource/:id', (req, res) => {
 	res.json({
 		confirmation: 'success',

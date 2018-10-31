@@ -53,7 +53,6 @@ export default {
   fetchUser: (userId) => {
     return Turbo({ site_id: config.turboAppId }).fetchOne('user', userId)
       .then(user => {
-
         const newCredentials = Object.assign(user);
         newCredentials['firstName'] = functions.upperCase(user.firstName);
         newCredentials['lastName'] = functions.upperCase(user.lastName);

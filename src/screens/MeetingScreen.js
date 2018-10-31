@@ -58,14 +58,12 @@ export class MeetingScreen extends React.Component {
                 }
               }
             })
-            console.log(respsoneJson.results[0]);
-            console.log(this.state.map)
           })
       })
   }
 
   fetchMeeting = () => {
-    const meetingId = this.props.navigation.state.params.id;
+    const meetingId = this.props.navigation.state.params.meeting.id;
     this.turbo.fetchOne('meeting', meetingId)
       .then(data => {
         if (data.userId === this.props.user.id) {
@@ -160,7 +158,7 @@ export class MeetingScreen extends React.Component {
   }
 
   render() {
-    console.log(this.state.meeting);
+
     if (!this.state.meeting === null) {
       console.log('körs')
       this.test(this.meeting.location);

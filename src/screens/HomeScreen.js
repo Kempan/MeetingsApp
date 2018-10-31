@@ -31,13 +31,24 @@ export class HomeScreen extends React.Component {
     this.props.getMeetings();
   }
 
-  navigateMeeting(item) {
-    this.props.navigation.navigate('MeetingScreen', { id: item.id });
+  navigate(screen, item) {
+    this.props.navigation.navigate(screen, { meeting: item });
   }
 
-  navigateEntrants(item) {
-    this.props.navigation.navigate('EntrantScreen', { meeting: item });
-  }
+  // navigateEntrants(item) {
+  //   this.props.navigation.navigate('EntrantScreen', { meeting: item });
+  // }
+
+  // navigateMessage(item) {
+  //   this.props.navigation.navigate('MeetingMessageScreen', { meeting: item });
+  // }
+
+  // signOut() {
+  //   AsyncStorage.clear()
+  //     .then(resp => {
+  //       console.log(resp)
+  //     })
+  // }
 
   render() {
 
@@ -56,7 +67,7 @@ export class HomeScreen extends React.Component {
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item }) =>
-              <TouchableOpacity onPress={() => { }} style={styles.cardContainer}>
+              <TouchableOpacity onPress={() => { this.signOut() }} style={styles.cardContainer}>
                 <Image source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }
@@ -80,8 +91,10 @@ export class HomeScreen extends React.Component {
               <Meeting
                 key={item.id}
                 {...item}
-                navigateMeeting={this.navigateMeeting.bind(this, { ...item })}
-                navigateEntrants={() => { this.navigateEntrants({ ...item }) }}
+                //ITEM = MÖTET
+                navigateMeeting={() => { this.navigate('MeetingScreen', { ...item }) }}
+                navigateEntrants={() => { this.navigate('EntrantScreen', { ...item }) }}
+                navigateMessage={() => { this.navigate('MeetingMessageScreen', { ...item }) }}
               />
             }
           />

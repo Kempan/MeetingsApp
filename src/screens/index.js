@@ -8,6 +8,8 @@ import ReviewMeetingScreen from './ReviewMeetingScreen';
 import EntrantScreen from './EntrantScreen';
 import UserProfileScreen from './UserProfileScreen';
 import EditMeetingScreen from './EditMeetingScreen';
+import MeetingMessageScreen from './MeetingMessageScreen';
+
 
 
 
@@ -21,5 +23,6 @@ export {
   ReviewMeetingScreen,
   EntrantScreen,
   UserProfileScreen,
-  EditMeetingScreen
+  EditMeetingScreen,
+  MeetingMessageScreen
 }

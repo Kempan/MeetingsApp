@@ -28,7 +28,7 @@ function* getUser() {
   try {
     const userId = yield call(AsyncStorage.getItem, config.userIdKey);
     const user = yield call(utils.fetchUser, userId);
-
+    console.log('User id in setUser saga: ' + userId);
     yield put(UserActions.setUser(user));
   }
   catch (error) {
