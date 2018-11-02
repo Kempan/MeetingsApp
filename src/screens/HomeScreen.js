@@ -35,20 +35,12 @@ export class HomeScreen extends React.Component {
     this.props.navigation.navigate(screen, { meeting: item });
   }
 
-  // navigateEntrants(item) {
-  //   this.props.navigation.navigate('EntrantScreen', { meeting: item });
-  // }
-
-  // navigateMessage(item) {
-  //   this.props.navigation.navigate('MeetingMessageScreen', { meeting: item });
-  // }
-
-  // signOut() {
-  //   AsyncStorage.clear()
-  //     .then(resp => {
-  //       console.log(resp)
-  //     })
-  // }
+  signOut() {
+    AsyncStorage.removeItem(config.userIdKey)
+      .then(resp => {
+        this.props.navigation.navigate('Auth');
+      })
+  }
 
   render() {
 

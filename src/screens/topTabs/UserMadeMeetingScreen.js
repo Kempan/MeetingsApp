@@ -10,24 +10,13 @@ export class UserMadeMeetingScreen extends React.Component {
     title: 'Dina möten'
   }
 
-  navigateMeeting(item) {
-    this.props.navigation.navigate('MeetingScreen', { id: item.id });
-  }
-
-  navigateEntrants(item) {
-    this.props.navigation.navigate('EntrantScreen', { meeting: item });
-  }
-
-  test() {
-    console.log('state :', this.props.createdMeetings)
+  navigate(screen, item) {
+    this.props.navigation.navigate(screen, { meeting: item });
   }
 
   render() {
 
     return (
-
-
-
 
       <View style={styles.container}>
 
@@ -59,8 +48,9 @@ export class UserMadeMeetingScreen extends React.Component {
                 <Meeting
                   key={item.id}
                   {...item}
-                  navigateMeeting={this.navigateMeeting.bind(this, { ...item })}
-                  navigateEntrants={() => { this.navigateEntrants({ ...item }) }}
+                  navigateMeeting={() => { this.navigate('MeetingScreen', { ...item }) }}
+                  navigateEntrants={() => { this.navigate('EntrantScreen', { ...item }) }}
+                  navigateMessage={() => { this.navigate('MeetingMessageScreen', { ...item }) }}
                 />
               }
             />

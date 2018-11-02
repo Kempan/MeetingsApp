@@ -32,7 +32,8 @@ export class CreateMeetingScreen extends React.Component {
         maxAttendants: '12',
         rating: '97% +',
         attendants: [],
-        image: this.props.user.image
+        image: this.props.user.image,
+        comments: []
       },
       datePickerVisible: false,
     }

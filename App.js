@@ -63,8 +63,8 @@ const AuthStack = createStackNavigator({
 });
 
 const MainApp = createStackNavigator({
-  MeetingMessageScreen: MeetingMessageScreen,
   MainTabs: MainTabs,
+  MeetingMessageScreen: MeetingMessageScreen,
   MeetingScreen: MeetingScreen,
   ReviewMeetingScreen: ReviewMeetingScreen,
   EntrantScreen: EntrantScreen,
@@ -118,6 +118,7 @@ export default class App extends React.Component {
     return AsyncStorage.getItem(config.userIdKey)
       .then(key => {
         if (key) {
+          console.log(key)
           this.setState({
             authCheck: true,
             authed: true

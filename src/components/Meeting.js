@@ -51,7 +51,7 @@ export class Meeting extends React.Component {
 
             <TouchableOpacity style={styles.chatContainer} onPress={() => { this.props.navigateMessage() }}>
               <Image source={Images.chat} style={styles.chatImage} />
-              <Text>2</Text>
+              <Text>{this.props.comments.length}</Text>
             </TouchableOpacity>
 
           </View>

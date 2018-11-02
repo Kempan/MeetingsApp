@@ -38,18 +38,22 @@ router.post('/create/meeting', (req, res) => {
 		})
 })
 
-router.post('/push', (req, res) => {
-	const token = req.body.token;
-	console.log(token);
+router.post('/create/comment/:id', (req, res) => {
+	const id = req.params.id;
 
-	res.json({
-		confirmation: 'success',
-		data: 'hejsan'
-	})
-	res.json({
-		confirmation: 'fail',
-		message: err.message
-	})
+	turbo.updateEntity('meeting', id, { comments: req.body })
+		.then(resp => {
+			res.json({
+				confirmation: 'success',
+				data: resp
+			})
+		})
+		.catch(err => {
+			res.json({
+				confirmation: 'fail',
+				message: err.message
+			})
+		})
 })
 
 router.get('/:resource/:id', (req, res) => {

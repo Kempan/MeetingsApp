@@ -23,16 +23,8 @@ export class BookedMeetingScreen extends React.Component {
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
-  componentDidMount() {
-    this.props.getMeetings()
-  }
-
-  navigateMeeting(item) {
-    this.props.navigation.navigate('MeetingScreen', { id: item.id });
-  }
-
-  navigateEntrants(item) {
-    this.props.navigation.navigate('EntrantScreen', { meeting: item });
+  navigate(screen, item) {
+    this.props.navigation.navigate(screen, { meeting: item });
   }
 
   render() {
@@ -77,8 +69,9 @@ export class BookedMeetingScreen extends React.Component {
                 <Meeting
                   key={item.id}
                   {...item}
-                  navigateMeeting={this.navigateMeeting.bind(this, { ...item })}
-                  navigateEntrants={() => { this.navigateEntrants({ ...item }) }}
+                  navigateMeeting={() => { this.navigate('MeetingScreen', { ...item }) }}
+                  navigateEntrants={() => { this.navigate('EntrantScreen', { ...item }) }}
+                  navigateMessage={() => { this.navigate('MeetingMessageScreen', { ...item }) }}
                 />
               }
             />

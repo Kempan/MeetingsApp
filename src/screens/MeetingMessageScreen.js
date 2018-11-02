@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, AsyncStorage, TouchableOpacity, TextInput, Image } from 'react-native';
-import { Text, Divider } from 'react-native-elements';
-import { Button } from '../components';
+import { View, StyleSheet, TextInput, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { Text } from 'react-native-elements';
+import { Button, Message } from '../components';
 import config from '../config';
 import { connect } from 'react-redux';
-import { Images } from '../resources/images';
+import utils from '../utils';
+import moment from 'moment';
 
 export class MeetingMessageScreen extends React.Component {
 
@@ -12,72 +13,87 @@ export class MeetingMessageScreen extends React.Component {
     super(props);
 
     this.state = {
-      comments: [
-        'Träffade mycket nytt intressant folk och och coachen var grym. Kul med mycket folk sist, hoppas lika många dyker upp denna gången!',
-        'Kul med mycket folk sist, hoppas lika många dyker upp denna gången!'
-      ],
-      message: ''
+      meeting: null,
+      comment: {
+        user: this.props.user,
+        message: '',
+        date: null
+      },
+      loading: true
     }
   }
 
   componentDidMount() {
-    // console.log(this.props.navigation.state.params.meeting)
+    const date = moment(new Date()).format('DD-MM-YYYY');
+    this.setState({
+      meeting: this.props.navigation.state.params.meeting,
+      loading: false,
+      comment: {
+        ...this.state.comment,
+        date: date
+      }
+    })
   }
 
   updateText(text) {
     this.setState({
-      message: text
+      comment: {
+        ...this.state.comment,
+        message: text
+      }
     })
+  }
+
+  submitComment(comment) {
+    const newComment = [...this.state.meeting.comments];
+    newComment.push(comment);
+    return utils.createComment(this.state.meeting.id, newComment)
+      .then(resp => {
+        this.setState({
+          meeting: resp.data,
+          ...this.state.comment,
+          message: ''
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   render() {
 
-    const { user } = this.props;
-
+    if (this.state.loading == true) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size='large' />
+        </View>
+      )
+    }
+    console.log('möte: ' + this.state.meeting)
     return (
 
       <View style={styles.container}>
         <Text style={styles.commentsText}>KOMMENTARER</Text>
-        {this.state.comments.length <= 0 ?
+        {this.state.meeting.comments.length <= 0 ?
           <View style={styles.messagesContainer}>
-            <Text>Inga meddelanden</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 20 }}>Inga meddelanden</Text>
           </View>
           :
-          <View style={styles.messagesContainer}>
-
-            <View style={styles.messageContainer}>
-              <View style={styles.profilPicContainer}>
-                <Image
-                  source={Images.profilPic}
-                  style={styles.profilPic}
+          <ScrollView style={styles.messagesContainer}>
+            <FlatList
+              data={this.state.meeting.comments}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) =>
+                <Message
+                  message={item.message}
+                  user={item.user}
+                  date={item.date}
                 />
-              </View>
-              <View style={styles.contentContainer}>
-                <Text>Joakim Edwardh</Text>
-                <Text>2 weeks ago</Text>
-                <Divider style={styles.divider} />
-                <Text>{this.state.comments[0]}</Text>
-              </View>
-            </View>
-
-            <View style={styles.messageContainer}>
-              <View style={styles.profilPicContainer}>
-                <Image
-                  source={Images.profilPic}
-                  style={styles.profilPic}
-                />
-              </View>
-              <View style={styles.contentContainer}>
-                <Text>Joakim Edwardh</Text>
-                <Text>2 weeks ago</Text>
-                <Divider style={styles.divider} />
-                <Text>{this.state.comments[0]}</Text>
-              </View>
-            </View>
-          </View>
+              }
+            />
+          </ScrollView>
 
         }
-        <Divider style={styles.divider} />
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -87,7 +103,7 @@ export class MeetingMessageScreen extends React.Component {
           <Button
             title='kommentera'
             buttonStyle={styles.buttons}
-            onPress={() => { console.log(this.state.message) }}
+            onPress={() => { this.submitComment(this.state.comment) }}
           />
         </View>
       </View>
@@ -132,10 +148,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%'
   },
-  divider: {
-    backgroundColor: 'black',
-    marginVertical: 5
-  },
   input: {
     borderWidth: 1,
     borderRadius: 5,
@@ -145,27 +157,5 @@ const styles = StyleSheet.create({
   buttons: {
     marginTop: 10,
     backgroundColor: 'rgb(66, 134, 244)',
-  },
-  profilPic: {
-    height: 40,
-    width: 40,
-    borderRadius: 50
-  },
-  messageContainer: {
-    borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    width: '100%',
-    marginBottom: 10
-  },
-  profilPicContainer: {
-    flex: 0.15,
-    alignItems: 'center',
-    paddingTop: 5
-  },
-  contentContainer: {
-    padding: 5,
-    flex: 0.85
   }
 })

@@ -4,3 +4,4 @@ export * from './EntrantCard';
 export * from './FormItem';
 export * from './FormRow';
 export * from './Form';
+export * from './Message';

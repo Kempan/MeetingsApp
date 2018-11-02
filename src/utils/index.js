@@ -51,6 +51,7 @@ export default {
   },
 
   fetchUser: (userId) => {
+    console.log(userId)
     return Turbo({ site_id: config.turboAppId }).fetchOne('user', userId)
       .then(user => {
         const newCredentials = Object.assign(user);
@@ -73,6 +74,20 @@ export default {
       })
       .catch(err => {
         console.log(err);
+      })
+  },
+
+  createComment(meetingId, newComment) {
+    return fetch(`${config.baseUrl}/create/comment/${meetingId}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'content-type': 'application,json'
+      },
+      body: JSON.stringify(newComment)
+    })
+      .then(resp => {
+        return resp.json();
       })
   }
 }
