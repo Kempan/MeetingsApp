@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, ActivityIndicator, FlatList, KeyboardAvoidingView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Button, Message } from '../components';
-import config from '../config';
 import { connect } from 'react-redux';
 import utils from '../utils';
 import moment from 'moment';
+import { MeetingActions } from '../redux/MeetingsRedux';
 
 export class MeetingMessageScreen extends React.Component {
 
@@ -54,6 +54,7 @@ export class MeetingMessageScreen extends React.Component {
           ...this.state.comment,
           message: ''
         })
+        this.props.getMeetings();
       })
       .catch(err => {
         console.log(err);
@@ -69,30 +70,29 @@ export class MeetingMessageScreen extends React.Component {
         </View>
       )
     }
-    console.log('möte: ' + this.state.meeting)
+
     return (
 
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
         <Text style={styles.commentsText}>KOMMENTARER</Text>
         {this.state.meeting.comments.length <= 0 ?
           <View style={styles.messagesContainer}>
             <Text style={{ alignSelf: 'center', fontSize: 20 }}>Inga meddelanden</Text>
           </View>
           :
-          <ScrollView style={styles.messagesContainer}>
-            <FlatList
-              data={this.state.meeting.comments}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) =>
-                <Message
-                  message={item.message}
-                  user={item.user}
-                  date={item.date}
-                />
-              }
-            />
-          </ScrollView>
-
+          <FlatList
+            style={styles.messagesContainer}
+            data={this.state.meeting.comments}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) =>
+              <Message
+                user={this.props.user}
+                message={item.message}
+                messageUser={item.user}
+                date={item.date}
+              />
+            }
+          />
         }
         <View style={styles.inputContainer}>
           <TextInput
@@ -106,7 +106,7 @@ export class MeetingMessageScreen extends React.Component {
             onPress={() => { this.submitComment(this.state.comment) }}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
 
     )
   }
@@ -120,7 +120,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-
+    getMeetings: () => dispatch((MeetingActions.getMeetings()))
   }
 }
 
@@ -140,9 +140,8 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   messagesContainer: {
-    minHeight: 150,
-    borderRadius: 5,
-    width: '100%'
+    width: '100%',
+    paddingRight: 5
   },
   inputContainer: {
     marginTop: 10,

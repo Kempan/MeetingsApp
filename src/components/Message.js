@@ -1,32 +1,47 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Text, Divider } from 'react-native-elements';
-import { Images } from '../resources/images';
-import Colors from '../styles/Colors';
 
 export class Message extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      created: false,
+    }
   }
 
   componentDidMount() {
-    console.log(this.props.item);
+    console.log(this.props)
+    if (this.props.messageUser.id == this.props.user.id) {
+      this.setState({
+        created: true
+      })
+    }
+  }
 
+  removeMessage(id) {
+
+    console.log(id)
   }
 
   render() {
-    const { user } = this.props;
+    const { messageUser } = this.props;
+
     return (
       <TouchableOpacity onPress={() => { }} style={styles.messageContainer}>
         <View style={styles.profilPicContainer}>
           <Image
-            source={Images.profilPic}
+            source={{ uri: messageUser.image }}
             style={styles.profilPic}
           />
         </View>
         <View style={styles.contentContainer}>
-          <Text style={styles.name}>{user.firstName} {user.lastName}</Text>
+          <View style={styles.topRow}>
+            <Text style={styles.name}>{messageUser.firstName} {messageUser.lastName}</Text>
+            {this.state.created ? <TouchableOpacity onPress={() => { this.removeMessage() }}><Text style={{ fontSize: 20 }}>X</Text></TouchableOpacity> : null}
+          </View>
           <Text>{this.props.date}</Text>
           <Divider style={styles.divider} />
           <Text>{this.props.message}</Text>
@@ -55,6 +70,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     flex: 0.85
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   name: {
     letterSpacing: 0.5,

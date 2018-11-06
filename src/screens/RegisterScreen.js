@@ -31,9 +31,6 @@ export default class AuthScreen extends React.Component {
     this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
-  componentDidMount() {
-    console.log(this.state.credentials.image)
-  }
   textUpdate(text, field) {
     const newCredentials = Object.assign(this.state.credentials);
     newCredentials[field] = text;
@@ -265,7 +262,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginTop: 15,
     paddingHorizontal: 16
   },
@@ -275,7 +272,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     marginBottom: 10,
-    width: 180,
+    width: 160,
     alignItems: 'center'
   },
   icon: {

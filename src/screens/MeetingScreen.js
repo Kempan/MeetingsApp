@@ -20,7 +20,6 @@ export class MeetingScreen extends React.Component {
     this.state = {
       meeting: null,
       loading: true,
-      attendants: [],
       meetingIsBooked: false,
       created: true,
       map: {
@@ -39,7 +38,6 @@ export class MeetingScreen extends React.Component {
 
   componentDidMount() {
     this.fetchMeeting();
-
   }
 
   fetchGoogleApi(address) {
@@ -70,7 +68,6 @@ export class MeetingScreen extends React.Component {
           this.setState({
             meeting: data,
             loading: false,
-            attendants: data.attendants,
           })
           this.fetchGoogleApi(this.state.meeting.location);
         }
@@ -78,14 +75,13 @@ export class MeetingScreen extends React.Component {
           this.setState({
             meeting: data,
             loading: false,
-            attendants: data.attendants,
             created: false
           })
           this.fetchGoogleApi(this.state.meeting.location);
         }
       })
       .then(() => {
-        this.state.attendants.forEach(item => {
+        this.state.meeting.attendants.forEach(item => {
           if (item === this.props.user.id) {
             this.setState({
               meetingIsBooked: true
@@ -106,13 +102,14 @@ export class MeetingScreen extends React.Component {
   bookMeeting() {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
-        const newAttendants = [...this.state.attendants];
+        const newAttendants = [...this.state.meeting.attendants];
         newAttendants.push(key);
         this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: newAttendants })
           .then(data => {
             this.setState({
               meetingIsBooked: true
             })
+            alert('Du har bokat mötet!');
             this.navigate('Home');
           })
           .catch(err => {
@@ -124,7 +121,7 @@ export class MeetingScreen extends React.Component {
   cancelMeeting() {
     AsyncStorage.getItem(config.userIdKey)
       .then(key => {
-        const filterAttendants = this.state.attendants.filter(item => {
+        const filterAttendants = this.state.meeting.attendants.filter(item => {
           return item !== key;
         });
         this.turbo.updateEntity('meeting', this.state.meeting.id, { attendants: filterAttendants })
@@ -132,6 +129,7 @@ export class MeetingScreen extends React.Component {
             this.setState({
               meetingIsBooked: false
             })
+            alert('Du har avbokat mötet!');
             this.navigate('Home');
           })
       })
@@ -165,7 +163,7 @@ export class MeetingScreen extends React.Component {
     }
 
 
-    const { meeting, attendants, created, meetingIsBooked } = this.state;
+    const { meeting, created, meetingIsBooked } = this.state;
 
     let bookedButtonTitle = meetingIsBooked ? 'Avboka möte' : 'Boka möte';
     bookedButtonTitle = created ? 'Redigera möte' : bookedButtonTitle;
@@ -246,10 +244,16 @@ export class MeetingScreen extends React.Component {
                   name='account-multiple'
                   type='material-community'
                 />
-                <Text style={styles.timeAndLocationText}>Visa deltagare ({attendants.length})</Text>
+                <Text style={styles.timeAndLocationText}>Visa deltagare ({meeting.attendants.length})</Text>
               </TouchableOpacity>
 
-
+              <TouchableOpacity onPress={() => { this.navigate('MeetingMessageScreen', meeting) }} style={styles.timeAndLocationContainer}>
+                <Icon
+                  name='message'
+                  type='material-community'
+                />
+                <Text style={styles.timeAndLocationText}>Visa kommentarer ({meeting.comments.length})</Text>
+              </TouchableOpacity>
 
               {created ?
                 <View style={styles.buttonContainer}>
