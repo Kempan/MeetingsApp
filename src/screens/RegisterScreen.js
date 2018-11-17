@@ -17,13 +17,13 @@ export default class AuthScreen extends React.Component {
 
     this.state = {
       credentials: {
-        email: 'David.franzen@ibusinez.com',
+        email: 'hejsan',
         password: 'password',
         firstName: 'David',
         lastName: 'Franzen',
         address: 'Kaptensgatan 15, Göteborg',
         phoneNumber: '0756464646',
-        image: 'https://ca.slack-edge.com/T0359QS6Q-UDCQ03DAQ-3b9db6efcac9-1024'
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM2ZxHe5kxvJH3RxvXUV7QBuRxWRNC8m-3jo36POSLUEpXWxWi'
       },
       loading: false
     }

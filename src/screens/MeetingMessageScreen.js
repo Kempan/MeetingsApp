@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, ActivityIndicator, FlatList, KeyboardAvoidingView } from 'react-native';
+import { View, StyleSheet, TextInput, ActivityIndicator, FlatList } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Button, Message } from '../components';
 import { connect } from 'react-redux';
 import utils from '../utils';
-import moment from 'moment';
 import { MeetingActions } from '../redux/MeetingsRedux';
+import Turbo from 'turbo360';
+
 
 export class MeetingMessageScreen extends React.Component {
 
@@ -14,47 +15,44 @@ export class MeetingMessageScreen extends React.Component {
 
     this.state = {
       meeting: null,
-      comment: {
-        user: this.props.user,
-        message: '',
-        date: null
-      },
+      comments: null,
+      newComment: '',
       loading: true
     }
+    this.turbo = Turbo({ site_id: config.turboAppId });
   }
 
   componentDidMount() {
-    const date = moment(new Date()).format('DD-MM-YYYY');
     this.setState({
-      meeting: this.props.navigation.state.params.meeting,
-      loading: false,
-      comment: {
-        ...this.state.comment,
-        date: date
-      }
+      meeting: this.props.navigation.state.params.meeting
+    }, () => {
+      this.fetchComments(this.state.meeting.id);
     })
   }
 
   updateText(text) {
     this.setState({
-      comment: {
-        ...this.state.comment,
-        message: text
-      }
+      newComment: text
     })
   }
 
-  submitComment(comment) {
-    const newComment = [...this.state.meeting.comments];
-    newComment.push(comment);
-    return utils.createComment(this.state.meeting.id, newComment)
+  fetchComments(id) {
+    this.turbo.fetch('kommentar', { meeting: id })
       .then(resp => {
         this.setState({
-          meeting: resp.data,
-          ...this.state.comment,
-          message: ''
+          comments: resp,
+          loading: false
         })
-        this.props.getMeetings();
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  submitComment(meetingId, comment, fromUser) {
+    Turbo({ site_id: config.turboAppId }).create('kommentar', { meeting: meetingId, text: comment, fromUser: fromUser })
+      .then(() => {
+        this.fetchComments(this.state.meeting.id);
       })
       .catch(err => {
         console.log(err);
@@ -62,7 +60,6 @@ export class MeetingMessageScreen extends React.Component {
   }
 
   render() {
-
     if (this.state.loading == true) {
       return (
         <View style={styles.container}>
@@ -73,27 +70,28 @@ export class MeetingMessageScreen extends React.Component {
 
     return (
 
-      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+      <View style={styles.container}>
         <Text style={styles.commentsText}>KOMMENTARER</Text>
-        {this.state.meeting.comments.length <= 0 ?
+        {this.state.comments.length <= 0 ?
           <View style={styles.messagesContainer}>
             <Text style={{ alignSelf: 'center', fontSize: 20 }}>Inga meddelanden</Text>
           </View>
           :
           <FlatList
             style={styles.messagesContainer}
-            data={this.state.meeting.comments}
+            data={this.state.comments}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) =>
               <Message
+                comment={item}
                 user={this.props.user}
-                message={item.message}
-                messageUser={item.user}
-                date={item.date}
+                fetchComments={() => { this.fetchComments(this.state.meeting.id) }}
               />
             }
           />
         }
+
+
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -103,10 +101,17 @@ export class MeetingMessageScreen extends React.Component {
           <Button
             title='kommentera'
             buttonStyle={styles.buttons}
-            onPress={() => { this.submitComment(this.state.comment) }}
+            onPress={() => { this.submitComment(this.state.meeting.id, this.state.newComment, this.props.user) }}
           />
+          {/* <Button
+            title='kommentera'
+            buttonStyle={styles.buttons}
+            onPress={() => {
+              this.fetchComments(this.state.meeting.id)
+            }}
+          /> */}
         </View>
-      </KeyboardAvoidingView>
+      </View>
 
     )
   }

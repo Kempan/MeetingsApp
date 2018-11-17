@@ -24,7 +24,7 @@ export default class AuthScreen extends React.Component {
     }
 
     this.turbo = Turbo({ site_id: config.turboAppId });
-    const PUSH_ENDPOINT = `${config.baseUrl}/push`;
+    // const PUSH_ENDPOINT = `${config.baseUrl}/push`;
   }
 
   componentDidMount() {

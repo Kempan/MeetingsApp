@@ -51,20 +51,22 @@ export default {
   },
 
   fetchUser: (userId) => {
-    console.log(userId)
-    return Turbo({ site_id: config.turboAppId }).fetchOne('user', userId)
-      .then(user => {
-        const newCredentials = Object.assign(user);
-        newCredentials['firstName'] = functions.upperCase(user.firstName);
-        newCredentials['lastName'] = functions.upperCase(user.lastName);
-        newCredentials['email'] = functions.upperCase(user.email);
-        newCredentials['address'] = functions.upperCase(user.address);
+    return new Promise((resolve, reject) => {
+      Turbo({ site_id: config.turboAppId }).fetchOne('user', userId)
+        .then(user => {
+          const newCredentials = Object.assign(user);
+          newCredentials['firstName'] = functions.upperCase(user.firstName);
+          newCredentials['lastName'] = functions.upperCase(user.lastName);
+          newCredentials['email'] = functions.upperCase(user.email);
+          newCredentials['address'] = functions.upperCase(user.address);
 
-        return newCredentials;
-      })
-      .catch(err => {
-        console.log(err);
-      })
+          resolve(user);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        })
+    })
   },
 
   updateUser(userId, cred) {
@@ -77,17 +79,26 @@ export default {
       })
   },
 
-  createComment(meetingId, newComment) {
-    return fetch(`${config.baseUrl}/create/comment/${meetingId}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'content-type': 'application,json'
-      },
-      body: JSON.stringify(newComment)
-    })
+  createComment(meetingId, comment, fromUser) {
+    console.log(fromUser)
+    return Turbo({ site_id: config.turboAppId }).create('comment', { text: comment, subject: fromUser.id, title: meetingId })
       .then(resp => {
-        return resp.json();
+        return resp;
       })
+      .catch(err => {
+        console.log(err);
+      })
+
+    //   return fetch(`${config.baseUrl}/create/comment/${meetingId}`, {
+    //     method: 'POST',
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'content-type': 'application,json'
+    //     },
+    //     body: JSON.stringify(newComment)
+    //   })
+    //     .then(resp => {
+    //       return resp.json();
+    //     })
   }
 }

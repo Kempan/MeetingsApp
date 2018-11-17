@@ -23,17 +23,16 @@ export class CreateMeetingScreen extends React.Component {
     this.state = {
       meetingInfo: {
         userId: null,
-        leader: 'David Franzén',
-        leaderDesc: 'Entrepreneur',
-        title: `It's all about ART`,
+        leader: 'Joakim Edwardh',
+        leaderDesc: 'Developer',
+        title: `React-Native`,
         meetingDesc: '',
         location: 'Häggvägen 15, Mölnlycke',
         dateTime: '',
         maxAttendants: '12',
         rating: '97% +',
         attendants: [],
-        image: this.props.user.image,
-        comments: []
+        image: this.props.user.image
       },
       datePickerVisible: false,
     }
@@ -108,7 +107,7 @@ export class CreateMeetingScreen extends React.Component {
           />
 
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>MÖTES NAMN</FormLabel>
+            <FormLabel labelStyle={styles.lable}>MÖTESNAMN</FormLabel>
             <FormInput
               underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}
@@ -117,7 +116,7 @@ export class CreateMeetingScreen extends React.Component {
           </View>
 
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>MÖTES BESK</FormLabel>
+            <FormLabel labelStyle={styles.lable}>MÖTESBESKRIVNING</FormLabel>
             <FormInput
               underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}
@@ -135,7 +134,7 @@ export class CreateMeetingScreen extends React.Component {
           </View>
 
           <View style={styles.textInputContainer}>
-            <FormLabel labelStyle={styles.lable}>VÄRDENS BESK</FormLabel>
+            <FormLabel labelStyle={styles.lable}>VÄRDENS BESKSKRIVNING</FormLabel>
             <FormInput
               underlineColorAndroid='grey'
               inputStyle={{ color: 'black' }}

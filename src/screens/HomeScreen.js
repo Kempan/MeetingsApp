@@ -35,12 +35,9 @@ export class HomeScreen extends React.Component {
     this.props.navigation.navigate(screen, { meeting: item });
   }
 
-  // signOut() {
-  //   AsyncStorage.removeItem(config.userIdKey)
-  //     .then(resp => {
-  //       this.props.navigation.navigate('Auth');
-  //     })
-  // }
+  signOut() {
+    console.log(this.props.user)
+  }
 
   render() {
 
@@ -59,7 +56,7 @@ export class HomeScreen extends React.Component {
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item }) =>
-              <TouchableOpacity onPress={() => { }} style={styles.cardContainer}>
+              <TouchableOpacity onPress={() => { this.signOut() }} style={styles.cardContainer}>
                 <Image source={item.image} style={styles.image} resizeMode='stretch' />
               </TouchableOpacity>
             }

@@ -239,21 +239,23 @@ export class MeetingScreen extends React.Component {
                 <Text style={styles.timeAndLocationText}>{meeting.location}</Text>
               </View>
 
-              <TouchableOpacity onPress={() => { this.navigate('EntrantScreen', meeting) }} style={styles.timeAndLocationContainer}>
-                <Icon
-                  name='account-multiple'
-                  type='material-community'
-                />
-                <Text style={styles.timeAndLocationText}>Visa deltagare ({meeting.attendants.length})</Text>
-              </TouchableOpacity>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity onPress={() => { this.navigate('EntrantScreen', meeting) }} style={styles.timeAndLocationContainer}>
+                  <Icon
+                    name='account-multiple'
+                    type='material-community'
+                  />
+                  <Text style={styles.timeAndLocationText}>Visa deltagare ({meeting.attendants.length})</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => { this.navigate('MeetingMessageScreen', meeting) }} style={styles.timeAndLocationContainer}>
-                <Icon
-                  name='message'
-                  type='material-community'
-                />
-                <Text style={styles.timeAndLocationText}>Visa kommentarer ({meeting.comments.length})</Text>
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => { this.navigate('MeetingMessageScreen', meeting) }} style={styles.timeAndLocationContainer}>
+                  <Icon
+                    name='message'
+                    type='material-community'
+                  />
+                  <Text style={styles.timeAndLocationText}>Visa kommentarer ()</Text>
+                </TouchableOpacity>
+              </View>
 
               {created ?
                 <View style={styles.buttonContainer}>
@@ -377,6 +379,7 @@ const styles = StyleSheet.create({
   timeAndLocationContainer: {
     flexDirection: 'row',
     padding: 8,
+    flex: 0.5
   },
   timeAndLocationText: {
     color: 'black',

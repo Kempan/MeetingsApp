@@ -6,6 +6,7 @@ import config from '../../config';
 import Turbo from 'turbo360';
 import { connect } from 'react-redux';
 import { MeetingActions } from '../../redux/MeetingsRedux';
+import Moment from 'moment';
 
 
 export class BookedMeetingScreen extends React.Component {
@@ -37,6 +38,9 @@ export class BookedMeetingScreen extends React.Component {
       )
     }
 
+    var d = new Date();
+    var date = Moment(d).format('MMMM Do YYYY');
+
     return (
 
       <ScrollView style={styles.container}>
@@ -60,14 +64,13 @@ export class BookedMeetingScreen extends React.Component {
 
           <View style={{ paddingBottom: 15 }}>
             <View style={styles.listTitleContainer}>
-              <Text style={styles.listTitleText}>Idag, 29e Okt</Text>
+              <Text style={styles.listTitleText}>{date}</Text>
             </View>
             <FlatList
               data={this.props.bookedMeetings}
               keyExtractor={item => item.id}
               renderItem={({ item }) =>
                 <Meeting
-                  key={item.id}
                   {...item}
                   navigateMeeting={() => { this.navigate('MeetingScreen', { ...item }) }}
                   navigateEntrants={() => { this.navigate('EntrantScreen', { ...item }) }}
